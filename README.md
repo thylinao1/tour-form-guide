@@ -1,4 +1,4 @@
-# Tour de France 2025 Form Guide
+# Tour de France 2025 Race Analyst
 
 An interactive dashboard of the 2025 Tour de France, built by BT5110 Group 31 for Task 3 (develop and demo an OLAP dashboard). It lets you open any total to see what is inside it, compare the four jerseys, follow cumulative race times for riders and teams, and see how many riders and teams each country sent. The angle is a "form guide", the kind of sheet people read before making an educated bet: it shows what the settled 2025 results say about riders, teams and terrain. It is a summary of one past race. It is not a forecast, and it has no money, stakes or "place bet" button anywhere.
 

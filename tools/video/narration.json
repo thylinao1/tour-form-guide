@@ -4,7 +4,7 @@
  "scenes": [
   {
    "id": "s1_intro",
-   "say": "Welcome to the Tour de France 2025 Form Guide. It turns the whole race into pictures and numbers, so you can judge riders and teams before you make a bet. Every number is a summary of the finished 2025 race. It is not a prediction."
+   "say": "Welcome to the Tour de France 2025 Race Analyst. It turns the whole race into pictures and numbers, so you can judge riders and teams before you make a bet. Every number is a summary of the finished 2025 race."
   },
   {
    "id": "s2_move",
@@ -28,11 +28,11 @@
   },
   {
    "id": "s7_map",
-   "say": "For our graders, the Function map lists all fifteen prompts from the brief. Press Show me to jump straight to the panel, or start the walk through to visit all fifteen in order."
+   "say": "The Function map lists all fifteen views. Press Show me to jump straight to the panel, or start the walk through to visit all fifteen in order."
   },
   {
    "id": "s8_help",
-   "say": "Need help at any time? Press Help for the guided tour and the glossary. Remember, one race is thin evidence. Use it to ask better questions, not to guarantee a win. Enjoy the Form Guide."
+   "say": "Need help at any time? Press Help for the guided tour and the glossary. Remember, one race is thin evidence. Use it to ask better questions, not to guarantee a win. Enjoy the Race Analyst."
   }
  ]
 }

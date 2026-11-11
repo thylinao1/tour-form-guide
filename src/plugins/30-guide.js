@@ -268,7 +268,7 @@
         add(card,
           h('div', { class: 'gd-hero' },
             h('span', { class: 'brand-block', text: 'TOUR ’25' }),
-            h('h2', { id: titleId, text: 'Welcome to the Form Guide' }),
+            h('h2', { id: titleId, text: 'Welcome to the Race Analyst' }),
             h('p', { class: 'gd-sub', text: `Every result of the 2025 Tour, laid out so a first-time visitor can read it. ${f.finishers} of ${f.riders} riders reached Paris.` }),
             stageStrip()),
           h('div', { class: 'gd-cards' }, cards.map(([n, t, x], i) => h('div', { class: 'gd-wcard', style: `--i:${i}` },
@@ -340,13 +340,13 @@
           h('p', { text: 'The video is not available in this copy of the page. The 1 minute tour shows the same things, step by step.' }),
           h('button', { type: 'button', class: 'btn primary', on: { click: () => { close(); startTour(); } } }, icon('tour'), ' Start the tour instead'));
         // preload 'metadata' makes a missing file fail at once, so the note shows instead of an empty player.
-        const video = h('video', { class: 'gd-video', controls: '', preload: 'metadata', playsinline: '', src: 'assets/tutorial.mp4', 'aria-label': 'Video tutorial: how to use the Form Guide' });
+        const video = h('video', { class: 'gd-video', controls: '', preload: 'metadata', playsinline: '', src: 'assets/tutorial.mp4', 'aria-label': 'Video tutorial: how to use the Race Analyst' });
         video.addEventListener('error', () => { video.hidden = true; note.hidden = false; });
         // The poster is only set once the image has loaded, so a missing poster never shows a broken frame.
         const poster = new Image();
         poster.addEventListener('load', () => { video.poster = poster.src; });
         poster.src = 'assets/tutorial-poster.jpg';
-        add(card, dlgHead(titleId, 'Video, under 3 minutes', 'How to use the Form Guide', 'A narrated walk through the tabs and the five checks behind an educated bet.'), video, note);
+        add(card, dlgHead(titleId, 'Video, under 3 minutes', 'How to use the Race Analyst', 'A narrated walk through the tabs and the five checks behind an educated bet.'), video, note);
       },
     });
   }

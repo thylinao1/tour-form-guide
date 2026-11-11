@@ -1,4 +1,4 @@
-/* Tour 2025 Form Guide - interface. Reads window.TDF_DATA through the engine (window.TDF). */
+/* Tour 2025 Race Analyst - interface. Reads window.TDF_DATA through the engine (window.TDF). */
 (function () {
   'use strict';
   const T = window.TDF;
@@ -393,7 +393,7 @@
       h('div', null,
         h('p', { class: 'eyebrow', text: `Tour de France 2025 · ${dateShort(first.date, false)} to ${dateShort(last.date, false)} · ${E.stages.length} stages · ${fmtInt(Math.round(km))} km` }),
         h('h1', null, h('span', { class: 'hl', text: w.name }), ` won by ${fmtGap(E.gcFinal[1].gap).slice(1)}. Here is how the 2025 race played out.`),
-        h('p', { class: 'lede', text: 'This page answers: what happened in the 2025 Tour, on one screen? Every number is a summary of settled 2025 results, not a prediction. Each tab above answers one question. Click any rider name to see their full race.' })),
+        h('p', { class: 'lede', text: 'This page answers: what happened in the 2025 Tour, on one screen? Every number is a summary of settled 2025 results. Each tab above answers one question. Click any rider name to see their full race.' })),
       h('div', { class: 'tiles' },
         tile('Riders', fmtInt(E.riders.length), `${E.teams.length} teams of 8`),
         tile('Nations', String(nations), '+1 rider with no listed nationality'),
@@ -1728,7 +1728,7 @@
   renderers.method = (root) => {
     add(root, h('div', { class: 'view-head' }, h('div', null,
       h('p', { class: 'eyebrow', text: 'Method and sources' }),
-      h('h1', { text: 'How this form guide is built' }),
+      h('h1', { text: 'How Race Analyst is built' }),
       h('p', { class: 'lede', text: 'This tab answers: where do the numbers come from, and where is each view? Every number is computed in your browser from the 2025 race data, except the official points and mountains standings, which come from published results.' }))));
     const fc = panel({ title: 'Where each view lives', span: 7, sub: 'The 15 views, E1 to E15, and the tab each one is on. The Function map tab takes you straight to each one.' });
     add(fc.body, h('p', { class: 'verdict' }, 'Want to see a view working? Open the ', h('a', { href: '#functions', text: 'Function map' }), ' and press any code from E1 to E15: it opens the right tab and highlights the panel.'));

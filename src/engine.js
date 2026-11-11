@@ -1,5 +1,5 @@
 /*
- * Tour 2025 Form Guide - analytics engine.
+ * Tour 2025 Race Analyst - analytics engine.
  * Pure functions over the cleaned CSV tables (no DOM). The same file runs in the
  * browser (window.TDF) and in Node tests (module.exports), so the numbers the
  * tests check are the numbers the dashboard shows.
