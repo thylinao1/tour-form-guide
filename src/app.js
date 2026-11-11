@@ -268,6 +268,8 @@
     if (o.id) el.id = o.id;
     return { el, body, head };
   }
+  /** The overall winner's name gets a golden shine and glow (class "champ"). */
+  const champTile = (el, isWinner) => { if (isWinner) el.querySelector('.value').classList.add('champ'); return el; };
   const tile = (label, value, foot, small) => h('div', { class: 'tile' }, h('span', { class: 'label', text: label }), h('span', { class: `value${small ? ' small' : ''}`, text: value }), foot ? h('span', { class: 'foot' }, foot) : null);
   function seg(options, value, onChange, label) {
     const wrap = h('div', { class: 'seg', role: 'group', 'aria-label': label || 'Choose' });
@@ -1356,7 +1358,7 @@
           tile('Team classification', ordinal(tm.classRank), tm.classRank === 1 ? fmtTime(tm.classTotal) : `${fmtGap(tm.classGap)} behind`, true),
           tile('Stage wins', String(tm.wins), `${tm.podiums} podiums · ${tm.top10s} top-10s`, true),
           tile('Riders in Paris', `${tm.finished} of ${tm.riders}`, tm.exits ? `${tm.exits} left the race` : 'nobody left', true),
-          tile('Best rider overall', tm.bestGcBib ? R(tm.bestGcBib).short : '-', tm.bestGcRank ? ordinal(tm.bestGcRank) : '', true)),
+          champTile(tile('Best rider overall', tm.bestGcBib ? R(tm.bestGcBib).short : '-', tm.bestGcRank ? ordinal(tm.bestGcRank) : '', true), tm.bestGcRank === 1)),
         h('h3', { text: 'Whose times counted' }),
         h('p', { class: 'note', text: `Cells show each rider’s place on every stage. Outlined cells are the stages where that rider was one of the team’s three counted times. Total workload of the team’s finishers: ${fmtTime(tm.workload)}.` }),
         h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl heat' },

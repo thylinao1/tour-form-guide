@@ -514,6 +514,16 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
   pointer-events: none; opacity: 0; animation: flash-ring 2.2s ease-out 1;
 }
 @keyframes flash-ring { 0% { opacity: 0; } 15% { opacity: 1; } 60% { opacity: 1; } 100% { opacity: 0; } }
+/* the overall winner's name: a band of gold light sweeps across the letters, with a soft yellow glow around them */
+.tile .value.champ {
+  align-self: flex-start; color: var(--ink);
+  background: linear-gradient(100deg, var(--ink) 0 40%, #a87900 46%, #ffd20a 50%, #a87900 54%, var(--ink) 60% 100%) 100% 0 / 300% 100%;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 5px rgba(255, 210, 10, 0.75)) drop-shadow(0 0 14px rgba(255, 210, 10, 0.45));
+  animation: champ-shine 2.8s ease-in-out infinite;
+}
+@keyframes champ-shine { 0%, 15% { background-position: 100% 0; } 85%, 100% { background-position: 0% 0; } }
+@media (prefers-reduced-motion: reduce) { .tile .value.champ { background-position: 50% 0; } }
 
 /* plugin 10-functions.css */
 /* Function map tab: asphalt "race board" header with yellow counters, a grid of 15 view cards coloured by
@@ -2291,6 +2301,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
     if (o.id) el.id = o.id;
     return { el, body, head };
   }
+  /** The overall winner's name gets a golden shine and glow (class "champ"). */
+  const champTile = (el, isWinner) => { if (isWinner) el.querySelector('.value').classList.add('champ'); return el; };
   const tile = (label, value, foot, small) => h('div', { class: 'tile' }, h('span', { class: 'label', text: label }), h('span', { class: `value${small ? ' small' : ''}`, text: value }), foot ? h('span', { class: 'foot' }, foot) : null);
   function seg(options, value, onChange, label) {
     const wrap = h('div', { class: 'seg', role: 'group', 'aria-label': label || 'Choose' });
@@ -3379,7 +3391,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
           tile('Team classification', ordinal(tm.classRank), tm.classRank === 1 ? fmtTime(tm.classTotal) : `${fmtGap(tm.classGap)} behind`, true),
           tile('Stage wins', String(tm.wins), `${tm.podiums} podiums · ${tm.top10s} top-10s`, true),
           tile('Riders in Paris', `${tm.finished} of ${tm.riders}`, tm.exits ? `${tm.exits} left the race` : 'nobody left', true),
-          tile('Best rider overall', tm.bestGcBib ? R(tm.bestGcBib).short : '-', tm.bestGcRank ? ordinal(tm.bestGcRank) : '', true)),
+          champTile(tile('Best rider overall', tm.bestGcBib ? R(tm.bestGcBib).short : '-', tm.bestGcRank ? ordinal(tm.bestGcRank) : '', true), tm.bestGcRank === 1)),
         h('h3', { text: 'Whose times counted' }),
         h('p', { class: 'note', text: `Cells show each rider’s place on every stage. Outlined cells are the stages where that rider was one of the team’s three counted times. Total workload of the team’s finishers: ${fmtTime(tm.workload)}.` }),
         h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl heat' },

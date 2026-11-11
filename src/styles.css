@@ -437,3 +437,13 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
   pointer-events: none; opacity: 0; animation: flash-ring 2.2s ease-out 1;
 }
 @keyframes flash-ring { 0% { opacity: 0; } 15% { opacity: 1; } 60% { opacity: 1; } 100% { opacity: 0; } }
+/* the overall winner's name: a band of gold light sweeps across the letters, with a soft yellow glow around them */
+.tile .value.champ {
+  align-self: flex-start; color: var(--ink);
+  background: linear-gradient(100deg, var(--ink) 0 40%, #a87900 46%, #ffd20a 50%, #a87900 54%, var(--ink) 60% 100%) 100% 0 / 300% 100%;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 5px rgba(255, 210, 10, 0.75)) drop-shadow(0 0 14px rgba(255, 210, 10, 0.45));
+  animation: champ-shine 2.8s ease-in-out infinite;
+}
+@keyframes champ-shine { 0%, 15% { background-position: 100% 0; } 85%, 100% { background-position: 0% 0; } }
+@media (prefers-reduced-motion: reduce) { .tile .value.champ { background-position: 50% 0; } }
