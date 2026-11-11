@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Form Guide test harness</title>
+<style>html,body{margin:0;background:#888}iframe{border:0;display:block}</style>
+</head>
+<body>
+<!--
+  Test-only page. Serve the dashboard folder (not dist/) over http and open:
+    tests/harness.html?view=race&click=[data-rider="1"]&w=1440&h=1400
+  It loads dist/index.html in a same-origin iframe, waits for it to render, then clicks the
+  element matching the selector (e.g. a rider link to open the profile drawer).
+-->
+<script>
+  const q = new URLSearchParams(location.search);
+  const w = Number(q.get('w') || 1440), h = Number(q.get('h') || 1400);
+  const f = document.createElement('iframe');
+  f.width = w; f.height = h;
+  f.src = `../dist/index.html#${q.get('view') || 'race'}`;
+  document.body.appendChild(f);
+  f.addEventListener('load', () => {
+    setTimeout(() => {
+      const sel = q.get('click');
+      if (sel) {
+        const el = f.contentDocument.querySelector(sel);
+        if (el) el.click(); else document.title = `NOT FOUND: ${sel}`;
+      }
+    }, Number(q.get('wait') || 1500));
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+classification,rank,bib_number,name,team_name,value_text,value_numeric,unit,source_url
+gc,1,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,76h 00' 32'',273632,seconds,https://web.archive.org/web/20250731013054/https://www.letour.fr/en/rankings/stage-21
+gc,2,11,Jonas Vingegaard,TEAM VISMA | LEASE A BIKE,+ 00h 04' 24'',273896,seconds,https://web.archive.org/web/20250731013054/https://www.letour.fr/en/rankings/stage-21
+gc,3,72,Florian Lipowitz,RED BULL - BORA - HANSGROHE,+ 00h 11' 00'',274292,seconds,https://web.archive.org/web/20250731013054/https://www.letour.fr/en/rankings/stage-21
+gc,4,191,Oscar Onley,TEAM PICNIC POSTNL,+ 00h 12' 12'',274364,seconds,https://web.archive.org/web/20250731013054/https://www.letour.fr/en/rankings/stage-21
+gc,5,151,Félix Gall,DECATHLON AG2R LA MONDIALE TEAM,+ 00h 17' 12'',274664,seconds,https://web.archive.org/web/20250731013054/https://www.letour.fr/en/rankings/stage-21
+gc,6,221,Tobias Johannessen,UNO-X MOBILITY,+ 00h 20' 14'',274846,seconds,https://web.archive.org/web/20250731013054/https://www.letour.fr/en/rankings/stage-21
+gc,7,131,Kévin Vauquelin,ARKEA-B&B HOTELS,+ 00h 22' 35'',274987,seconds,https://web.archive.org/web/20250731013054/https://www.letour.fr/en/rankings/stage-21
+gc,8,71,Primoz Roglic,RED BULL - BORA - HANSGROHE,+ 00h 25' 30'',275162,seconds,https://web.archive.org/web/20250731013054/https://www.letour.fr/en/rankings/stage-21
+gc,9,31,Ben Healy,EF EDUCATION - EASYPOST,+ 00h 28' 02'',275314,seconds,https://web.archive.org/web/20250731013054/https://www.letour.fr/en/rankings/stage-21
+gc,10,186,Jordan Jegat,TOTALENERGIES,+ 00h 32' 42'',275594,seconds,https://web.archive.org/web/20250731013054/https://www.letour.fr/en/rankings/stage-21
+points,1,81,Jonathan Milan,LIDL-TREK,372,372,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+points,2,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,294,294,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+points,3,41,Biniam Girmay,INTERMARCHÉ - WANTY,232,232,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+points,4,11,Jonas Vingegaard,TEAM VISMA | LEASE A BIKE,182,182,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+points,5,187,Anthony Turgis,TOTALENERGIES,182,182,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+points,6,222,Jonas Abrahamsen,UNO-X MOBILITY,173,173,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+points,7,24,Tim Merlier,SOUDAL QUICK-STEP,156,156,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+points,8,17,Wout Van Aert,TEAM VISMA | LEASE A BIKE,138,138,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+points,9,103,Kaden Groves,ALPECIN-DECEUNINCK,125,125,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+points,10,84,Quinn Simmons,LIDL-TREK,123,123,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+kom,1,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,119,119,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+kom,2,11,Jonas Vingegaard,TEAM VISMA | LEASE A BIKE,104,104,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+kom,3,55,Lenny Martinez,BAHRAIN VICTORIOUS,97,97,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+kom,4,62,Thymen Arensman,INEOS GRENADIERS,85,85,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+kom,5,121,Ben O'Connor,TEAM JAYCO ALULA,51,51,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+kom,6,25,Valentin Paret Peintre,SOUDAL QUICK-STEP,51,51,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+kom,7,151,Félix Gall,DECATHLON AG2R LA MONDIALE TEAM,46,46,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+kom,8,71,Primoz Roglic,RED BULL - BORA - HANSGROHE,43,43,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+kom,9,191,Oscar Onley,TEAM PICNIC POSTNL,42,42,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+kom,10,201,Michael Woods,ISRAEL - PREMIER TECH,38,38,points,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+young,1,72,Florian Lipowitz,RED BULL - BORA - HANSGROHE,"76h 11' 32""",274292,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+young,2,191,Oscar Onley,TEAM PICNIC POSTNL,"+ 1' 12""",274364,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+young,3,131,Kévin Vauquelin,ARKEA-B&B HOTELS,"+ 11' 35""",274987,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+young,4,31,Ben Healy,EF EDUCATION - EASYPOST,"+ 17' 02""",275314,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+young,5,135,Raul Garcia Pierna,ARKEA-B&B HOTELS,"+ 2h 04' 58""",281790,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+young,6,28,Ilan Van Wilder,SOUDAL QUICK-STEP,"+ 2h 12' 14""",282226,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+young,7,94,Romain Gregoire,GROUPAMA-FDJ,"+ 2h 14' 58""",282390,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+young,8,198,Frank Van Den Broek,TEAM PICNIC POSTNL,"+ 2h 34' 44""",283576,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+young,9,25,Valentin Paret Peintre,SOUDAL QUICK-STEP,"+ 2h 36' 05""",283657,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+young,10,34,Alex Baudin,EF EDUCATION - EASYPOST,"+ 2h 45' 15""",284207,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+team,1,,TEAM VISMA | LEASE A BIKE,TEAM VISMA | LEASE A BIKE,"232h 01' 32""",835292,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+team,2,,UAE TEAM EMIRATES XRG,UAE TEAM EMIRATES XRG,"+ 24' 26""",836758,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+team,3,,RED BULL - BORA - HANSGROHE,RED BULL - BORA - HANSGROHE,"+ 1h 24' 47""",840379,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+team,4,,ARKEA-B&B HOTELS,ARKEA-B&B HOTELS,"+ 2h 10' 52""",843144,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+team,5,,DECATHLON AG2R LA MONDIALE TEAM,DECATHLON AG2R LA MONDIALE TEAM,"+ 2h 14' 15""",843347,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+team,6,,INEOS GRENADIERS,INEOS GRENADIERS,"+ 3h 22' 52""",847464,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+team,7,,MOVISTAR TEAM,MOVISTAR TEAM,"+ 3h 23' 25""",847497,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+team,8,,XDS ASTANA TEAM,XDS ASTANA TEAM,"+ 3h 23' 59""",847531,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+team,9,,TEAM PICNIC POSTNL,TEAM PICNIC POSTNL,"+ 3h 26' 06""",847658,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw
+team,10,,EF EDUCATION - EASYPOST,EF EDUCATION - EASYPOST,"+ 3h 43' 35""",848707,seconds,https://en.wikipedia.org/w/index.php?title=2025_Tour_de_France&action=raw

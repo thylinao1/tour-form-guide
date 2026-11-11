@@ -1,0 +1,24 @@
+team,team_country,riders,riders_finished,exits_total,exits_dns,exits_withdrawal,stage_wins,podiums,top10s,wins_flat,top10_flat,wins_hilly,top10_hilly,wins_mountain,top10_mountain,wins_itt,top10_itt,best_gc_rank,best_gc_rider,avg_gc_rank_finishers,team_class_rank_raw,team_class_rank_adj,total_adjusted_s_finishers,mountain_support,flat_top3x2_riders,gc_top10_riders,split_priorities
+TEAM VISMA | LEASE A BIKE,NLD,8,8,0,0,0,2,13,27,1,5,0,10,1,9,0,3,2,Jonas Vingegaard,40.0,1,1,2284282,2.3333,Wout Van Aert,Jonas Vingegaard,True
+UAE TEAM EMIRATES XRG,ARE,8,7,1,0,1,5,10,20,0,1,3,8,1,7,1,4,1,Tadej Pogacar,38.0,2,2,1997349,2.1667,,Tadej Pogacar,False
+RED BULL - BORA - HANSGROHE,DEU,8,7,1,1,0,0,3,14,0,2,0,1,0,8,0,3,3,Florian Lipowitz,71.8571,3,3,2020263,1.8333,,Florian Lipowitz; Primoz Roglic,False
+ARKEA-B&B HOTELS,FRA,8,8,0,0,0,0,0,9,0,2,0,3,0,3,0,1,7,Kévin Vauquelin,62.125,4,4,2307755,1.3333,,Kévin Vauquelin,False
+DECATHLON AG2R LA MONDIALE TEAM,FRA,8,7,1,0,1,0,0,8,0,0,0,2,0,4,0,2,5,Félix Gall,42.7143,5,5,2006113,1.8333,,Félix Gall,False
+INEOS GRENADIERS,GBR,8,6,2,1,1,2,3,7,0,2,0,2,2,3,0,0,12,Thymen Arensman,69.5,6,6,1737521,1.3333,,,False
+MOVISTAR TEAM,ESP,8,7,1,0,1,0,0,5,0,0,0,1,0,2,0,2,18,Gregor Mühlberger,79.8571,7,7,2035124,1.0,,,False
+XDS ASTANA TEAM,KAZ,8,6,2,2,0,0,1,8,0,5,0,3,0,0,0,0,14,Sergio Higuita,66.0,8,8,1735355,1.0,,,False
+TEAM PICNIC POSTNL,NLD,8,8,0,0,0,0,3,13,0,4,0,4,0,4,0,1,4,Oscar Onley,82.625,9,9,2324111,1.0,,Oscar Onley,False
+EF EDUCATION - EASYPOST,USA,8,7,1,1,0,1,3,8,0,1,1,3,0,4,0,0,9,Ben Healy,59.1429,10,10,2017936,0.8333,,Ben Healy,False
+GROUPAMA-FDJ,FRA,8,7,1,1,0,0,0,9,0,5,0,4,0,0,0,0,16,Guillaume Martin Guyonnet,63.8571,11,11,2021662,0.1667,,,False
+UNO-X MOBILITY,NOR,8,7,1,0,1,1,2,11,1,5,0,1,0,5,0,0,6,Tobias Johannessen,77.5714,12,12,2031585,1.0,,Tobias Johannessen,False
+TOTALENERGIES,FRA,8,6,2,1,1,0,0,4,0,2,0,2,0,0,0,0,10,Jordan Jegat,69.6667,13,13,1736887,0.8333,,Jordan Jegat,False
+SOUDAL QUICK-STEP,BEL,8,6,2,0,2,4,5,10,2,2,0,3,1,4,1,1,32,Ilan Van Wilder,80.8333,14,14,1746885,0.8333,Tim Merlier,,False
+TUDOR PRO CYCLING TEAM,CHE,8,8,0,0,0,0,2,11,0,6,0,3,0,2,0,0,42,Michael Storer,91.375,15,15,2337024,0.5,,,False
+ALPECIN-DECEUNINCK,BEL,8,6,2,1,1,3,6,9,1,5,2,4,0,0,0,0,22,Xandro Meurisse,84.1667,16,16,1746488,0.1667,,,False
+TEAM JAYCO ALULA,AUS,8,7,1,0,1,1,2,6,0,1,0,1,1,2,0,2,11,Ben O'Connor,116.0,17,17,2056754,0.8333,,,False
+ISRAEL - PREMIER TECH,ISR,8,8,0,0,0,0,0,4,0,2,0,1,0,1,0,0,48,Joseph Blackmore,95.25,18,18,2339851,0.1667,,,False
+COFIDIS,FRA,8,7,1,1,0,0,0,2,0,2,0,0,0,0,0,0,30,Emanuel Buchmann,94.7143,19,19,2045836,0.1667,,,False
+LIDL-TREK,USA,8,7,1,0,1,2,5,9,2,6,0,3,0,0,0,0,59,Quinn Simmons,113.8571,20,20,2060088,0.0,Jonathan Milan,,False
+BAHRAIN VICTORIOUS,BHR,8,7,1,0,1,0,3,7,0,4,0,0,0,2,0,1,40,Santiago Buitrago,111.1429,21,21,2058731,0.6667,,,False
+LOTTO,BEL,8,6,2,2,0,0,1,6,0,5,0,1,0,0,0,0,66,Jenno Berckmoes,114.5,22,22,1767539,0.0,,,False
+INTERMARCHÉ - WANTY,BEL,8,7,1,1,0,0,1,3,0,3,0,0,0,0,0,0,82,Louis Barre,131.4286,23,23,2072693,0.0,,,False

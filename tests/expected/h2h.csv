@@ -1,0 +1,91 @@
+group,bib_a,name_a,bib_b,name_b,common_stages,a_ahead,b_ahead,level,flat_common,flat_a_ahead,flat_b_ahead,hilly_common,hilly_a_ahead,hilly_b_ahead,mountain_common,mountain_a_ahead,mountain_b_ahead,itt_common,itt_a_ahead,itt_b_ahead,a_ahead_share,gc_rank_a,gc_rank_b,final_gc_gap_s
+GC top 10,1,Tadej Pogacar,11,Jonas Vingegaard,21,18,3,0,7,5,2,6,6,0,6,5,1,2,2,0,0.8571,1,2,264
+GC top 10,1,Tadej Pogacar,72,Florian Lipowitz,21,20,1,0,7,7,0,6,5,1,6,6,0,2,2,0,0.9524,1,3,660
+GC top 10,1,Tadej Pogacar,191,Oscar Onley,21,20,1,0,7,6,1,6,6,0,6,6,0,2,2,0,0.9524,1,4,732
+GC top 10,1,Tadej Pogacar,151,Félix Gall,21,20,1,0,7,6,1,6,6,0,6,6,0,2,2,0,0.9524,1,5,1032
+GC top 10,1,Tadej Pogacar,221,Tobias Johannessen,21,18,3,0,7,5,2,6,5,1,6,6,0,2,2,0,0.8571,1,6,1214
+GC top 10,1,Tadej Pogacar,131,Kévin Vauquelin,21,17,4,0,7,4,3,6,5,1,6,6,0,2,2,0,0.8095,1,7,1355
+GC top 10,1,Tadej Pogacar,71,Primoz Roglic,21,21,0,0,7,7,0,6,6,0,6,6,0,2,2,0,1.0,1,8,1530
+GC top 10,1,Tadej Pogacar,31,Ben Healy,21,14,7,0,7,5,2,6,3,3,6,4,2,2,2,0,0.6667,1,9,1682
+GC top 10,1,Tadej Pogacar,186,Jordan Jegat,21,17,4,0,7,5,2,6,4,2,6,6,0,2,2,0,0.8095,1,10,1962
+GC top 10,11,Jonas Vingegaard,72,Florian Lipowitz,21,18,3,0,7,6,1,6,5,1,6,6,0,2,1,1,0.8571,2,3,396
+GC top 10,11,Jonas Vingegaard,191,Oscar Onley,21,19,2,0,7,5,2,6,6,0,6,6,0,2,2,0,0.9048,2,4,468
+GC top 10,11,Jonas Vingegaard,151,Félix Gall,21,19,2,0,7,5,2,6,6,0,6,6,0,2,2,0,0.9048,2,5,768
+GC top 10,11,Jonas Vingegaard,221,Tobias Johannessen,21,17,4,0,7,5,2,6,4,2,6,6,0,2,2,0,0.8095,2,6,950
+GC top 10,11,Jonas Vingegaard,131,Kévin Vauquelin,21,15,6,0,7,3,4,6,5,1,6,6,0,2,1,1,0.7143,2,7,1091
+GC top 10,11,Jonas Vingegaard,71,Primoz Roglic,21,20,1,0,7,7,0,6,6,0,6,6,0,2,1,1,0.9524,2,8,1266
+GC top 10,11,Jonas Vingegaard,31,Ben Healy,21,14,7,0,7,5,2,6,3,3,6,4,2,2,2,0,0.6667,2,9,1418
+GC top 10,11,Jonas Vingegaard,186,Jordan Jegat,21,16,5,0,7,4,3,6,4,2,6,6,0,2,2,0,0.7619,2,10,1698
+GC top 10,72,Florian Lipowitz,191,Oscar Onley,21,12,9,0,7,3,4,6,2,4,6,5,1,2,2,0,0.5714,3,4,72
+GC top 10,72,Florian Lipowitz,151,Félix Gall,21,12,9,0,7,3,4,6,3,3,6,4,2,2,2,0,0.5714,3,5,372
+GC top 10,72,Florian Lipowitz,221,Tobias Johannessen,21,11,10,0,7,1,6,6,3,3,6,5,1,2,2,0,0.5238,3,6,554
+GC top 10,72,Florian Lipowitz,131,Kévin Vauquelin,21,10,11,0,7,1,6,6,2,4,6,6,0,2,1,1,0.4762,3,7,695
+GC top 10,72,Florian Lipowitz,71,Primoz Roglic,21,15,6,0,7,6,1,6,4,2,6,4,2,2,1,1,0.7143,3,8,870
+GC top 10,72,Florian Lipowitz,31,Ben Healy,21,12,9,0,7,2,5,6,4,2,6,4,2,2,2,0,0.5714,3,9,1022
+GC top 10,72,Florian Lipowitz,186,Jordan Jegat,21,13,8,0,7,3,4,6,2,4,6,6,0,2,2,0,0.619,3,10,1302
+GC top 10,191,Oscar Onley,151,Félix Gall,21,17,4,0,7,4,3,6,6,0,6,5,1,2,2,0,0.8095,4,5,300
+GC top 10,191,Oscar Onley,221,Tobias Johannessen,21,13,8,0,7,2,5,6,4,2,6,5,1,2,2,0,0.619,4,6,482
+GC top 10,191,Oscar Onley,131,Kévin Vauquelin,21,13,8,0,7,2,5,6,4,2,6,6,0,2,1,1,0.619,4,7,623
+GC top 10,191,Oscar Onley,71,Primoz Roglic,21,14,7,0,7,5,2,6,4,2,6,5,1,2,0,2,0.6667,4,8,798
+GC top 10,191,Oscar Onley,31,Ben Healy,21,12,9,0,7,3,4,6,3,3,6,4,2,2,2,0,0.5714,4,9,950
+GC top 10,191,Oscar Onley,186,Jordan Jegat,21,14,7,0,7,2,5,6,4,2,6,6,0,2,2,0,0.6667,4,10,1230
+GC top 10,151,Félix Gall,221,Tobias Johannessen,21,9,12,0,7,1,6,6,3,3,6,4,2,2,1,1,0.4286,5,6,182
+GC top 10,151,Félix Gall,131,Kévin Vauquelin,21,8,13,0,7,1,6,6,1,5,6,5,1,2,1,1,0.381,5,7,323
+GC top 10,151,Félix Gall,71,Primoz Roglic,21,11,10,0,7,4,3,6,3,3,6,4,2,2,0,2,0.5238,5,8,498
+GC top 10,151,Félix Gall,31,Ben Healy,21,11,10,0,7,2,5,6,3,3,6,4,2,2,2,0,0.5238,5,9,650
+GC top 10,151,Félix Gall,186,Jordan Jegat,21,12,9,0,7,1,6,6,3,3,6,6,0,2,2,0,0.5714,5,10,930
+GC top 10,221,Tobias Johannessen,131,Kévin Vauquelin,21,8,13,0,7,1,6,6,2,4,6,5,1,2,0,2,0.381,6,7,141
+GC top 10,221,Tobias Johannessen,71,Primoz Roglic,21,14,7,0,7,7,0,6,4,2,6,3,3,2,0,2,0.6667,6,8,316
+GC top 10,221,Tobias Johannessen,31,Ben Healy,21,14,7,0,7,5,2,6,4,2,6,3,3,2,2,0,0.6667,6,9,468
+GC top 10,221,Tobias Johannessen,186,Jordan Jegat,21,14,7,0,7,4,3,6,3,3,6,5,1,2,2,0,0.6667,6,10,748
+GC top 10,131,Kévin Vauquelin,71,Primoz Roglic,21,16,5,0,7,7,0,6,6,0,6,2,4,2,1,1,0.7619,7,8,175
+GC top 10,131,Kévin Vauquelin,31,Ben Healy,21,14,7,0,7,6,1,6,4,2,6,2,4,2,2,0,0.6667,7,9,327
+GC top 10,131,Kévin Vauquelin,186,Jordan Jegat,21,15,6,0,7,5,2,6,4,2,6,4,2,2,2,0,0.7143,7,10,607
+GC top 10,71,Primoz Roglic,31,Ben Healy,21,9,12,0,7,2,5,6,3,3,6,2,4,2,2,0,0.4286,8,9,152
+GC top 10,71,Primoz Roglic,186,Jordan Jegat,21,11,10,0,7,1,6,6,3,3,6,5,1,2,2,0,0.5238,8,10,432
+GC top 10,31,Ben Healy,186,Jordan Jegat,21,10,11,0,7,4,3,6,1,5,6,5,1,2,0,2,0.4762,9,10,280
+Flat top-10 leaders,211,Arnaud De Lie,81,Jonathan Milan,21,5,16,0,7,2,5,6,2,4,6,1,5,2,0,2,0.2381,142,146,360
+Flat top-10 leaders,211,Arnaud De Lie,17,Wout Van Aert,21,5,16,0,7,5,2,6,0,6,6,0,6,2,0,2,0.2381,142,67,-6939
+Flat top-10 leaders,211,Arnaud De Lie,103,Kaden Groves,21,4,17,0,7,4,3,6,0,6,6,0,6,2,0,2,0.1905,142,86,-5766
+Flat top-10 leaders,211,Arnaud De Lie,41,Biniam Girmay,21,7,14,0,7,5,2,6,1,5,6,0,6,2,1,1,0.3333,142,132,-880
+Flat top-10 leaders,211,Arnaud De Lie,172,Davide Ballerini,21,11,10,0,7,5,2,6,4,2,6,2,4,2,0,2,0.5238,142,135,-553
+Flat top-10 leaders,211,Arnaud De Lie,112,Alberto Dainese,21,9,12,0,7,6,1,6,2,4,6,1,5,2,0,2,0.4286,142,119,-1984
+Flat top-10 leaders,211,Arnaud De Lie,97,Paul Penhoet,21,7,14,0,7,6,1,6,1,5,6,0,6,2,0,2,0.3333,142,111,-2691
+Flat top-10 leaders,211,Arnaud De Lie,24,Tim Merlier,21,9,12,0,7,5,2,6,2,4,6,1,5,2,1,1,0.4286,142,148,464
+Flat top-10 leaders,211,Arnaud De Lie,195,Tobias Lund Andresen,21,5,16,0,7,5,2,6,0,6,6,0,6,2,0,2,0.2381,142,96,-4964
+Flat top-10 leaders,81,Jonathan Milan,17,Wout Van Aert,21,6,15,0,7,5,2,6,0,6,6,1,5,2,0,2,0.2857,146,67,-7299
+Flat top-10 leaders,81,Jonathan Milan,103,Kaden Groves,21,5,16,0,7,4,3,6,1,5,6,0,6,2,0,2,0.2381,146,86,-6126
+Flat top-10 leaders,81,Jonathan Milan,41,Biniam Girmay,21,11,10,0,7,4,3,6,3,3,6,3,3,2,1,1,0.5238,146,132,-1240
+Flat top-10 leaders,81,Jonathan Milan,172,Davide Ballerini,21,14,7,0,7,4,3,6,3,3,6,5,1,2,2,0,0.6667,146,135,-913
+Flat top-10 leaders,81,Jonathan Milan,112,Alberto Dainese,21,11,10,0,7,6,1,6,1,5,6,3,3,2,1,1,0.5238,146,119,-2344
+Flat top-10 leaders,81,Jonathan Milan,97,Paul Penhoet,21,7,14,0,7,6,1,6,0,6,6,0,6,2,1,1,0.3333,146,111,-3051
+Flat top-10 leaders,81,Jonathan Milan,24,Tim Merlier,21,12,9,0,7,5,2,6,3,3,6,3,3,2,1,1,0.5714,146,148,104
+Flat top-10 leaders,81,Jonathan Milan,195,Tobias Lund Andresen,21,6,15,0,7,5,2,6,0,6,6,0,6,2,1,1,0.2857,146,96,-5324
+Flat top-10 leaders,17,Wout Van Aert,103,Kaden Groves,21,12,9,0,7,3,4,6,4,2,6,4,2,2,1,1,0.5714,67,86,1173
+Flat top-10 leaders,17,Wout Van Aert,41,Biniam Girmay,21,16,5,0,7,4,3,6,6,0,6,5,1,2,1,1,0.7619,67,132,6059
+Flat top-10 leaders,17,Wout Van Aert,172,Davide Ballerini,21,18,3,0,7,5,2,6,5,1,6,6,0,2,2,0,0.8571,67,135,6386
+Flat top-10 leaders,17,Wout Van Aert,112,Alberto Dainese,21,16,5,0,7,3,4,6,6,0,6,6,0,2,1,1,0.7619,67,119,4955
+Flat top-10 leaders,17,Wout Van Aert,97,Paul Penhoet,21,14,7,0,7,4,3,6,5,1,6,3,3,2,2,0,0.6667,67,111,4248
+Flat top-10 leaders,17,Wout Van Aert,24,Tim Merlier,21,16,5,0,7,3,4,6,6,0,6,6,0,2,1,1,0.7619,67,148,7403
+Flat top-10 leaders,17,Wout Van Aert,195,Tobias Lund Andresen,21,15,6,0,7,4,3,6,4,2,6,5,1,2,2,0,0.7143,67,96,1975
+Flat top-10 leaders,103,Kaden Groves,41,Biniam Girmay,21,17,4,0,7,4,3,6,5,1,6,6,0,2,2,0,0.8095,86,132,4886
+Flat top-10 leaders,103,Kaden Groves,172,Davide Ballerini,21,18,3,0,7,4,3,6,6,0,6,6,0,2,2,0,0.8571,86,135,5213
+Flat top-10 leaders,103,Kaden Groves,112,Alberto Dainese,21,18,3,0,7,6,1,6,4,2,6,6,0,2,2,0,0.8571,86,119,3782
+Flat top-10 leaders,103,Kaden Groves,97,Paul Penhoet,21,12,9,0,7,4,3,6,3,3,6,3,3,2,2,0,0.5714,86,111,3075
+Flat top-10 leaders,103,Kaden Groves,24,Tim Merlier,21,18,3,0,7,5,2,6,5,1,6,6,0,2,2,0,0.8571,86,148,6230
+Flat top-10 leaders,103,Kaden Groves,195,Tobias Lund Andresen,21,14,7,0,7,6,1,6,3,3,6,3,3,2,2,0,0.6667,86,96,802
+Flat top-10 leaders,41,Biniam Girmay,172,Davide Ballerini,21,12,9,0,7,4,3,6,3,3,6,4,2,2,1,1,0.5714,132,135,327
+Flat top-10 leaders,41,Biniam Girmay,112,Alberto Dainese,21,9,12,0,7,4,3,6,1,5,6,3,3,2,1,1,0.4286,132,119,-1104
+Flat top-10 leaders,41,Biniam Girmay,97,Paul Penhoet,21,6,15,0,7,5,2,6,0,6,6,0,6,2,1,1,0.2857,132,111,-1811
+Flat top-10 leaders,41,Biniam Girmay,24,Tim Merlier,21,12,9,0,7,4,3,6,3,3,6,3,3,2,2,0,0.5714,132,148,1344
+Flat top-10 leaders,41,Biniam Girmay,195,Tobias Lund Andresen,21,6,15,0,7,4,3,6,0,6,6,1,5,2,1,1,0.2857,132,96,-4084
+Flat top-10 leaders,172,Davide Ballerini,112,Alberto Dainese,21,6,15,0,7,4,3,6,2,4,6,0,6,2,0,2,0.2857,135,119,-1431
+Flat top-10 leaders,172,Davide Ballerini,97,Paul Penhoet,21,5,16,0,7,4,3,6,1,5,6,0,6,2,0,2,0.2381,135,111,-2138
+Flat top-10 leaders,172,Davide Ballerini,24,Tim Merlier,21,8,13,0,7,4,3,6,2,4,6,1,5,2,1,1,0.381,135,148,1017
+Flat top-10 leaders,172,Davide Ballerini,195,Tobias Lund Andresen,21,5,16,0,7,3,4,6,1,5,6,0,6,2,1,1,0.2381,135,96,-4411
+Flat top-10 leaders,112,Alberto Dainese,97,Paul Penhoet,21,8,13,0,7,5,2,6,2,4,6,0,6,2,1,1,0.381,119,111,-707
+Flat top-10 leaders,112,Alberto Dainese,24,Tim Merlier,21,15,6,0,7,5,2,6,3,3,6,5,1,2,2,0,0.7143,119,148,2448
+Flat top-10 leaders,112,Alberto Dainese,195,Tobias Lund Andresen,21,5,16,0,7,4,3,6,0,6,6,0,6,2,1,1,0.2381,119,96,-2980
+Flat top-10 leaders,97,Paul Penhoet,24,Tim Merlier,21,16,5,0,7,3,4,6,6,0,6,6,0,2,1,1,0.7619,111,148,3155
+Flat top-10 leaders,97,Paul Penhoet,195,Tobias Lund Andresen,21,9,12,0,7,2,5,6,1,5,6,5,1,2,1,1,0.4286,111,96,-2273
+Flat top-10 leaders,24,Tim Merlier,195,Tobias Lund Andresen,21,5,16,0,7,3,4,6,1,5,6,0,6,2,1,1,0.2381,148,96,-5428

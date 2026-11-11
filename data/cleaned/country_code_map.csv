@@ -1,0 +1,31 @@
+source_code,country_code,country_name
+UAE,ARE,United Arab Emirates
+ARG,ARG,Argentina
+AUS,AUS,Australia
+AUT,AUT,Austria
+BEL,BEL,Belgium
+BRN,BHR,Bahrain
+CAN,CAN,Canada
+SUI,CHE,Switzerland
+COL,COL,Colombia
+CZE,CZE,Czechia
+GER,DEU,Germany
+DEN,DNK,Denmark
+ECU,ECU,Ecuador
+ERI,ERI,Eritrea
+ESP,ESP,Spain
+FRA,FRA,France
+GBR,GBR,United Kingdom of Great Britain and Northern Ireland
+IRL,IRL,Ireland
+ISR,ISR,Israel
+ITA,ITA,Italy
+KAZ,KAZ,Kazakhstan
+LAT,LVA,Latvia
+NED,NLD,"Netherlands, Kingdom of the"
+NOR,NOR,Norway
+NZL,NZL,New Zealand
+POL,POL,Poland
+POR,PRT,Portugal
+SLO,SVN,Slovenia
+USA,USA,United States of America
+NULL,XXX,Not specified

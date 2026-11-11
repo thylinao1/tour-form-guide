@@ -1,0 +1,22 @@
+stage_id,leader_bib,leader_name,leader_team,leader_country,leader_cum_adjusted_s,leader_cum_hms,second_bib,second_name,margin_to_second_s,riders_level_on_time_with_leader,riders_ranked,leader_changed
+1,101,Jasper Philipsen,ALPECIN-DECEUNINCK,BEL,13981,3:53:01,41,Biniam Girmay,4,0,182,False
+2,106,Mathieu Van Der Poel,ALPECIN-DECEUNINCK,NLD,31122,8:38:42,1,Tadej Pogacar,4,0,182,True
+3,106,Mathieu Van Der Poel,ALPECIN-DECEUNINCK,NLD,46537,12:55:37,1,Tadej Pogacar,4,0,181,False
+4,106,Mathieu Van Der Poel,ALPECIN-DECEUNINCK,NLD,60360,16:46:00,1,Tadej Pogacar,0,1,181,False
+5,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,62578,17:22:58,21,Remco Evenepoel,42,0,179,True
+6,106,Mathieu Van Der Poel,ALPECIN-DECEUNINCK,NLD,78754,21:52:34,1,Tadej Pogacar,1,0,179,True
+7,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,93484,25:58:04,21,Remco Evenepoel,54,0,177,True
+8,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,107310,29:48:30,21,Remco Evenepoel,54,0,176,False
+9,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,119842,33:17:22,21,Remco Evenepoel,54,0,175,False
+10,31,Ben Healy,EF EDUCATION - EASYPOST,IRL,135709,37:41:49,1,Tadej Pogacar,29,0,172,True
+11,31,Ben Healy,EF EDUCATION - EASYPOST,IRL,147673,41:01:13,1,Tadej Pogacar,29,0,172,False
+12,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,163371,45:22:51,11,Jonas Vingegaard,211,0,171,True
+13,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,164751,45:45:51,11,Jonas Vingegaard,247,0,171,False
+14,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,182428,50:40:28,11,Jonas Vingegaard,253,0,167,False
+15,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,195644,54:20:44,11,Jonas Vingegaard,253,0,166,False
+16,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,210286,58:24:46,11,Jonas Vingegaard,255,0,165,False
+17,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,222616,61:50:16,11,Jonas Vingegaard,255,0,164,False
+18,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,240942,66:55:42,11,Jonas Vingegaard,266,0,161,False
+19,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,250906,69:41:46,11,Jonas Vingegaard,264,0,161,False
+20,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,266099,73:54:59,11,Jonas Vingegaard,264,0,160,False
+21,1,Tadej Pogacar,UAE TEAM EMIRATES XRG,SVN,277349,77:02:29,11,Jonas Vingegaard,264,0,160,False

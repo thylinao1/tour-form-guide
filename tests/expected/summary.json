@@ -1,0 +1,87 @@
+{
+  "stages": 21,
+  "first_stage_date": "2025-07-05",
+  "last_stage_date": "2025-07-27",
+  "total_distance_km": 3302.0,
+  "riders_registered": 184,
+  "riders_with_results": 182,
+  "result_rows": 3602,
+  "teams": 23,
+  "riders_per_team": [
+    8
+  ],
+  "nations_excluding_XXX": 26,
+  "nations_including_XXX": 27,
+  "team_countries": 14,
+  "finishers_all_21": 160,
+  "exits_total": 24,
+  "exits_dns": 12,
+  "exits_withdrawal": 12,
+  "stage_counts_by_type": {
+    "flat": 7,
+    "hilly": 6,
+    "individual time-trial": 2,
+    "mountain": 6
+  },
+  "distance_by_type_km": {
+    "flat": 1158.2,
+    "hilly": 1135.3,
+    "individual time-trial": 43.9,
+    "mountain": 964.6
+  },
+  "distinct_stage_winners": 15,
+  "young_registered": 48,
+  "young_finishers": 42,
+  "winner": {
+    "bib": 1,
+    "name": "Tadej Pogacar",
+    "team": "UAE TEAM EMIRATES XRG",
+    "country": "SVN",
+    "total_adjusted_s": 277349,
+    "total_hms": "77:02:29",
+    "margin_s": 264,
+    "margin_text": "+4:24",
+    "second": "Jonas Vingegaard",
+    "third": "Florian Lipowitz",
+    "third_gap_s": 660
+  },
+  "young_winner": "Florian Lipowitz",
+  "points_estimate_leader": "Tadej Pogacar",
+  "points_estimate_leader_finishers": "Tadej Pogacar",
+  "kom_proxy_leader": "Tadej Pogacar",
+  "team_classification_winner_raw": "TEAM VISMA | LEASE A BIKE",
+  "team_classification_winner_adj": "TEAM VISMA | LEASE A BIKE",
+  "gc_time_ties_among_finishers": 0,
+  "team_class_ties_raw": 0,
+  "team_class_ties_adj": 0,
+  "constants": {
+    "young_cutoff": "2000-01-01",
+    "race_start": "2025-07-05",
+    "bunch_min": 20,
+    "team_scorers": 3,
+    "min_starts_archetype": 5,
+    "weeks": {
+      "1": [
+        1,
+        9
+      ],
+      "2": [
+        10,
+        15
+      ],
+      "3": [
+        16,
+        21
+      ]
+    }
+  },
+  "archetype_counts": {
+    "Domestique/Support": 133,
+    "Sprinter": 19,
+    "GC contender": 10,
+    "Puncheur/Hilly": 7,
+    "Climber": 6,
+    "Too few starts (<5)": 5,
+    "Time-trialist": 4
+  }
+}
