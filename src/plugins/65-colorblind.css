@@ -1,0 +1,17 @@
+/* Colour blind mode. The button in the header adds the class "cb" to <html>, and these tokens replace the
+   data colours with the Okabe-Ito set, which stays distinguishable with red-green and blue-yellow colour blindness.
+   Checked in tests/colorblind.test.mjs. The doubled class makes these rules win over both themes. */
+:root.cb.cb {
+  --flat: #0072b2; --hilly: #e69f00; --mountain: #d55e00; --itt: #cc79a7;
+  --green: #009e73; --polka: #d55e00;
+  --a: #0072b2; --b: #e69f00;
+  --s1: #0072b2; --s2: #e69f00; --s3: #009e73; --s4: #cc79a7; --s5: #56b4e9; --s6: #d55e00;
+  --div-neg: #0072b2; --div-pos: #d55e00;
+  --good: #0072b2; --bad: #d55e00;
+}
+.cb-btn { margin-right: 8px; }
+.cb-btn + .th-btn { margin-left: 0; }
+.cb-btn[aria-pressed="true"] { background: var(--maillot); border-color: var(--maillot); color: var(--maillot-ink); }
+.cb-btn i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 3px; vertical-align: 0; }
+.cb-btn i:nth-child(1) { background: #0072b2; } .cb-btn i:nth-child(2) { background: #e69f00; } .cb-btn i:nth-child(3) { background: #cc79a7; margin-right: 7px; }
+.cb-btn[aria-pressed="true"] i { box-shadow: 0 0 0 1.5px var(--maillot-ink); }

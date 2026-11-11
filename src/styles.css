@@ -106,9 +106,10 @@ button, select, input { font: inherit; color: inherit; }
 .masthead :focus-visible { outline: 2px solid var(--maillot); outline-offset: -3px; }
 .tbl tr.click:focus-visible { outline-offset: -2px; }
 .btn:focus-visible, .chip:focus-visible, .seg button:focus-visible, .sel:focus-visible, .finder:focus-visible { outline-width: 3px; }
-/* laptop widths: the tab row moves under the brand and wraps, so all tabs stay visible without scrolling.
+/* laptop and desktop widths: the tab row sits under the brand and wraps, so all tabs stay visible without
+   scrolling (twelve tabs and the header buttons do not fit on one 1360 px row).
    The Help button (guide plugin) moves to the right end of the brand row. */
-@media (max-width: 1439px) and (min-width: 761px) {
+@media (min-width: 761px) {
   .mast-inner { flex-wrap: wrap; row-gap: 0; }
   .tabs { order: 3; flex: 1 1 100%; flex-wrap: wrap; margin-left: 0; overflow: visible; }
   .tabs a { padding: 9px 8px 8px; font-size: 14px; letter-spacing: 0.05em; margin-bottom: 0; }
