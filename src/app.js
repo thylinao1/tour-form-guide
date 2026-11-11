@@ -253,7 +253,7 @@
         o.team === false ? null : [' ', h('span', { class: 'team-s', text: teamShort(r.team) })]));
   }
   // also = this panel supports a function whose main panel is elsewhere on the tab (badge drawn dashed).
-  const fnTag = (code, name, also) => h('span', { class: also ? 'fn also' : 'fn', title: `${also ? 'Also part of brief function' : 'Brief function'} ${code}: ${name}` }, code);
+  const fnTag = (code, name, also) => h('span', { class: also ? 'fn also' : 'fn', title: `${also ? 'Also part of view' : 'View'} ${code}: ${name}` }, code);
   function panel(o) {
     const head = h('div', { class: 'panel-head' },
       h('div', null,
@@ -1327,7 +1327,7 @@
     }, { onClick: (p) => { const list = (variant === 'raw' ? E.TEAMCLASS : E.TEAMCLASS_ADJ).list.slice().reverse(); S.team = list[p.dataIndex].team; teamSel.value = S.team; redraw(tcChart); drawTeam(); tb.el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
 
     // E3
-    const tb = panel({ title: 'Team burden and contribution', fn: [['E3', 'Team burden and contribution']], sub: 'Roll the team down to its riders: who supplied the three counted times, stage by stage. The brief asks for total adjusted time: this panel uses the official rule (three best times per stage), while the Official / With bonuses switch above and the workload figure below show the other totals.' });
+    const tb = panel({ title: 'Team burden and contribution', fn: [['E3', 'Team burden and contribution']], sub: 'Roll the team down to its riders: who supplied the three counted times, stage by stage. This panel uses the official rule (three best times per stage), while the Official / With bonuses switch above and the workload figure below show the other totals.' });
     const teamSel = selectEl('team-sel', [{ options: E.TEAMCLASS.list.map((x) => ({ value: x.team, label: `${ordinal(x.rank)} · ${teamShort(x.team)}` })) }], S.team, (v) => { S.team = v; redraw(tcChart); drawTeam(); }, 'Team');
     tb.head.appendChild(h('div', { class: 'panel-tools' }, teamSel));
     const tbBody = h('div', { style: 'display:flex;flex-direction:column;gap:12px;min-width:0' });
@@ -1729,9 +1729,9 @@
     add(root, h('div', { class: 'view-head' }, h('div', null,
       h('p', { class: 'eyebrow', text: 'Method and sources' }),
       h('h1', { text: 'How this form guide is built' }),
-      h('p', { class: 'lede', text: 'This tab answers: where do the numbers come from, and which of the 15 brief functions are built? Every number is computed in your browser from the 2025 race data, except the official points and mountains standings, which come from published results.' }))));
-    const fc = panel({ title: 'Brief functions covered', span: 7, sub: 'All 15 of the lecturer\'s demonstration prompts (E1 to E15) are built in. The Function map tab takes you straight to each one.' });
-    add(fc.body, h('p', { class: 'verdict' }, 'Want to see a function working? Open the ', h('a', { href: '#functions', text: 'Function map' }), ' and press any code from E1 to E15: it opens the right tab and highlights the panel.'));
+      h('p', { class: 'lede', text: 'This tab answers: where do the numbers come from, and where is each view? Every number is computed in your browser from the 2025 race data, except the official points and mountains standings, which come from published results.' }))));
+    const fc = panel({ title: 'Where each view lives', span: 7, sub: 'The 15 views, E1 to E15, and the tab each one is on. The Function map tab takes you straight to each one.' });
+    add(fc.body, h('p', { class: 'verdict' }, 'Want to see a view working? Open the ', h('a', { href: '#functions', text: 'Function map' }), ' and press any code from E1 to E15: it opens the right tab and highlights the panel.'));
     const F = [
       ['E1', 'GC leaderboard with contextual descent', 'Overall winner', '#outright', 'Final standings. Click a rider to see the day they gained or lost the most time on the top ten, then click through to that stage.'],
       ['E2', 'A stage in focus', 'Stages', '#stages', 'Pick any stage: winner, finish and adjusted times, teams, nations, distance and terrain. Click a team to see only its riders.'],
@@ -1753,19 +1753,19 @@
     const jumpTo = (f) => (e) => { e.preventDefault(); API.goToFunction(f[3].slice(1), f[0]); };
     add(fc.body, tbl([
       { label: 'Code', render: (f) => h('button', { class: 'fn fn-jump', type: 'button', style: 'margin:0', title: `Show ${f[0]} on the ${f[2]} tab`, 'aria-label': `Show ${f[0]}, ${f[1]}, on the ${f[2]} tab`, text: f[0], on: { click: jumpTo(f) } }) },
-      { label: 'Function', render: (f) => h('b', { text: f[1] }) },
+      { label: 'View', render: (f) => h('b', { text: f[1] }) },
       { label: 'Where', render: (f) => h('a', { href: f[3], title: `Open the ${f[2]} tab at ${f[0]}`, text: `${f[2]} ›`, on: { click: jumpTo(f) } }) },
       { label: 'What it does', render: (f) => f[4] },
     ], F, { caption: 'Press a code or a tab name to jump to that panel. It flashes yellow when you arrive.' }));
     root.appendChild(fc.el);
 
-    const req = panel({ title: 'What the brief asks for (Task 3, a to e)', span: 5 });
+    const req = panel({ title: 'Ways to explore', span: 5 });
     add(req.body, h('dl', { class: 'kv' },
-      h('dt', { text: 'a. Drill down' }), h('dd', { text: 'Go from a total to the detail behind it. Stages tab: terrain, then stage, then rider. Overall winner tab: rider, then their key stage. Teams tab: team, then rider, then stage. Nations tab: country, then riders. Click any rider name for a profile.' }),
-      h('dt', { text: 'b. Compare the jerseys' }), h('dd', { text: 'Jerseys tab: the top 10 of the overall (yellow), points (green), mountains (polka dot) and young rider (white) standings side by side, plus each rider\'s places in all of them.' }),
-      h('dt', { text: 'c. Running race times' }), h('dd', { text: 'Overall winner tab: each rider\'s total time after every stage. Teams tab: team totals and running team time. Head-to-head tab: the running gap between two riders or two teams.' }),
-      h('dt', { text: 'd. Countries' }), h('dd', { text: 'Nations tab: how many riders and how many teams come from each country, on a map and in a ranked list, with results per country.' }),
-      h('dt', { text: 'e. Clear design' }), h('dd', { text: 'One colour and icon per terrain, jersey colours for the standings, a plain sentence at the top of every tab, light and dark themes and a phone layout.' })));
+      h('dt', { text: 'Drill down' }), h('dd', { text: 'Go from a total to the detail behind it. Stages tab: terrain, then stage, then rider. Overall winner tab: rider, then their key stage. Teams tab: team, then rider, then stage. Nations tab: country, then riders. Click any rider name for a profile.' }),
+      h('dt', { text: 'Compare the jerseys' }), h('dd', { text: 'Jerseys tab: the top 10 of the overall (yellow), points (green), mountains (polka dot) and young rider (white) standings side by side, plus each rider\'s places in all of them.' }),
+      h('dt', { text: 'Running race times' }), h('dd', { text: 'Overall winner tab: each rider\'s total time after every stage. Teams tab: team totals and running team time. Head-to-head tab: the running gap between two riders or two teams.' }),
+      h('dt', { text: 'Countries' }), h('dd', { text: 'Nations tab: how many riders and how many teams come from each country, on a map and in a ranked list, with results per country.' }),
+      h('dt', { text: 'Colours and layout' }), h('dd', { text: 'One colour and icon per terrain, jersey colours for the standings, a plain sentence at the top of every tab, light and dark themes and a phone layout.' })));
     root.appendChild(req.el);
 
     const df = panel({ title: 'Definitions', span: 7 });

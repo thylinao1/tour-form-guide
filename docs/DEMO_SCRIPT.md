@@ -85,7 +85,7 @@ The yellow total 77:02:29 is longer than the official 76:00:32 for one reason: s
 
 ### 10. Function map and close, about 1 minute (requirement e, all 15)
 
-1. Open **Function map**. Say: "All 15 prompts, E1 to E15, each with a plain title, the lecturer's title, a live number and a Show me button. 15 of 15 are covered, and the Task 3 list a to e is ticked off below."
+1. Open **Function map**. Say: "All 15 views, E1 to E15, each with a plain title, a live number and a Show me button. Below them are four ways to explore: drill down, compare the jerseys, running times and countries."
 2. Press **Start the walk-through** and click **Next** once or twice. Say: "This steps through every prompt and highlights each panel."
 3. On any card press **SQL**. Say: "The same question as a short query in DuckDB. The full queries are in `sql/04_functions_e1_e15.sql`."
 4. Close with: "Everything is a summary of settled 2025 results. It is not betting advice."

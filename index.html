@@ -487,8 +487,8 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
 @keyframes flash-ring { 0% { opacity: 0; } 15% { opacity: 1; } 60% { opacity: 1; } 100% { opacity: 0; } }
 
 /* plugin 10-functions.css */
-/* Function map tab: asphalt "race board" header with yellow counters, a grid of 15 prompt cards coloured by
-   the tab they live on, the Task 3 checklist, and the fixed walk-through bar used in the live demo. */
+/* Function map tab: asphalt "race board" header with yellow counters, a grid of 15 view cards coloured by
+   the tab they live on, the four ways to explore, and the fixed walk-through bar. */
 
 /* panels reached from the map land below the sticky header, and above the walk-through bar */
 .view [data-fn], .view [data-fn-also] { scroll-margin-top: calc(var(--mast-h, 64px) + 14px); scroll-margin-bottom: 140px; }
@@ -539,7 +539,7 @@ body.fm-touring main { padding-bottom: 150px; }
 .fm-tick:hover { transform: translateY(-2px); }
 .fm-tick:active { transform: translateY(0) scale(0.96); }
 
-/* ---------- prompt cards ---------- */
+/* ---------- view cards ---------- */
 .fm-legend { display: flex; flex-direction: column; gap: 8px; }
 .fm-ops-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .fm-op {
@@ -573,7 +573,6 @@ body.fm-touring main { padding-bottom: 150px; }
 .fm-tab { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
 .fm-tab i { width: 9px; height: 9px; border-radius: 50%; background: var(--acc); display: inline-block; }
 .fm-title { font-size: 19px; line-height: 1.15; }
-.fm-brief { margin: -4px 0 0; font-size: 12px; color: var(--muted); font-style: italic; }
 .fm-see { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.45; }
 .fm-fact {
   margin: 0; font-size: 13px; color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums;
@@ -596,7 +595,7 @@ body.fm-touring main { padding-bottom: 150px; }
 .fm-sql code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; white-space: pre; color: var(--ink); }
 .fm-sql-tools { display: flex; align-items: center; gap: 10px; }
 
-/* ---------- Task 3 checklist ---------- */
+/* ---------- four ways to explore ---------- */
 .fm-reqs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .fm-req {
   display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid var(--rule);
@@ -609,9 +608,6 @@ body.fm-touring main { padding-bottom: 150px; }
 }
 .fm-req-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .fm-req-body h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 18px; }
-.fm-met { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--good); }
-.fm-check circle { fill: color-mix(in srgb, var(--good) 16%, transparent); stroke: var(--good); stroke-width: 1.5; }
-.fm-check path { fill: none; stroke: var(--good); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .fm-req-how { margin: 0; color: var(--ink-2); font-size: 14px; max-width: 80ch; }
 .fm-req-links { display: flex; gap: 8px; flex-wrap: wrap; }
 .fm-link { font-size: 13px; padding: 5px 11px; border-radius: 999px; transition: transform 140ms ease-out; }
@@ -2121,7 +2117,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         o.team === false ? null : [' ', h('span', { class: 'team-s', text: teamShort(r.team) })]));
   }
   // also = this panel supports a function whose main panel is elsewhere on the tab (badge drawn dashed).
-  const fnTag = (code, name, also) => h('span', { class: also ? 'fn also' : 'fn', title: `${also ? 'Also part of brief function' : 'Brief function'} ${code}: ${name}` }, code);
+  const fnTag = (code, name, also) => h('span', { class: also ? 'fn also' : 'fn', title: `${also ? 'Also part of view' : 'View'} ${code}: ${name}` }, code);
   function panel(o) {
     const head = h('div', { class: 'panel-head' },
       h('div', null,
@@ -3195,7 +3191,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
     }, { onClick: (p) => { const list = (variant === 'raw' ? E.TEAMCLASS : E.TEAMCLASS_ADJ).list.slice().reverse(); S.team = list[p.dataIndex].team; teamSel.value = S.team; redraw(tcChart); drawTeam(); tb.el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
 
     // E3
-    const tb = panel({ title: 'Team burden and contribution', fn: [['E3', 'Team burden and contribution']], sub: 'Roll the team down to its riders: who supplied the three counted times, stage by stage. The brief asks for total adjusted time: this panel uses the official rule (three best times per stage), while the Official / With bonuses switch above and the workload figure below show the other totals.' });
+    const tb = panel({ title: 'Team burden and contribution', fn: [['E3', 'Team burden and contribution']], sub: 'Roll the team down to its riders: who supplied the three counted times, stage by stage. This panel uses the official rule (three best times per stage), while the Official / With bonuses switch above and the workload figure below show the other totals.' });
     const teamSel = selectEl('team-sel', [{ options: E.TEAMCLASS.list.map((x) => ({ value: x.team, label: `${ordinal(x.rank)} · ${teamShort(x.team)}` })) }], S.team, (v) => { S.team = v; redraw(tcChart); drawTeam(); }, 'Team');
     tb.head.appendChild(h('div', { class: 'panel-tools' }, teamSel));
     const tbBody = h('div', { style: 'display:flex;flex-direction:column;gap:12px;min-width:0' });
@@ -3597,9 +3593,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
     add(root, h('div', { class: 'view-head' }, h('div', null,
       h('p', { class: 'eyebrow', text: 'Method and sources' }),
       h('h1', { text: 'How this form guide is built' }),
-      h('p', { class: 'lede', text: 'This tab answers: where do the numbers come from, and which of the 15 brief functions are built? Every number is computed in your browser from the 2025 race data, except the official points and mountains standings, which come from published results.' }))));
-    const fc = panel({ title: 'Brief functions covered', span: 7, sub: 'All 15 of the lecturer\'s demonstration prompts (E1 to E15) are built in. The Function map tab takes you straight to each one.' });
-    add(fc.body, h('p', { class: 'verdict' }, 'Want to see a function working? Open the ', h('a', { href: '#functions', text: 'Function map' }), ' and press any code from E1 to E15: it opens the right tab and highlights the panel.'));
+      h('p', { class: 'lede', text: 'This tab answers: where do the numbers come from, and where is each view? Every number is computed in your browser from the 2025 race data, except the official points and mountains standings, which come from published results.' }))));
+    const fc = panel({ title: 'Where each view lives', span: 7, sub: 'The 15 views, E1 to E15, and the tab each one is on. The Function map tab takes you straight to each one.' });
+    add(fc.body, h('p', { class: 'verdict' }, 'Want to see a view working? Open the ', h('a', { href: '#functions', text: 'Function map' }), ' and press any code from E1 to E15: it opens the right tab and highlights the panel.'));
     const F = [
       ['E1', 'GC leaderboard with contextual descent', 'Overall winner', '#outright', 'Final standings. Click a rider to see the day they gained or lost the most time on the top ten, then click through to that stage.'],
       ['E2', 'A stage in focus', 'Stages', '#stages', 'Pick any stage: winner, finish and adjusted times, teams, nations, distance and terrain. Click a team to see only its riders.'],
@@ -3621,19 +3617,19 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
     const jumpTo = (f) => (e) => { e.preventDefault(); API.goToFunction(f[3].slice(1), f[0]); };
     add(fc.body, tbl([
       { label: 'Code', render: (f) => h('button', { class: 'fn fn-jump', type: 'button', style: 'margin:0', title: `Show ${f[0]} on the ${f[2]} tab`, 'aria-label': `Show ${f[0]}, ${f[1]}, on the ${f[2]} tab`, text: f[0], on: { click: jumpTo(f) } }) },
-      { label: 'Function', render: (f) => h('b', { text: f[1] }) },
+      { label: 'View', render: (f) => h('b', { text: f[1] }) },
       { label: 'Where', render: (f) => h('a', { href: f[3], title: `Open the ${f[2]} tab at ${f[0]}`, text: `${f[2]} ›`, on: { click: jumpTo(f) } }) },
       { label: 'What it does', render: (f) => f[4] },
     ], F, { caption: 'Press a code or a tab name to jump to that panel. It flashes yellow when you arrive.' }));
     root.appendChild(fc.el);
 
-    const req = panel({ title: 'What the brief asks for (Task 3, a to e)', span: 5 });
+    const req = panel({ title: 'Ways to explore', span: 5 });
     add(req.body, h('dl', { class: 'kv' },
-      h('dt', { text: 'a. Drill down' }), h('dd', { text: 'Go from a total to the detail behind it. Stages tab: terrain, then stage, then rider. Overall winner tab: rider, then their key stage. Teams tab: team, then rider, then stage. Nations tab: country, then riders. Click any rider name for a profile.' }),
-      h('dt', { text: 'b. Compare the jerseys' }), h('dd', { text: 'Jerseys tab: the top 10 of the overall (yellow), points (green), mountains (polka dot) and young rider (white) standings side by side, plus each rider\'s places in all of them.' }),
-      h('dt', { text: 'c. Running race times' }), h('dd', { text: 'Overall winner tab: each rider\'s total time after every stage. Teams tab: team totals and running team time. Head-to-head tab: the running gap between two riders or two teams.' }),
-      h('dt', { text: 'd. Countries' }), h('dd', { text: 'Nations tab: how many riders and how many teams come from each country, on a map and in a ranked list, with results per country.' }),
-      h('dt', { text: 'e. Clear design' }), h('dd', { text: 'One colour and icon per terrain, jersey colours for the standings, a plain sentence at the top of every tab, light and dark themes and a phone layout.' })));
+      h('dt', { text: 'Drill down' }), h('dd', { text: 'Go from a total to the detail behind it. Stages tab: terrain, then stage, then rider. Overall winner tab: rider, then their key stage. Teams tab: team, then rider, then stage. Nations tab: country, then riders. Click any rider name for a profile.' }),
+      h('dt', { text: 'Compare the jerseys' }), h('dd', { text: 'Jerseys tab: the top 10 of the overall (yellow), points (green), mountains (polka dot) and young rider (white) standings side by side, plus each rider\'s places in all of them.' }),
+      h('dt', { text: 'Running race times' }), h('dd', { text: 'Overall winner tab: each rider\'s total time after every stage. Teams tab: team totals and running team time. Head-to-head tab: the running gap between two riders or two teams.' }),
+      h('dt', { text: 'Countries' }), h('dd', { text: 'Nations tab: how many riders and how many teams come from each country, on a map and in a ranked list, with results per country.' }),
+      h('dt', { text: 'Colours and layout' }), h('dd', { text: 'One colour and icon per terrain, jersey colours for the standings, a plain sentence at the top of every tab, light and dark themes and a phone layout.' })));
     root.appendChild(req.el);
 
     const df = panel({ title: 'Definitions', span: 7 });
@@ -4083,9 +4079,9 @@ ORDER BY f.rank LIMIT 10;`,
 
 </script>
 <script>/* plugin 10-functions.js */
-/* Function map tab. Shows where each of the lecturer's 15 demonstration prompts (E1 to E15) and the five
-   Task 3 requirements live, jumps straight to each one, and runs a step by step walk-through for the live demo.
-   Exposes window.TDF_FUNCTIONS = { list, requirements, ops, facts, stepIndex, show, start, stop }. */
+/* Function map tab. Lists the 15 views (E1 to E15) and four ways to explore the race, says which tab each
+   one is on, jumps straight to it, and runs a step by step walk-through.
+   Exposes window.TDF_FUNCTIONS = { list, explore, ops, facts, stepIndex, show, start, stop }. */
 (function () {
   'use strict';
   const W = typeof window !== 'undefined' ? window : globalThis;
@@ -4148,24 +4144,22 @@ ORDER BY f.rank LIMIT 10;`,
       say: 'Sorted by distance, the longest day comes first: its route, its terrain and who finished at the front.' },
   ];
 
-  const REQUIREMENTS = [
-    { key: 'a', title: 'Drill down by stage, rider and team', how: 'Open any total to see what is inside it: a terrain to its stages to the top finishers, any rider name to their whole race, and a team to its riders to each stage.',
+  const EXPLORE = [
+    { key: 'drill', title: 'Drill down by stage, rider and team', how: 'Open any total to see what is inside it: a terrain to its stages to the top finishers, any rider name to their whole race, and a team to its riders to each stage.',
       links: [{ label: 'Stages explorer', view: 'stages', code: 'OLAP', title: 'Roll up and drill down' }, { label: 'Rider profile', action: 'rider' }, { label: 'Team to rider to stage', view: 'teams', code: 'E3' }] },
-    { key: 'b', title: 'Compare the General, Points, Mountains and Young Rider classifications', how: 'The Jerseys tab shows the overall (yellow jersey), points (green), mountains (polka dot) and young rider (white) standings side by side.',
+    { key: 'jerseys', title: 'Compare the General, Points, Mountains and Young Rider classifications', how: 'The Jerseys tab shows the overall (yellow jersey), points (green), mountains (polka dot) and young rider (white) standings side by side.',
       links: [{ label: 'Jerseys tab', view: 'jerseys', code: '3b', title: 'Official final classifications' }, { label: 'Side by side ranks', view: 'jerseys', code: 'E4' }] },
-    { key: 'c', title: 'Cumulative race times by rider, team and classification', how: 'Total time for every rider after every stage, the team classification totals, and the young rider and mountains only standings.',
+    { key: 'times', title: 'Cumulative race times by rider, team and classification', how: 'Total time for every rider after every stage, the team classification totals, and the young rider and mountains only standings.',
       links: [{ label: 'Overall standings', view: 'outright', code: 'E1' }, { label: 'Time after each stage', view: 'outright', code: 'E10' }, { label: 'Team classification', view: 'teams', title: 'Team classification' }] },
-    { key: 'd', title: 'Teams per country and riders per country', how: 'A map and ranked bars count riders per nationality and teams per country. Pick a country to list them.',
+    { key: 'countries', title: 'Teams per country and riders per country', how: 'A map and ranked bars count riders per nationality and teams per country. Pick a country to list them.',
       links: [{ label: 'Nations tab', view: 'nations', code: 'E8' }] },
-    { key: 'e', title: 'Clear, intuitive, good looking design', how: 'One colour per terrain and per jersey, this map of every prompt, a walk-through of all 15, light and dark themes, and a layout that works on a phone.',
-      links: [{ label: 'Start the walk-through', action: 'tour' }, { label: 'Back to the top', action: 'top' }] },
   ];
 
   /* =================== pure helpers (tested in tests/functions.test.mjs) =================== */
   /** Next step index, kept inside 0..n-1. */
   const stepIndex = (i, delta, n) => Math.max(0, Math.min(n - 1, i + delta));
 
-  /** One short headline number per prompt, computed from the engine. fx = { name(bib), team(name), gap(seconds), ordinal(n) }. */
+  /** One short headline number per view, computed from the engine. fx = { name(bib), team(name), gap(seconds), ordinal(n) }. */
   function buildFacts(E, fx) {
     const out = {};
     const put = (code, fn) => {
@@ -4197,7 +4191,7 @@ ORDER BY f.rank LIMIT 10;`,
     return out;
   }
 
-  const FN = { list: LIST, requirements: REQUIREMENTS, ops: OPS, facts: buildFacts, stepIndex, show: () => false, start: () => false, stop: () => false };
+  const FN = { list: LIST, explore: EXPLORE, ops: OPS, facts: buildFacts, stepIndex, show: () => false, start: () => false, stop: () => false };
   W.TDF_FUNCTIONS = FN;
 
   const API = W.TDF_APP;
@@ -4272,7 +4266,7 @@ ORDER BY f.rank LIMIT 10;`,
     toastTimer = setTimeout(() => { el.hidden = true; }, 4500);
   }
 
-  /** Mark a prompt's card as seen once its panel was reached, so the presenter can see what is left. */
+  /** Mark a view's card as seen once its panel was reached. */
   function markSeen(code) {
     const c = document.querySelector(`.fm-card[data-code="${code}"]`);
     if (c) c.classList.add('seen');
@@ -4304,11 +4298,11 @@ ORDER BY f.rank LIMIT 10;`,
     const miss = h('p', { class: 'fm-tour-miss', hidden: '' });
     const fill = h('span', { class: 'fm-tour-fill' });
     const code = h('span', { class: 'fm-code' });
-    const prev = h('button', { class: 'btn', type: 'button', text: 'Previous', 'aria-label': 'Previous prompt', on: { click: () => step(-1) } });
-    const next = h('button', { class: 'btn primary', type: 'button', text: 'Next', 'aria-label': 'Next prompt', on: { click: () => (tourIdx >= LIST.length - 1 ? stop() : step(1)) } });
+    const prev = h('button', { class: 'btn', type: 'button', text: 'Previous', 'aria-label': 'Previous view', on: { click: () => step(-1) } });
+    const next = h('button', { class: 'btn primary', type: 'button', text: 'Next', 'aria-label': 'Next view', on: { click: () => (tourIdx >= LIST.length - 1 ? stop() : step(1)) } });
     const again = h('button', { class: 'btn ghost', type: 'button', text: 'Show again', 'aria-label': 'Scroll back to this panel', on: { click: () => step(0) } });
     const close = h('button', { class: 'btn fm-tour-close', type: 'button', text: 'Close', 'aria-label': 'Close the walk-through', on: { click: stop } });
-    const el = h('div', { class: 'fm-tour', role: 'region', 'aria-label': 'Walk-through of the 15 demonstration prompts' },
+    const el = h('div', { class: 'fm-tour', role: 'region', 'aria-label': 'Walk-through of the 15 views' },
       h('div', { class: 'fm-tour-track', 'aria-hidden': 'true' }, fill),
       h('div', { class: 'fm-tour-inner' },
         code,
@@ -4376,21 +4370,22 @@ ORDER BY f.rank LIMIT 10;`,
     const ticks = LIST.map((f, i) => h('button', { class: 'fm-tick', type: 'button', style: `${accentVar(f.view)}; --i: ${i}`,
       'aria-label': `${f.code}: ${f.title}, on the ${tabLabel(f.view)} tab`, title: `${f.code} · ${f.title}`, text: f.code,
       on: { click: () => show(f) } }));
-    const count = (n, of, label) => h('div', { class: 'fm-count' },
-      h('span', { class: 'fm-count-num' }, h('b', { text: String(n) }), h('span', { text: ` of ${of}` })),
+    const count = (n, label) => h('div', { class: 'fm-count' },
+      h('span', { class: 'fm-count-num' }, h('b', { text: String(n) })),
       h('span', { class: 'fm-count-label', text: label }));
+    const tabCount = new Set(LIST.map((f) => f.view)).size;
     return h('div', { class: 'fm-hero' },
       h('div', { class: 'fm-hero-text' },
-        h('p', { class: 'fm-eyebrow', text: 'Function map · the brief at a glance' }),
-        h('h1', { text: 'Every prompt in the brief, one click away' }),
-        h('p', { class: 'fm-lede', text: 'Each card below is one of the lecturer’s 15 demonstration prompts. Press “Show me” to jump to the panel that answers it, or start the walk-through to visit all 15 in order.' }),
+        h('p', { class: 'fm-eyebrow', text: 'Function map · the dashboard at a glance' }),
+        h('h1', { text: 'Every view, one click away' }),
+        h('p', { class: 'fm-lede', text: `Each card below is one view of the race. Press “Show me” to jump to its panel, or start the walk-through to visit all ${LIST.length} in order.` }),
         h('div', { class: 'fm-hero-actions' },
-          h('button', { class: 'btn fm-start', id: 'fm-tour-start', type: 'button', on: { click: () => start(0) } }, 'Start the walk-through', h('span', { class: 'fm-start-n', text: '15 steps' })))),
+          h('button', { class: 'btn fm-start', id: 'fm-tour-start', type: 'button', on: { click: () => start(0) } }, 'Start the walk-through', h('span', { class: 'fm-start-n', text: `${LIST.length} steps` })))),
       h('div', { class: 'fm-hero-board' },
         h('div', { class: 'fm-counts' },
-          count(LIST.length, 15, 'demonstration prompts covered'),
-          count(REQUIREMENTS.length, 5, 'Task 3 requirements met')),
-        h('div', { class: 'fm-ticks', role: 'group', 'aria-label': 'Jump straight to a prompt' }, ticks)));
+          count(LIST.length, 'views of the race'),
+          count(tabCount, 'tabs to find them on')),
+        h('div', { class: 'fm-ticks', role: 'group', 'aria-label': 'Jump straight to a view' }, ticks)));
   }
 
   function opsLegend(grid) {
@@ -4451,7 +4446,6 @@ ORDER BY f.rank LIMIT 10;`,
         h('span', { class: 'fm-seen', text: 'Seen' }),
         h('span', { class: 'fm-tab' }, h('i', { 'aria-hidden': 'true' }), `${tabLabel(f.view)} tab`)),
       h('h3', { class: 'fm-title', text: f.title }),
-      f.brief !== f.title ? h('p', { class: 'fm-brief', text: `Brief: ${f.brief}` }) : h('p', { class: 'fm-brief', text: 'Brief: same title as the lecturer\'s prompt' }),
       h('p', { class: 'fm-see', text: f.see }),
       fact ? h('p', { class: 'fm-fact' }, h('span', { text: 'In the data' }), fact) : null,
       h('div', { class: 'fm-ops', 'aria-label': 'OLAP moves shown' }, f.ops.map(opChip)),
@@ -4465,22 +4459,16 @@ ORDER BY f.rank LIMIT 10;`,
     return h('div', { class: 'legend' }, views.map((v) => h('span', null, h('i', { style: `background:var(--${ACCENT[v]})` }), tabLabel(v))));
   }
 
-  function checkIcon() {
-    const s = API.svg('svg', { width: '18', height: '18', viewBox: '0 0 20 20', 'aria-hidden': 'true', class: 'fm-check' });
-    s.appendChild(API.svg('circle', { cx: '10', cy: '10', r: '9' }));
-    s.appendChild(API.svg('path', { d: 'M6 10.5 L8.8 13.2 L14 7.5' }));
-    return s;
-  }
-  function requirementsPanel() {
-    const p = API.panel({ title: 'Task 3 requirements', sub: 'The five things the assignment asks the dashboard to do, and where each one is.' });
-    const rows = REQUIREMENTS.map((r, i) => {
+  function explorePanel() {
+    const p = API.panel({ title: 'Four ways to explore', sub: 'Open a total, compare the jerseys, follow the running times or split by country. Each button opens the panel.' });
+    const rows = EXPLORE.map((r, i) => {
       const miss = h('p', { class: 'fm-miss', role: 'status', hidden: '' });
       const links = r.links.map((l) => h('button', { class: 'btn fm-link', type: 'button', 'aria-label': `Show me: ${l.label}`,
         on: { click: () => { miss.hidden = true; show(l, (found) => { if (!found) { miss.textContent = `Could not find that panel. Open the ${tabLabel(l.view)} tab.`; miss.hidden = false; toast(miss.textContent); } }); } } }, l.label, h('span', { 'aria-hidden': 'true', text: ' ›' })));
       return h('li', { class: 'fm-req', style: `--i: ${i}` },
-        h('span', { class: 'fm-req-key', text: r.key }),
+        h('span', { class: 'fm-req-key', 'aria-hidden': 'true', text: String(i + 1) }),
         h('div', { class: 'fm-req-body' },
-          h('h3', null, r.title, h('span', { class: 'fm-met' }, checkIcon(), 'Met')),
+          h('h3', { text: r.title }),
           h('p', { class: 'fm-req-how', text: r.how }),
           h('div', { class: 'fm-req-links' }, links),
           miss));
@@ -4495,9 +4483,9 @@ ORDER BY f.rank LIMIT 10;`,
       facts = buildFacts(API.E, { name: (b) => (API.R(b) ? API.R(b).short || API.R(b).name : String(b)), team: API.teamShort, gap: (s) => API.fmtGap(s).slice(1), ordinal: API.ordinal });
     } catch (err) { if (W.console) W.console.warn('function map: facts unavailable', err); }
     const grid = h('div', { class: 'fm-grid' }, LIST.map((f, i) => card(f, i, facts[f.code])));
-    const cards = API.panel({ title: 'The 15 demonstration prompts', sub: 'In the lecturer’s order, E1 to E15. The colour shows which tab each one lives on; every panel there carries the same code tag.' });
+    const cards = API.panel({ title: `All ${LIST.length} views`, sub: 'E1 to E15. The colour shows which tab each one lives on; every panel there carries the same code tag.' });
     add(cards.body, tabLegend(), opsLegend(grid), grid);
-    add(root, hero(), cards.el, requirementsPanel());
+    add(root, hero(), cards.el, explorePanel());
   }
 
   API.registerView('functions', 'Function map', render, { before: 'method' });
@@ -4815,8 +4803,8 @@ ORDER BY f.rank LIMIT 10;`,
       text: 'See how many riders and teams each country sent, and how they did. Click a country to list its riders.' },
     { view: 'bet', target: ['#view-bet .panel', '#view-bet'], title: 'The bet builder',
       text: 'Pick two riders and compare them on every stage they both rode. Fair odds come from a smoothed share of how often each one finished ahead in 2025.' },
-    { view: 'functions', target: ['#view-functions .panel', '#view-functions'], title: 'All 15 prompts, E1 to E15',
-      text: 'This map lists the lecturer\'s 15 demonstration prompts. Click any one to jump straight to the panel that answers it.' },
+    { view: 'functions', target: ['#view-functions .panel', '#view-functions'], title: 'All 15 views, E1 to E15',
+      text: 'This map lists all 15 views of the race. Click any one to jump straight to its panel.' },
     { view: null, target: ['.gd-help-btn'], title: 'Help is always here',
       text: 'Open Help to replay this tour, watch the video, read the five betting checks or look up a word. That is the whole tour.' },
   ];
@@ -4860,7 +4848,7 @@ ORDER BY f.rank LIMIT 10;`,
     ['s.t. (same time)', 'Riders who cross the line in one group are all given the same time as the first rider of that group.'],
     ['Drill down', 'Click a total to open the detail behind it, for example from a team to its riders, or from a rider to each stage.'],
     ['Roll up', 'The opposite of drill down: add the details back up into a total, for example riders into their team.'],
-    ['E badges (E1 to E15)', 'Mark the panels that answer the lecturer\'s 15 demonstration prompts.'],
+    ['E badges (E1 to E15)', 'Mark the 15 main views. The Function map lists them all.'],
   ];
 
   /** Keep only the tour steps whose tab exists (a null view means "stay where you are"). */
@@ -5046,7 +5034,7 @@ ORDER BY f.rank LIMIT 10;`,
       ['3', 'How to read the numbers', null],
     ];
     const read = h('p', null, `Times are hours, minutes and seconds, like ${T.fmtTime(f.winnerTime)}. Gaps are time behind the leader, like ${T.fmtGap(f.secondGap)}. `,
-      badge('E1'), ' badges mark the lecturer\'s 15 prompts.');
+      badge('E1'), ' badges mark the 15 main views.');
     openDialog({
       name: 'welcome', cls: 'gd-welcome', onClose: storeSet,
       build: (card, { titleId, close }) => {

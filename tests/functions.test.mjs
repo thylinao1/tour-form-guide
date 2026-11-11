@@ -1,4 +1,4 @@
-// Checks the Function map plugin: the 15 prompts and their fixed tabs, the five requirements,
+// Checks the Function map plugin: the 15 views and their fixed tabs, the four ways to explore,
 // step navigation, the headline numbers against the real 2025 data, and the no-dash wording rule.
 //   node tests/functions.test.mjs
 import assert from 'node:assert/strict';
@@ -24,7 +24,7 @@ function check(name, fn) { fn(); pass += 1; console.log(`pass ${name}`); }
 const FIXED_VIEW = { E1: 'outright', E2: 'stages', E3: 'teams', E4: 'jerseys', E5: 'terrain', E6: 'terrain', E7: 'outright', E8: 'nations',
   E9: 'nations', E10: 'outright', E11: 'stages', E12: 'form', E13: 'teams', E14: 'teams', E15: 'stages' };
 
-check('15 prompts, E1 to E15 in order, each on its fixed tab', () => {
+check('15 views, E1 to E15 in order, each on its fixed tab', () => {
   assert.equal(F.list.length, 15);
   F.list.forEach((f, i) => {
     assert.equal(f.code, `E${i + 1}`);
@@ -34,9 +34,16 @@ check('15 prompts, E1 to E15 in order, each on its fixed tab', () => {
   });
 });
 
-check('five Task 3 requirements a to e, each with a link', () => {
-  assert.equal(F.requirements.map((r) => r.key).join(','), 'a,b,c,d,e');
-  F.requirements.forEach((r) => assert.ok(r.links.length >= 1 && r.links.every((l) => l.action || l.view), `requirement ${r.key}`));
+check('four ways to explore, each with a link', () => {
+  assert.equal(F.explore.map((r) => r.key).join(','), 'drill,jerseys,times,countries');
+  F.explore.forEach((r) => assert.ok(r.links.length >= 1 && r.links.every((l) => l.action || l.view), `explore ${r.key}`));
+});
+
+check('no assignment wording in the text shown on the page', () => {
+  const shown = F.list.flatMap((f) => [f.title, f.see, f.say]).concat(F.explore.flatMap((r) => [r.title, r.how, ...r.links.map((l) => l.label)]));
+  shown.forEach((t) => assert.ok(!/lecturer|brief|prompt|task 3|requirement|assignment/i.test(t), t));
+  const code = plugin('js').replace(/brief: '[^']*',/g, '');
+  ['lecturer', 'Task 3', 'requirements met', 'prompts covered', 'the brief'].forEach((w) => assert.ok(!code.includes(w), w));
 });
 
 check('the five OLAP moves are all defined and all used', () => {
@@ -62,7 +69,7 @@ check('headline numbers match the 2025 data', () => {
   const E = T.createEngine(loadData());
   const fx = { name: (b) => E.riderByBib.get(b).name, team: (t) => t, gap: (s) => T.fmtGap(s).slice(1), ordinal: (n) => `${n}th` };
   const facts = F.facts(E, fx);
-  assert.equal(Object.keys(facts).length, 15, 'one fact per prompt');
+  assert.equal(Object.keys(facts).length, 15, 'one fact per view');
   assert.match(facts.E1, /Poga.ar won by 4' 24"/);
   assert.equal(facts.E2, '21 stages to explore');
   assert.equal(facts.E5, '6 mountain stages');
@@ -80,7 +87,7 @@ check('headline numbers match the 2025 data', () => {
 const DASH = new RegExp(`[${String.fromCharCode(0x2013)}${String.fromCharCode(0x2014)}]`);
 check('no em dash or en dash in the plugin files', () => {
   ['js', 'css'].forEach((ext) => assert.ok(!DASH.test(plugin(ext)), `10-functions.${ext}`));
-  const text = F.list.flatMap((f) => [f.title, f.brief, f.see, f.say]).concat(F.requirements.flatMap((r) => [r.title, r.how]));
+  const text = F.list.flatMap((f) => [f.title, f.brief, f.see, f.say]).concat(F.explore.flatMap((r) => [r.title, r.how]));
   text.forEach((t) => assert.ok(!DASH.test(t), t));
 });
 

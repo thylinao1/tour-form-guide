@@ -21,7 +21,7 @@ New here? The yellow **Help** button (top right) offers a one minute tour, a sho
 | Teams | How strong and how deep is each team? Team classification, which riders carried each team, top ten finishes by team and terrain, squad depth. |
 | Head-to-head | Between two riders or two teams, who finished ahead more often, and by how much? |
 | Nations | How many riders and teams came from each country, and how did each country do? A map, ranked bars, and results per country. |
-| Function map | Where is each of the 15 demonstration prompts? Cards for E1 to E15, a walk-through, the short SQL for each, and the Task 3 checklist. |
+| Function map | Where is each view? Cards for E1 to E15, a walk-through, the short SQL for each, and four ways to explore the race. |
 | Bet builder | If I pick two riders (or two teams) and a type of day, what does 2025 say? A three step builder with the record, a "History says" share, fair odds and a checklist. |
 | Method | Where do the numbers come from, and what do the words mean? Definitions, caveats and sources. |
 

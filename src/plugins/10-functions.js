@@ -1,6 +1,6 @@
-/* Function map tab. Shows where each of the lecturer's 15 demonstration prompts (E1 to E15) and the five
-   Task 3 requirements live, jumps straight to each one, and runs a step by step walk-through for the live demo.
-   Exposes window.TDF_FUNCTIONS = { list, requirements, ops, facts, stepIndex, show, start, stop }. */
+/* Function map tab. Lists the 15 views (E1 to E15) and four ways to explore the race, says which tab each
+   one is on, jumps straight to it, and runs a step by step walk-through.
+   Exposes window.TDF_FUNCTIONS = { list, explore, ops, facts, stepIndex, show, start, stop }. */
 (function () {
   'use strict';
   const W = typeof window !== 'undefined' ? window : globalThis;
@@ -63,24 +63,22 @@
       say: 'Sorted by distance, the longest day comes first: its route, its terrain and who finished at the front.' },
   ];
 
-  const REQUIREMENTS = [
-    { key: 'a', title: 'Drill down by stage, rider and team', how: 'Open any total to see what is inside it: a terrain to its stages to the top finishers, any rider name to their whole race, and a team to its riders to each stage.',
+  const EXPLORE = [
+    { key: 'drill', title: 'Drill down by stage, rider and team', how: 'Open any total to see what is inside it: a terrain to its stages to the top finishers, any rider name to their whole race, and a team to its riders to each stage.',
       links: [{ label: 'Stages explorer', view: 'stages', code: 'OLAP', title: 'Roll up and drill down' }, { label: 'Rider profile', action: 'rider' }, { label: 'Team to rider to stage', view: 'teams', code: 'E3' }] },
-    { key: 'b', title: 'Compare the General, Points, Mountains and Young Rider classifications', how: 'The Jerseys tab shows the overall (yellow jersey), points (green), mountains (polka dot) and young rider (white) standings side by side.',
+    { key: 'jerseys', title: 'Compare the General, Points, Mountains and Young Rider classifications', how: 'The Jerseys tab shows the overall (yellow jersey), points (green), mountains (polka dot) and young rider (white) standings side by side.',
       links: [{ label: 'Jerseys tab', view: 'jerseys', code: '3b', title: 'Official final classifications' }, { label: 'Side by side ranks', view: 'jerseys', code: 'E4' }] },
-    { key: 'c', title: 'Cumulative race times by rider, team and classification', how: 'Total time for every rider after every stage, the team classification totals, and the young rider and mountains only standings.',
+    { key: 'times', title: 'Cumulative race times by rider, team and classification', how: 'Total time for every rider after every stage, the team classification totals, and the young rider and mountains only standings.',
       links: [{ label: 'Overall standings', view: 'outright', code: 'E1' }, { label: 'Time after each stage', view: 'outright', code: 'E10' }, { label: 'Team classification', view: 'teams', title: 'Team classification' }] },
-    { key: 'd', title: 'Teams per country and riders per country', how: 'A map and ranked bars count riders per nationality and teams per country. Pick a country to list them.',
+    { key: 'countries', title: 'Teams per country and riders per country', how: 'A map and ranked bars count riders per nationality and teams per country. Pick a country to list them.',
       links: [{ label: 'Nations tab', view: 'nations', code: 'E8' }] },
-    { key: 'e', title: 'Clear, intuitive, good looking design', how: 'One colour per terrain and per jersey, this map of every prompt, a walk-through of all 15, light and dark themes, and a layout that works on a phone.',
-      links: [{ label: 'Start the walk-through', action: 'tour' }, { label: 'Back to the top', action: 'top' }] },
   ];
 
   /* =================== pure helpers (tested in tests/functions.test.mjs) =================== */
   /** Next step index, kept inside 0..n-1. */
   const stepIndex = (i, delta, n) => Math.max(0, Math.min(n - 1, i + delta));
 
-  /** One short headline number per prompt, computed from the engine. fx = { name(bib), team(name), gap(seconds), ordinal(n) }. */
+  /** One short headline number per view, computed from the engine. fx = { name(bib), team(name), gap(seconds), ordinal(n) }. */
   function buildFacts(E, fx) {
     const out = {};
     const put = (code, fn) => {
@@ -112,7 +110,7 @@
     return out;
   }
 
-  const FN = { list: LIST, requirements: REQUIREMENTS, ops: OPS, facts: buildFacts, stepIndex, show: () => false, start: () => false, stop: () => false };
+  const FN = { list: LIST, explore: EXPLORE, ops: OPS, facts: buildFacts, stepIndex, show: () => false, start: () => false, stop: () => false };
   W.TDF_FUNCTIONS = FN;
 
   const API = W.TDF_APP;
@@ -187,7 +185,7 @@
     toastTimer = setTimeout(() => { el.hidden = true; }, 4500);
   }
 
-  /** Mark a prompt's card as seen once its panel was reached, so the presenter can see what is left. */
+  /** Mark a view's card as seen once its panel was reached. */
   function markSeen(code) {
     const c = document.querySelector(`.fm-card[data-code="${code}"]`);
     if (c) c.classList.add('seen');
@@ -219,11 +217,11 @@
     const miss = h('p', { class: 'fm-tour-miss', hidden: '' });
     const fill = h('span', { class: 'fm-tour-fill' });
     const code = h('span', { class: 'fm-code' });
-    const prev = h('button', { class: 'btn', type: 'button', text: 'Previous', 'aria-label': 'Previous prompt', on: { click: () => step(-1) } });
-    const next = h('button', { class: 'btn primary', type: 'button', text: 'Next', 'aria-label': 'Next prompt', on: { click: () => (tourIdx >= LIST.length - 1 ? stop() : step(1)) } });
+    const prev = h('button', { class: 'btn', type: 'button', text: 'Previous', 'aria-label': 'Previous view', on: { click: () => step(-1) } });
+    const next = h('button', { class: 'btn primary', type: 'button', text: 'Next', 'aria-label': 'Next view', on: { click: () => (tourIdx >= LIST.length - 1 ? stop() : step(1)) } });
     const again = h('button', { class: 'btn ghost', type: 'button', text: 'Show again', 'aria-label': 'Scroll back to this panel', on: { click: () => step(0) } });
     const close = h('button', { class: 'btn fm-tour-close', type: 'button', text: 'Close', 'aria-label': 'Close the walk-through', on: { click: stop } });
-    const el = h('div', { class: 'fm-tour', role: 'region', 'aria-label': 'Walk-through of the 15 demonstration prompts' },
+    const el = h('div', { class: 'fm-tour', role: 'region', 'aria-label': 'Walk-through of the 15 views' },
       h('div', { class: 'fm-tour-track', 'aria-hidden': 'true' }, fill),
       h('div', { class: 'fm-tour-inner' },
         code,
@@ -291,21 +289,22 @@
     const ticks = LIST.map((f, i) => h('button', { class: 'fm-tick', type: 'button', style: `${accentVar(f.view)}; --i: ${i}`,
       'aria-label': `${f.code}: ${f.title}, on the ${tabLabel(f.view)} tab`, title: `${f.code} · ${f.title}`, text: f.code,
       on: { click: () => show(f) } }));
-    const count = (n, of, label) => h('div', { class: 'fm-count' },
-      h('span', { class: 'fm-count-num' }, h('b', { text: String(n) }), h('span', { text: ` of ${of}` })),
+    const count = (n, label) => h('div', { class: 'fm-count' },
+      h('span', { class: 'fm-count-num' }, h('b', { text: String(n) })),
       h('span', { class: 'fm-count-label', text: label }));
+    const tabCount = new Set(LIST.map((f) => f.view)).size;
     return h('div', { class: 'fm-hero' },
       h('div', { class: 'fm-hero-text' },
-        h('p', { class: 'fm-eyebrow', text: 'Function map · the brief at a glance' }),
-        h('h1', { text: 'Every prompt in the brief, one click away' }),
-        h('p', { class: 'fm-lede', text: 'Each card below is one of the lecturer’s 15 demonstration prompts. Press “Show me” to jump to the panel that answers it, or start the walk-through to visit all 15 in order.' }),
+        h('p', { class: 'fm-eyebrow', text: 'Function map · the dashboard at a glance' }),
+        h('h1', { text: 'Every view, one click away' }),
+        h('p', { class: 'fm-lede', text: `Each card below is one view of the race. Press “Show me” to jump to its panel, or start the walk-through to visit all ${LIST.length} in order.` }),
         h('div', { class: 'fm-hero-actions' },
-          h('button', { class: 'btn fm-start', id: 'fm-tour-start', type: 'button', on: { click: () => start(0) } }, 'Start the walk-through', h('span', { class: 'fm-start-n', text: '15 steps' })))),
+          h('button', { class: 'btn fm-start', id: 'fm-tour-start', type: 'button', on: { click: () => start(0) } }, 'Start the walk-through', h('span', { class: 'fm-start-n', text: `${LIST.length} steps` })))),
       h('div', { class: 'fm-hero-board' },
         h('div', { class: 'fm-counts' },
-          count(LIST.length, 15, 'demonstration prompts covered'),
-          count(REQUIREMENTS.length, 5, 'Task 3 requirements met')),
-        h('div', { class: 'fm-ticks', role: 'group', 'aria-label': 'Jump straight to a prompt' }, ticks)));
+          count(LIST.length, 'views of the race'),
+          count(tabCount, 'tabs to find them on')),
+        h('div', { class: 'fm-ticks', role: 'group', 'aria-label': 'Jump straight to a view' }, ticks)));
   }
 
   function opsLegend(grid) {
@@ -366,7 +365,6 @@
         h('span', { class: 'fm-seen', text: 'Seen' }),
         h('span', { class: 'fm-tab' }, h('i', { 'aria-hidden': 'true' }), `${tabLabel(f.view)} tab`)),
       h('h3', { class: 'fm-title', text: f.title }),
-      f.brief !== f.title ? h('p', { class: 'fm-brief', text: `Brief: ${f.brief}` }) : h('p', { class: 'fm-brief', text: 'Brief: same title as the lecturer\'s prompt' }),
       h('p', { class: 'fm-see', text: f.see }),
       fact ? h('p', { class: 'fm-fact' }, h('span', { text: 'In the data' }), fact) : null,
       h('div', { class: 'fm-ops', 'aria-label': 'OLAP moves shown' }, f.ops.map(opChip)),
@@ -380,22 +378,16 @@
     return h('div', { class: 'legend' }, views.map((v) => h('span', null, h('i', { style: `background:var(--${ACCENT[v]})` }), tabLabel(v))));
   }
 
-  function checkIcon() {
-    const s = API.svg('svg', { width: '18', height: '18', viewBox: '0 0 20 20', 'aria-hidden': 'true', class: 'fm-check' });
-    s.appendChild(API.svg('circle', { cx: '10', cy: '10', r: '9' }));
-    s.appendChild(API.svg('path', { d: 'M6 10.5 L8.8 13.2 L14 7.5' }));
-    return s;
-  }
-  function requirementsPanel() {
-    const p = API.panel({ title: 'Task 3 requirements', sub: 'The five things the assignment asks the dashboard to do, and where each one is.' });
-    const rows = REQUIREMENTS.map((r, i) => {
+  function explorePanel() {
+    const p = API.panel({ title: 'Four ways to explore', sub: 'Open a total, compare the jerseys, follow the running times or split by country. Each button opens the panel.' });
+    const rows = EXPLORE.map((r, i) => {
       const miss = h('p', { class: 'fm-miss', role: 'status', hidden: '' });
       const links = r.links.map((l) => h('button', { class: 'btn fm-link', type: 'button', 'aria-label': `Show me: ${l.label}`,
         on: { click: () => { miss.hidden = true; show(l, (found) => { if (!found) { miss.textContent = `Could not find that panel. Open the ${tabLabel(l.view)} tab.`; miss.hidden = false; toast(miss.textContent); } }); } } }, l.label, h('span', { 'aria-hidden': 'true', text: ' ›' })));
       return h('li', { class: 'fm-req', style: `--i: ${i}` },
-        h('span', { class: 'fm-req-key', text: r.key }),
+        h('span', { class: 'fm-req-key', 'aria-hidden': 'true', text: String(i + 1) }),
         h('div', { class: 'fm-req-body' },
-          h('h3', null, r.title, h('span', { class: 'fm-met' }, checkIcon(), 'Met')),
+          h('h3', { text: r.title }),
           h('p', { class: 'fm-req-how', text: r.how }),
           h('div', { class: 'fm-req-links' }, links),
           miss));
@@ -410,9 +402,9 @@
       facts = buildFacts(API.E, { name: (b) => (API.R(b) ? API.R(b).short || API.R(b).name : String(b)), team: API.teamShort, gap: (s) => API.fmtGap(s).slice(1), ordinal: API.ordinal });
     } catch (err) { if (W.console) W.console.warn('function map: facts unavailable', err); }
     const grid = h('div', { class: 'fm-grid' }, LIST.map((f, i) => card(f, i, facts[f.code])));
-    const cards = API.panel({ title: 'The 15 demonstration prompts', sub: 'In the lecturer’s order, E1 to E15. The colour shows which tab each one lives on; every panel there carries the same code tag.' });
+    const cards = API.panel({ title: `All ${LIST.length} views`, sub: 'E1 to E15. The colour shows which tab each one lives on; every panel there carries the same code tag.' });
     add(cards.body, tabLegend(), opsLegend(grid), grid);
-    add(root, hero(), cards.el, requirementsPanel());
+    add(root, hero(), cards.el, explorePanel());
   }
 
   API.registerView('functions', 'Function map', render, { before: 'method' });

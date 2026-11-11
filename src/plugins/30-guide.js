@@ -30,8 +30,8 @@
       text: 'See how many riders and teams each country sent, and how they did. Click a country to list its riders.' },
     { view: 'bet', target: ['#view-bet .panel', '#view-bet'], title: 'The bet builder',
       text: 'Pick two riders and compare them on every stage they both rode. Fair odds come from a smoothed share of how often each one finished ahead in 2025.' },
-    { view: 'functions', target: ['#view-functions .panel', '#view-functions'], title: 'All 15 prompts, E1 to E15',
-      text: 'This map lists the lecturer\'s 15 demonstration prompts. Click any one to jump straight to the panel that answers it.' },
+    { view: 'functions', target: ['#view-functions .panel', '#view-functions'], title: 'All 15 views, E1 to E15',
+      text: 'This map lists all 15 views of the race. Click any one to jump straight to its panel.' },
     { view: null, target: ['.gd-help-btn'], title: 'Help is always here',
       text: 'Open Help to replay this tour, watch the video, read the five betting checks or look up a word. That is the whole tour.' },
   ];
@@ -75,7 +75,7 @@
     ['s.t. (same time)', 'Riders who cross the line in one group are all given the same time as the first rider of that group.'],
     ['Drill down', 'Click a total to open the detail behind it, for example from a team to its riders, or from a rider to each stage.'],
     ['Roll up', 'The opposite of drill down: add the details back up into a total, for example riders into their team.'],
-    ['E badges (E1 to E15)', 'Mark the panels that answer the lecturer\'s 15 demonstration prompts.'],
+    ['E badges (E1 to E15)', 'Mark the 15 main views. The Function map lists them all.'],
   ];
 
   /** Keep only the tour steps whose tab exists (a null view means "stay where you are"). */
@@ -261,7 +261,7 @@
       ['3', 'How to read the numbers', null],
     ];
     const read = h('p', null, `Times are hours, minutes and seconds, like ${T.fmtTime(f.winnerTime)}. Gaps are time behind the leader, like ${T.fmtGap(f.secondGap)}. `,
-      badge('E1'), ' badges mark the lecturer\'s 15 prompts.');
+      badge('E1'), ' badges mark the 15 main views.');
     openDialog({
       name: 'welcome', cls: 'gd-welcome', onClose: storeSet,
       build: (card, { titleId, close }) => {

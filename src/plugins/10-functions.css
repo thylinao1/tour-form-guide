@@ -1,5 +1,5 @@
-/* Function map tab: asphalt "race board" header with yellow counters, a grid of 15 prompt cards coloured by
-   the tab they live on, the Task 3 checklist, and the fixed walk-through bar used in the live demo. */
+/* Function map tab: asphalt "race board" header with yellow counters, a grid of 15 view cards coloured by
+   the tab they live on, the four ways to explore, and the fixed walk-through bar. */
 
 /* panels reached from the map land below the sticky header, and above the walk-through bar */
 .view [data-fn], .view [data-fn-also] { scroll-margin-top: calc(var(--mast-h, 64px) + 14px); scroll-margin-bottom: 140px; }
@@ -50,7 +50,7 @@ body.fm-touring main { padding-bottom: 150px; }
 .fm-tick:hover { transform: translateY(-2px); }
 .fm-tick:active { transform: translateY(0) scale(0.96); }
 
-/* ---------- prompt cards ---------- */
+/* ---------- view cards ---------- */
 .fm-legend { display: flex; flex-direction: column; gap: 8px; }
 .fm-ops-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .fm-op {
@@ -84,7 +84,6 @@ body.fm-touring main { padding-bottom: 150px; }
 .fm-tab { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
 .fm-tab i { width: 9px; height: 9px; border-radius: 50%; background: var(--acc); display: inline-block; }
 .fm-title { font-size: 19px; line-height: 1.15; }
-.fm-brief { margin: -4px 0 0; font-size: 12px; color: var(--muted); font-style: italic; }
 .fm-see { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.45; }
 .fm-fact {
   margin: 0; font-size: 13px; color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums;
@@ -107,7 +106,7 @@ body.fm-touring main { padding-bottom: 150px; }
 .fm-sql code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; white-space: pre; color: var(--ink); }
 .fm-sql-tools { display: flex; align-items: center; gap: 10px; }
 
-/* ---------- Task 3 checklist ---------- */
+/* ---------- four ways to explore ---------- */
 .fm-reqs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .fm-req {
   display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid var(--rule);
@@ -120,9 +119,6 @@ body.fm-touring main { padding-bottom: 150px; }
 }
 .fm-req-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .fm-req-body h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 18px; }
-.fm-met { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--good); }
-.fm-check circle { fill: color-mix(in srgb, var(--good) 16%, transparent); stroke: var(--good); stroke-width: 1.5; }
-.fm-check path { fill: none; stroke: var(--good); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .fm-req-how { margin: 0; color: var(--ink-2); font-size: 14px; max-width: 80ch; }
 .fm-req-links { display: flex; gap: 8px; flex-wrap: wrap; }
 .fm-link { font-size: 13px; padding: 5px 11px; border-radius: 999px; transition: transform 140ms ease-out; }
