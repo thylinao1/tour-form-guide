@@ -1,0 +1,11 @@
+/* theme switch button in the header */
+.th-btn {
+  flex: none; align-self: center; margin-left: auto; margin-right: 8px; padding: 7px 12px; border-radius: 999px;
+  border: 1px solid var(--asphalt-muted); background: transparent; color: var(--asphalt-ink);
+  font: 600 13px/1 var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+  transition: transform 150ms ease, border-color 150ms ease;
+}
+.th-btn:hover { border-color: var(--maillot); transform: translateY(-1px); }
+.th-btn:focus-visible { outline: 2px solid var(--maillot); outline-offset: 2px; }
+.mast-inner > .th-btn + .gd-help, .th-btn + .gd-help-btn { margin-left: 0; }
+@media (prefers-reduced-motion: reduce) { .th-btn { transition: none; } .th-btn:hover { transform: none; } }

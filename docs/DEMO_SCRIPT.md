@@ -6,7 +6,7 @@ This script covers requirements a to e and all 15 demonstration prompts (E1 to E
 
 - Open https://thylinao1.github.io/tour-form-guide/ (or the local `index.html`). It works offline.
 - For a clean start use `index.html?welcome=0#race`. The welcome box opens by itself on a first visit, so close it first or use that link.
-- Use a laptop screen at full width. The theme button in the header switches light and dark if the room is bright.
+- Use a laptop screen at full width. The Light or Dark button in the header switches the theme if the room is bright.
 - Keep these numbers to hand (they are on the page too).
 
 | Fact | Value |

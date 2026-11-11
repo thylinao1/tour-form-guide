@@ -66,7 +66,7 @@ More detail, with the matching SQL, is in [docs/FUNCTION_MAP.md](docs/FUNCTION_M
 | `index.html` | The built dashboard. One file, works offline. Made by `build.mjs`. |
 | `build.mjs` | Reads the data and the source files and writes the single `index.html`. |
 | `src/` | `engine.js` (pure calculations), `app.js` (the interface and the ten core tabs), `styles.css` (design tokens and components), `body.html` (page skeleton). |
-| `src/plugins/` | Extra features, joined into the page in file name order: `05-sql.js` (short SQL for each prompt), `10-functions.*` (Function map tab), `20-coverage.*` (E13 and E15), `30-guide.*` (Help, tour, glossary, video), `40-showcase.*` (podium, race replay, 3D chart, motion), `50-bet.*` (Bet builder tab). |
+| `src/plugins/` | Extra features, joined into the page in file name order: `05-sql.js` (short SQL for each prompt), `10-functions.*` (Function map tab), `20-coverage.*` (E13 and E15), `30-guide.*` (Help, tour, glossary, video), `40-showcase.*` (podium, race replay, 3D chart, motion), `50-bet.*` (Bet builder tab), `60-theme.*` (light and dark switch). |
 | `data/` | `cleaned/` (one CSV per table, see its README), `official/` (official classifications, published points and mountains standings, sources note), `source/` (the three original course files), `weather/` (race-day weather), `geo_2025.json` (map outlines). |
 | `sql/` | The Task 2 schema, the load script, the star schema, one query per prompt, and the Task 4 comparison. See `sql/README.md`. |
 | `tests/` | Node tests, a SQL check script and the expected values from an independent reference. |
@@ -114,6 +114,8 @@ Handy web page switches for recordings: add `?welcome=0` to hide the first-visit
 - **Race-day weather:** Open-Meteo historical weather (open-meteo.com), used for the wet, hot and windy filters in the Bet builder.
 - **Maps:** country outlines from Natural Earth (public domain, via world-atlas). Stage town positions are from OpenStreetMap, © OpenStreetMap contributors.
 - **Charts:** Apache ECharts 5.6.0 (Apache License 2.0) and ECharts GL 2.0.9 (BSD 3-Clause), copied into `vendor/`.
+- **Tutorial video:** `assets/tutorial.mp4` (about 2 minutes) is a recording of this dashboard, made by the scripts in `tools/video/`. The voice is computer generated with the open Kokoro speech model (Apache License 2.0), run on the NUS School of Computing compute cluster. Open it from Help, then Watch the video.
+- **Fonts:** Barlow and Barlow Condensed (SIL Open Font License 1.1), embedded in the page.
 - **Fonts:** Barlow and Barlow Condensed (SIL Open Font License 1.1), embedded in `vendor/fonts.css`.
 - **Team:** BT5110 Group 31.
 
