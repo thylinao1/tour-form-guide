@@ -177,3 +177,4 @@ dialog.gd-dialog::backdrop { background: rgba(8, 10, 14, 0.58); animation: gd-fa
   .gd-help-btn.gd-ping::after, .gd-ring::after, .gd-bar, .gd-wcard, .gd-bet-step, .gd-card, .gd-menu, .gd-tour-inner,
   dialog.gd-dialog::backdrop { animation: none !important; }
 }
+.gd-quip { margin: 2px 0 0; font-style: italic; font-size: 15px; color: var(--ink-2); text-align: center; }

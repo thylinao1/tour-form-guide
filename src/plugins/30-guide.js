@@ -291,12 +291,14 @@
       h('button', { type: 'button', class: 'btn', 'aria-label': `${betLabel(s)}: ${s.title}`, on: { click: () => onJump(s) } }, betLabel(s), ' →'))));
   }
   const limitsEl = () => h('p', { class: 'gd-limits', text: LIMITS });
+  // a closing joke under the five checks window, at the owner's request
+  const QUIP = 'It’s not a bet if you bet your money on Pogacar, it’s a guarantee.';
   function openBetGuide() {
     openDialog({
       name: 'bet', cls: 'gd-wide',
       build: (card, { titleId, close }) => add(card,
         dlgHead(titleId, 'Five checks', 'How to make an educated bet', 'Work through these in order. Each button opens the tab with the evidence.'),
-        betSteps((s) => { close(); jumpBet(s); }), limitsEl()),
+        betSteps((s) => { close(); jumpBet(s); }), limitsEl(), h('p', { class: 'gd-quip', text: QUIP })),
     });
   }
   function betPanel(rootEl) {
