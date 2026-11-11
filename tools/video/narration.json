@@ -1,0 +1,38 @@
+{
+ "voice": "af_heart",
+ "speed": 1.0,
+ "scenes": [
+  {
+   "id": "s1_intro",
+   "say": "Welcome to the Tour de France 2025 Form Guide. It turns the whole race into pictures and numbers, so you can judge riders and teams before you make a bet. Every number is a summary of the finished 2025 race. It is not a prediction."
+  },
+  {
+   "id": "s2_move",
+   "say": "Moving around is simple. Each tab across the top answers one question. Click any rider's name to open their full race, and click bars or table rows to go deeper."
+  },
+  {
+   "id": "s3_overall",
+   "say": "Start with the Overall winner tab. The table ranks riders by total time. Click a rider to see their biggest day. Further down, the race replay shows the top ten changing after every stage, and you can turn the whole race around in 3D."
+  },
+  {
+   "id": "s4_stage",
+   "say": "Next, check the kind of stage. The Stages tab lets you drill down from terrain, to a stage, to its riders. The Terrain tab shows who is strong on flat roads, in the hills, in the mountains and against the clock."
+  },
+  {
+   "id": "s5_tabs",
+   "say": "Jerseys compares the four classifications side by side. Form and risk shows who finishes near the front again and again. Teams shows which squads are strongest and deepest. Nations counts the riders and teams of every country."
+  },
+  {
+   "id": "s6_bet",
+   "say": "Now build your bet. Step one: choose the kind of day, for example mountain stages. Step two: pick your two riders. Step three: read the evidence. You see how often one finished ahead of the other, the share that history suggests, the fair odds, and a warning when the sample is small."
+  },
+  {
+   "id": "s7_map",
+   "say": "For our graders, the Function map lists all fifteen prompts from the brief. Press Show me to jump straight to the panel, or start the walk through to visit all fifteen in order."
+  },
+  {
+   "id": "s8_help",
+   "say": "Need help at any time? Press Help for the guided tour and the glossary. Remember, one race is thin evidence. Use it to ask better questions, not to guarantee a win. Enjoy the Form Guide."
+  }
+ ]
+}

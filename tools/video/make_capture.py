@@ -3,7 +3,7 @@
 
   python3 tools/video/make_capture.py <durations.json> <frames_dir> <out_dir> [base_url]
 
-storyboard.json holds the scenes: id, say (narration), caption lines and timed steps.
+storyboard.json holds the scenes: id, say (narration), caption lines and timed steps (at = fraction of the scene, 0 to 1).
 durations.json maps scene id to the length of its narration audio in seconds.
 Each generated file is a function (page) => {...} that plays the scene in the real dashboard
 and saves numbered JPEG frames at a fixed rate, so the video shows the real interface.
@@ -89,6 +89,7 @@ def main():
     for i, sc in enumerate(board['scenes']):
         dur = float(durations[sc['id']]) + float(sc.get('pad', 0.6))
         frames = int(round(dur * FPS))
+        sc = dict(sc, steps=[dict(st, at=round(st['at'] * (dur - 0.4), 2)) for st in sc['steps']])  # step times are fractions of the scene
         js = f"""async (page) => {{
 const MISSING = [], PENDING = [];
 {HELPERS}

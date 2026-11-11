@@ -1,0 +1,392 @@
+{
+ "voice": "af_heart",
+ "speed": 1.0,
+ "scenes": [
+  {
+   "id": "s1_intro",
+   "say": "Welcome to the Tour de France 2025 Form Guide. It turns the whole race into pictures and numbers, so you can judge riders and teams before you make a bet. Every number is a summary of the finished 2025 race. It is not a prediction.",
+   "steps": [
+    {
+     "at": 0,
+     "do": "go",
+     "view": "race"
+    },
+    {
+     "at": 0.02,
+     "do": "caption",
+     "text": "Tour de France 2025 Form Guide"
+    },
+    {
+     "at": 0.3,
+     "do": "spot",
+     "sel": "#sc-podium-panel"
+    },
+    {
+     "at": 0.42,
+     "do": "caption",
+     "text": "Judge riders and teams before you bet"
+    },
+    {
+     "at": 0.7,
+     "do": "unspot",
+     "sel": "body"
+    },
+    {
+     "at": 0.72,
+     "do": "caption",
+     "text": "A summary of 2025 results, not a prediction"
+    }
+   ]
+  },
+  {
+   "id": "s2_move",
+   "say": "Moving around is simple. Each tab across the top answers one question. Click any rider's name to open their full race, and click bars or table rows to go deeper.",
+   "steps": [
+    {
+     "at": 0.0,
+     "do": "caption",
+     "text": "Each tab answers one question"
+    },
+    {
+     "at": 0.05,
+     "do": "move",
+     "sel": ".tabs a[href='#outright']"
+    },
+    {
+     "at": 0.22,
+     "do": "move",
+     "sel": ".tabs a[href='#teams']"
+    },
+    {
+     "at": 0.36,
+     "do": "move",
+     "sel": ".tabs a[href='#nations']"
+    },
+    {
+     "at": 0.45,
+     "do": "caption",
+     "text": "Click any rider name for their full race"
+    },
+    {
+     "at": 0.48,
+     "do": "click",
+     "sel": "#sc-podium-panel .sc-p1 button"
+    },
+    {
+     "at": 0.92,
+     "do": "key",
+     "key": "Escape"
+    }
+   ]
+  },
+  {
+   "id": "s3_overall",
+   "say": "Start with the Overall winner tab. The table ranks riders by total time. Click a rider to see their biggest day. Further down, the race replay shows the top ten changing after every stage, and you can turn the whole race around in 3D.",
+   "steps": [
+    {
+     "at": 0,
+     "do": "go",
+     "view": "outright"
+    },
+    {
+     "at": 0.02,
+     "do": "caption",
+     "text": "Overall winner: who was strongest over 3 weeks"
+    },
+    {
+     "at": 0.2,
+     "do": "click",
+     "sel": "#view-outright [data-fn~='E1'] tbody tr",
+     "nth": 1
+    },
+    {
+     "at": 0.3,
+     "do": "caption",
+     "text": "Click a rider to see their biggest day"
+    },
+    {
+     "at": 0.5,
+     "do": "spot",
+     "sel": "#view-outright .panel:nth-of-type(6)"
+    },
+    {
+     "at": 0.52,
+     "do": "caption",
+     "text": "Race replay: the top ten after every stage"
+    },
+    {
+     "at": 0.56,
+     "do": "click",
+     "sel": "#view-outright .sc-play"
+    },
+    {
+     "at": 0.8,
+     "do": "unspot",
+     "sel": "body"
+    },
+    {
+     "at": 0.81,
+     "do": "move",
+     "sel": "#view-outright .panel:nth-of-type(7) h2"
+    },
+    {
+     "at": 0.83,
+     "do": "caption",
+     "text": "The race in 3D: drag to turn it"
+    }
+   ]
+  },
+  {
+   "id": "s4_stage",
+   "say": "Next, check the kind of stage. The Stages tab lets you drill down from terrain, to a stage, to its riders. The Terrain tab shows who is strong on flat roads, in the hills, in the mountains and against the clock.",
+   "steps": [
+    {
+     "at": 0,
+     "do": "go",
+     "view": "stages"
+    },
+    {
+     "at": 0.02,
+     "do": "caption",
+     "text": "Stages: drill down from terrain to stage to rider"
+    },
+    {
+     "at": 0.2,
+     "do": "spot",
+     "sel": "#view-stages .panel:nth-of-type(2)"
+    },
+    {
+     "at": 0.34,
+     "do": "click",
+     "sel": "#view-stages tr.sub button.exp"
+    },
+    {
+     "at": 0.55,
+     "do": "unspot",
+     "sel": "body"
+    },
+    {
+     "at": 0.56,
+     "do": "go",
+     "view": "terrain"
+    },
+    {
+     "at": 0.58,
+     "do": "caption",
+     "text": "Terrain: who is strong on each kind of road"
+    }
+   ]
+  },
+  {
+   "id": "s5_tabs",
+   "say": "Jerseys compares the four classifications side by side. Form and risk shows who finishes near the front again and again. Teams shows which squads are strongest and deepest. Nations counts the riders and teams of every country.",
+   "steps": [
+    {
+     "at": 0,
+     "do": "go",
+     "view": "jerseys"
+    },
+    {
+     "at": 0.02,
+     "do": "caption",
+     "text": "Jerseys: four classifications side by side"
+    },
+    {
+     "at": 0.26,
+     "do": "go",
+     "view": "form"
+    },
+    {
+     "at": 0.28,
+     "do": "caption",
+     "text": "Form and risk: who is near the front again and again"
+    },
+    {
+     "at": 0.52,
+     "do": "go",
+     "view": "teams"
+    },
+    {
+     "at": 0.54,
+     "do": "caption",
+     "text": "Teams: the strongest and deepest squads"
+    },
+    {
+     "at": 0.66,
+     "do": "move",
+     "sel": "#view-teams [data-fn~='E13'] h2"
+    },
+    {
+     "at": 0.78,
+     "do": "go",
+     "view": "nations"
+    },
+    {
+     "at": 0.8,
+     "do": "caption",
+     "text": "Nations: riders and teams per country"
+    }
+   ]
+  },
+  {
+   "id": "s6_bet",
+   "say": "Now build your bet. Step one: choose the kind of day, for example mountain stages. Step two: pick your two riders. Step three: read the evidence. You see how often one finished ahead of the other, the share that history suggests, the fair odds, and a warning when the sample is small.",
+   "steps": [
+    {
+     "at": 0,
+     "do": "go",
+     "view": "bet"
+    },
+    {
+     "at": 0.02,
+     "do": "caption",
+     "text": "Bet builder: three steps"
+    },
+    {
+     "at": 0.14,
+     "do": "click",
+     "sel": "#view-bet .seg button",
+     "text": "Mountain"
+    },
+    {
+     "at": 0.16,
+     "do": "caption",
+     "text": "Step 1: choose the kind of day"
+    },
+    {
+     "at": 0.32,
+     "do": "spot",
+     "sel": "#view-bet .panel:nth-of-type(2)"
+    },
+    {
+     "at": 0.34,
+     "do": "caption",
+     "text": "Step 2: pick your two riders"
+    },
+    {
+     "at": 0.46,
+     "do": "spot",
+     "sel": "#view-bet .panel:nth-of-type(3)"
+    },
+    {
+     "at": 0.48,
+     "do": "caption",
+     "text": "Step 3: read what 2025 says"
+    },
+    {
+     "at": 0.74,
+     "do": "unspot",
+     "sel": "body"
+    },
+    {
+     "at": 0.75,
+     "do": "scrollBy",
+     "y": 420
+    },
+    {
+     "at": 0.78,
+     "do": "caption",
+     "text": "Small sample? The card warns you"
+    }
+   ]
+  },
+  {
+   "id": "s7_map",
+   "say": "For our graders, the Function map lists all fifteen prompts from the brief. Press Show me to jump straight to the panel, or start the walk through to visit all fifteen in order.",
+   "steps": [
+    {
+     "at": 0,
+     "do": "go",
+     "view": "functions"
+    },
+    {
+     "at": 0.02,
+     "do": "caption",
+     "text": "Function map: all 15 prompts, one click away"
+    },
+    {
+     "at": 0.3,
+     "do": "click",
+     "sel": "#view-functions .fm-card button",
+     "text": "Show me",
+     "nth": 6
+    },
+    {
+     "at": 0.34,
+     "do": "caption",
+     "text": "Show me jumps straight to the panel"
+    },
+    {
+     "at": 0.62,
+     "do": "go",
+     "view": "functions"
+    },
+    {
+     "at": 0.7,
+     "do": "click",
+     "sel": "#view-functions .fm-start"
+    },
+    {
+     "at": 0.72,
+     "do": "caption",
+     "text": "Or walk through all 15 in order"
+    }
+   ]
+  },
+  {
+   "id": "s8_help",
+   "say": "Need help at any time? Press Help for the guided tour and the glossary. Remember, one race is thin evidence. Use it to ask better questions, not to guarantee a win. Enjoy the Form Guide.",
+   "steps": [
+    {
+     "at": 0.0,
+     "do": "key",
+     "key": "Escape"
+    },
+    {
+     "at": 0.02,
+     "do": "go",
+     "view": "race"
+    },
+    {
+     "at": 0.04,
+     "do": "caption",
+     "text": "Help: guided tour and glossary"
+    },
+    {
+     "at": 0.1,
+     "do": "click",
+     "sel": ".gd-help-btn"
+    },
+    {
+     "at": 0.5,
+     "do": "key",
+     "key": "Escape"
+    },
+    {
+     "at": 0.52,
+     "do": "caption",
+     "text": "One race is thin evidence. Ask better questions."
+    },
+    {
+     "at": 0.56,
+     "do": "top"
+    },
+    {
+     "at": 0.6,
+     "do": "spot",
+     "sel": "#sc-podium-panel"
+    },
+    {
+     "at": 0.9,
+     "do": "unspot",
+     "sel": "body"
+    },
+    {
+     "at": 0.88,
+     "do": "caption",
+     "text": "Enjoy the Form Guide"
+    }
+   ]
+  }
+ ]
+}
