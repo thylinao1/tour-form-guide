@@ -1,4 +1,4 @@
-/* plugin 20-coverage: two brief functions the core tabs lacked.
+/* plugin 20-coverage: two analysis views added to existing tabs.
  *   E13 Depth of squads  (Teams tab)  : distinct riders per team, who reached Paris, how many nationalities.
  *   E15 The long day     (Stages tab) : stages sorted by distance, with the leading finishers of the chosen one.
  * The pure calculations at the top also run under Node (module.exports) for tests/coverage.test.mjs.

@@ -1,6 +1,6 @@
 -- =====================================================================================
 -- 05_task4_compare.sql
--- Task 4: three representative questions, each written twice, first on the normalized
+-- Normalized schema against star schema: three representative questions, each written twice, first on the normalized
 -- schema (01, 02) and then on the star schema (03), with a note on the joins needed.
 -- Both versions return the same rows.
 -- =====================================================================================

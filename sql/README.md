@@ -4,10 +4,10 @@ Run from the repository root with DuckDB (`brew install duckdb`). The files also
 
 | File | What it does |
 |---|---|
-| `01_normalized_schema.sql` | The Task 2 schema: 10 tables, keys, CHECKs and the `result_adjusted` view, with four marked corrections (award recipient type for WIN and EARN, `rank >= 1`, loop stages allowed, dead heats allowed) |
+| `01_normalized_schema.sql` | The relational schema: 10 tables, keys, CHECKs and the `result_adjusted` view, with four marked notes (award recipient type for WIN and EARN, `rank >= 1`, loop stages allowed, dead heats allowed) |
 | `02_load.sql` | Loads `data/cleaned/*.csv` and seeds the five 2025 awards |
 | `03_star_schema.sql` | Star schema built from the normalized tables: `fact_results` (one rider on one stage) with `dim_rider`, `dim_team`, `dim_stage`, `dim_country` |
-| `04_functions_e1_e15.sql` | One commented query (plus drill down where the prompt asks) for each prompt E1 to E15, using ROLLUP, GROUPING SETS, FILTER pivots and window functions |
+| `04_functions_e1_e15.sql` | One commented query (plus its drill down where there is one) for each function E1 to E15, using ROLLUP, GROUPING SETS, FILTER pivots and window functions |
 | `05_task4_compare.sql` | Three questions written on both schemas, with the joins each one needs |
 
 ```sh

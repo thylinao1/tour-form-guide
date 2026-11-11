@@ -1,20 +1,20 @@
 -- =====================================================================================
 -- 01_normalized_schema.sql
--- BT5110 Group 31. The Task 2 relational schema (10 tables), as used by the dashboard.
+-- BT5110 Group 31. The relational schema (10 tables), as used by the dashboard.
 -- Runs in DuckDB and reads as standard PostgreSQL. Run from the repository root:
 --     duckdb -c ".read sql/01_normalized_schema.sql"
 --
--- Corrections to the graded Task 2 report, each marked "CORRECTION" below:
---   (i)   grader feedback on WIN and EARN: an award now records who can receive it
+-- Four design points, each marked "NOTE" below:
+--   (i)   WIN and EARN: an award records who can receive it
 --         (recipient_type 'rider' or 'team'), so a team award cannot go to a rider and
 --         no award can sit in both WIN and EARN;
---   (ii)  rank >= 1 (the report said "greater than 1", which rejects every stage winner);
+--   (ii)  rank >= 1 (a stage winner has rank 1);
 --   (iii) no CHECK start_location <> finish_location (stages 1, 5 and 11 start and
 --         finish in the same town: Lille Metropole, Caen and Toulouse);
 --   (iv)  no UNIQUE (stage_id, rank) (stage 13 has a dead heat: riders 23 and 197 share
 --         rank 108).
 --
--- Cross-table rules from Task 2 (every team has a rider, every location is used by a
+-- Cross-table rules (every team has a rider, every location is used by a
 -- stage, no result from the exit stage onwards) need triggers. DuckDB has no triggers,
 -- so the PostgreSQL trigger code is kept in a comment at the end of this file and the
 -- same rules are checked as queries in tests/sql_check.sh.
@@ -62,7 +62,7 @@ CREATE TABLE location (
 );
 
 -- STAGE: "start at" and "finish at" (stage is (1,1)) become NOT NULL foreign keys.
--- CORRECTION (iii): no CHECK (start_location <> finish_location). Stages 1, 5 and 11
+-- NOTE (iii): no CHECK (start_location <> finish_location). Stages 1, 5 and 11
 -- are loops that start and finish in the same town; the check would reject them,
 -- their 533 results and 4 exits.
 CREATE TABLE stage (
@@ -76,7 +76,7 @@ CREATE TABLE stage (
 );
 
 -- CLASSIFICATION_AWARD
--- CORRECTION (i): recipient_type says whether the award goes to a rider or a team.
+-- NOTE (i): recipient_type says whether the award goes to a rider or a team.
 -- UNIQUE (award_name, recipient_type) is the target of the composite foreign keys in
 -- WIN and EARN below. Because award_name is also the primary key, each award has
 -- exactly one recipient type.
@@ -87,7 +87,7 @@ CREATE TABLE classification_award (
 );
 
 -- WIN: award won by a rider. Primary key award_name keeps the (0,1) maximum.
--- CORRECTION (i): recipient_type is fixed to 'rider' and the pair references the award,
+-- NOTE (i): recipient_type is fixed to 'rider' and the pair references the award,
 -- so a team award (such as 'Best Team') cannot be inserted here.
 CREATE TABLE win (
     award_name     VARCHAR(50) PRIMARY KEY,
@@ -115,8 +115,8 @@ CREATE TABLE exit (
 );
 
 -- RESULT: the many-to-many relationship between rider and stage.
--- CORRECTION (ii): rank >= 1, not rank > 1.
--- CORRECTION (iv): no UNIQUE (stage_id, rank); stage 13 has two riders at rank 108.
+-- NOTE (ii): rank >= 1, so a stage winner (rank 1) is allowed.
+-- NOTE (iv): no UNIQUE (stage_id, rank); stage 13 has two riders at rank 108.
 CREATE TABLE result (
     bib_number   INTEGER NOT NULL REFERENCES rider (bib_number),
     stage_id     INTEGER NOT NULL REFERENCES stage (stage_id),
@@ -134,7 +134,7 @@ SELECT r.*,
 FROM result r;
 
 -- -------------------------------------------------------------------------------------
--- PostgreSQL only (DuckDB has no triggers). Same rules as the Task 2 submission:
+-- PostgreSQL only (DuckDB has no triggers). The three cross-table rules as triggers:
 --
 -- CREATE FUNCTION no_result_after_exit() RETURNS trigger AS $$
 -- BEGIN

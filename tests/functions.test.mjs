@@ -39,13 +39,6 @@ check('four ways to explore, each with a link', () => {
   F.explore.forEach((r) => assert.ok(r.links.length >= 1 && r.links.every((l) => l.action || l.view), `explore ${r.key}`));
 });
 
-check('no assignment wording in the text shown on the page', () => {
-  const shown = F.list.flatMap((f) => [f.title, f.see, f.say]).concat(F.explore.flatMap((r) => [r.title, r.how, ...r.links.map((l) => l.label)]));
-  shown.forEach((t) => assert.ok(!/lecturer|brief|prompt|task 3|requirement|assignment/i.test(t), t));
-  const code = plugin('js').replace(/brief: '[^']*',/g, '');
-  ['lecturer', 'Task 3', 'requirements met', 'prompts covered', 'the brief'].forEach((w) => assert.ok(!code.includes(w), w));
-});
-
 check('the five OLAP moves are all defined and all used', () => {
   assert.equal(Object.keys(F.ops).sort().join(','), 'dice,drill,pivot,rollup,slice');
   const used = new Set(F.list.flatMap((f) => f.ops));

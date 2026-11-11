@@ -1,9 +1,9 @@
 """Build data/geo_2025.json: two small GeoJSON maps for the dashboard (France with its neighbours
 for the stage route, Europe for nations), the stage town coordinates, and badge positions for the
 21 stage numbers. Map outlines: Natural Earth via world-atlas (ISC licence). Town coordinates:
-data/stage_places.csv (OpenStreetMap Nominatim, © OpenStreetMap contributors).
+data/official/stage_places.csv (OpenStreetMap Nominatim, © OpenStreetMap contributors).
 
-Usage (from betting-dashboard/):
+Usage (from the repository root):
   curl -o /tmp/countries-50m.json https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json
   python tools/make_geo.py /tmp/countries-50m.json
 """
@@ -11,7 +11,7 @@ import csv, json, math, sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
-CLEAN = next(d for d in (HERE.parent / "data" / "cleaned", HERE.parent / "cleaned") if (d / "stage.csv").exists())
+CLEAN = HERE / "data" / "cleaned"
 topo = json.load(open(sys.argv[1], encoding="utf-8"))
 sx, sy = topo["transform"]["scale"]; tx, ty = topo["transform"]["translate"]
 arcs = []
@@ -79,7 +79,7 @@ EU_BOX = (-11.0, 35.5, 31.0, 62.5)
 fr = make(FR_BOX, 0.025, 2)
 eu = make(EU_BOX, 0.13, 1)
 
-places = {r["place"]: [float(r["lon"]), float(r["lat"])] for r in csv.DictReader(open(HERE / "data" / "stage_places.csv", encoding="utf-8"))}
+places = {r["place"]: [float(r["lon"]), float(r["lat"])] for r in csv.DictReader(open(HERE / "data" / "official" / "stage_places.csv", encoding="utf-8"))}
 stages = list(csv.DictReader(open(CLEAN / "stage.csv", encoding="utf-8")))
 # stage-number badges: start at the middle of each line, then push apart on a ~520 px wide map
 k = math.cos(math.radians(46.5)); S = 520 / ((FR_BOX[2] - FR_BOX[0]) * k)

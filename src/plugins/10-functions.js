@@ -14,7 +14,7 @@
     pivot: { label: 'Pivot', tip: 'turn the same numbers to see them from another side, for example a stage seen by team' },
   };
 
-  // The view for each code is fixed by the project plan; other tabs and the docs rely on it.
+  // Each code maps to one view; other tabs and the docs use the same mapping.
   const LIST = [
     { code: 'E1', view: 'outright', brief: 'GC leaderboard with contextual descent', title: 'Final overall standings', ops: ['rollup', 'drill'],
       see: 'The final overall standings (GC, the general classification: lowest total time wins). Click any rider to see the day they gained or lost the most time on the top ten.',

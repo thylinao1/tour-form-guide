@@ -5,7 +5,7 @@
 #   plugins  "all" (default), "none", or a comma list of plugin names without extension
 #   clicks   CSS selectors separated by |, clicked one after another before the DOM is saved
 # Output: .smoke/<view>.html (rendered DOM) and one line: SMOKE OK or SMOKE ERRORS followed by the errors.
-# Only one run at a time (a lock keeps Chrome runs from piling up on a small machine).
+# Only one run at a time (a lock directory prevents parallel Chrome runs).
 set -u
 cd "$(dirname "$0")/.."
 VIEW="${1:-race}"; PLUG="${2:-all}"; CLICKS="${3:-}"

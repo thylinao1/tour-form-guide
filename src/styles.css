@@ -166,7 +166,7 @@ h3 { font-family: var(--font-display); font-weight: 600; font-size: 17px; letter
 .note { color: var(--muted); font-size: 13px; margin: 0; }
 .note b { color: var(--ink-2); font-weight: 600; }
 
-/* function tag: which brief function a panel implements */
+/* function tag: which analysis function (E1 to E15) a panel implements */
 .fn {
   display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-display); font-weight: 600; font-size: 12px;
   letter-spacing: 0.08em; color: var(--ink-2); border: 1px solid var(--rule-strong); border-radius: 4px; padding: 1px 6px; vertical-align: 3px; margin-left: 6px; white-space: nowrap;

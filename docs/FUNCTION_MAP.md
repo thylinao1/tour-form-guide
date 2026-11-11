@@ -1,6 +1,6 @@
 # Function map: E1 to E15
 
-The lecturer listed 15 demonstration prompts. All 15 are built into the dashboard. In the page, each panel carries a yellow badge with its code, and the **Function map** tab has a card and a "Show me" button for each one.
+The dashboard implements 15 analysis functions, E1 to E15. In the page, each panel carries a yellow badge with its code, and the **Function map** tab has a card and a "Show me" button for each one.
 
 The OLAP words used below:
 
@@ -12,7 +12,7 @@ The OLAP words used below:
 
 SQL is in `sql/04_functions_e1_e15.sql`. It runs on the star schema built by `sql/03_star_schema.sql`. Each query has a comment line that starts with the code (for example `-- E7.`). A shorter version of each query is shown by the SQL button on the Function map tab (from `src/plugins/05-sql.js`).
 
-| Code | Lecturer's title | Tab | Panel title | OLAP operation | Matching query in `sql/04_functions_e1_e15.sql` |
+| Code | Function | Tab | Panel title | OLAP operation | Matching query in `sql/04_functions_e1_e15.sql` |
 |---|---|---|---|---|---|
 | E1 | GC leaderboard with contextual descent | Overall winner | Final overall standings, and Biggest day against the top ten | Roll up, drill down | `E1`: total adjusted time per rider with gap, then the stage where one rider gained or lost the most time on the median of the final top ten |
 | E2 | A stage in focus | Stages | Stage in focus | Slice, pivot | `E2`: leading finishers of one stage, then the same slice by team |
@@ -33,6 +33,6 @@ SQL is in `sql/04_functions_e1_e15.sql`. It runs on the star schema built by `sq
 ## Notes
 
 - **Where a code is on the page.** Panels set a `data-fn` tag, so the Function map can scroll to the right panel and flash it. E10 appears on three panels in the Overall winner tab (the line chart first, then the replay and the 3D chart). E8 and E9 share the map panel, and E9 also has its own table.
-- **Drill down for requirement a.** The Stages tab also has a panel called "Roll up and drill down" (terrain, then stage, then top five), tagged "OLAP" on the page. It is not one of the 15 prompts. It is there to show the drill down by stage clearly.
+- **Drill down by stage.** The Stages tab also has a panel called "Roll up and drill down" (terrain, then stage, then top five), tagged "OLAP" on the page. It is not one of the 15 functions. It shows the drill down by stage on its own.
 - **Same answers in SQL and in the page.** The dashboard computes from the same cleaned data as the SQL. `tests/sql_check.sh` checks key values in the SQL (Pogacar 277,349 seconds, Vingegaard +264, Lipowitz +660, France 38 riders and 5 teams, stage 2 the longest at 209.1 km, time trials on stages 5 and 13, Pogacar 13 top tens), and `tests/engine.test.mjs` checks the same values in the page code against an independent reference.
-- **The team total in E3 uses the official rule.** The brief asks for each team's aggregate adjusted time. Adding every rider's time makes totals depend on how many riders dropped out, so the ROLLUP counts the three best times per stage, which matches the Teams tab. The page still shows the all rider total through the Official / With bonuses switch and the workload figure.
+- **The team total in E3 uses the official rule.** E3 is about each team's aggregate adjusted time. Adding every rider's time makes totals depend on how many riders dropped out, so the ROLLUP counts the three best times per stage, which matches the Teams tab. The page still shows the all rider total through the Official / With bonuses switch and the workload figure.

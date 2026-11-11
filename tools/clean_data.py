@@ -1,19 +1,20 @@
-"""Clean the three source CSVs into one CSV per Task 2 table.
+"""Clean the three source CSVs into one CSV per table of the relational schema.
 
-Run from anywhere:  python clean_data.py
-Inputs : riders.csv, individual_results.csv, exits.csv (same folder as this script)
-Outputs: cleaned/*.csv (UTF-8, no BOM, header row, comma-separated)
+Run from anywhere:  python3 tools/clean_data.py   (needs pandas)
+Inputs : data/source/riders.csv, individual_results.csv, exits.csv
+Outputs: data/cleaned/*.csv (UTF-8, no BOM, header row, comma-separated)
 
-Every step is described in cleaned/README.md. The script stops with an
-AssertionError if any Task 2 constraint (other than the known
+Every step is described in data/cleaned/README.md. The script stops with an
+AssertionError if any schema constraint (other than the known
 start_location <> finish_location conflict) fails on the output.
 """
 from pathlib import Path
 
 import pandas as pd
 
-SRC = Path(__file__).resolve().parent
-OUT = SRC / "cleaned"
+DATA = Path(__file__).resolve().parent.parent / "data"
+SRC = DATA / "source"
+OUT = DATA / "cleaned"
 OUT.mkdir(exist_ok=True)
 
 READ = dict(encoding="utf-8", dtype=str, keep_default_na=False)
@@ -22,7 +23,7 @@ results_raw = pd.read_csv(SRC / "individual_results.csv", **READ)
 exits_raw = pd.read_csv(SRC / "exits.csv", **READ)
 
 # ---------------------------------------------------------------------------
-# 1. Countries: source uses IOC/UCI-style codes; the brief requires ISO 3166-1
+# 1. Countries: source uses IOC/UCI-style codes; the schema uses ISO 3166-1
 #    alpha-3. Map by country name (the source names are ISO short names).
 # ---------------------------------------------------------------------------
 ISO3 = {
@@ -140,7 +141,7 @@ exit_ = pd.DataFrame({
 }).sort_values(["exit_stage", "bib_number"])
 
 # ---------------------------------------------------------------------------
-# 6. Validate every Task 2 constraint on the output.
+# 6. Validate every schema constraint on the output.
 # ---------------------------------------------------------------------------
 def fk(child, col, parent, pcol):
     missing = set(child[col]) - set(parent[pcol])
@@ -181,7 +182,7 @@ src_adj = (results_raw.time.astype(int) - results_raw.bonus.astype(int) + result
 assert src_adj == (result.finish_time - result.time_bonus + result.time_penalty).sum()
 
 loops = stage[stage.start_location == stage.finish_location]
-print(f"NOTE: {len(loops)} stages violate Task 2 CHECK start_location <> finish_location:",
+print(f"NOTE: {len(loops)} stages start and finish in the same town (no CHECK start_location <> finish_location):",
       loops.stage_id.tolist())
 
 # ---------------------------------------------------------------------------

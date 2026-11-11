@@ -1,7 +1,7 @@
 // Build the dashboard into one self-contained file.
 //   node build.mjs            -> index.html (opens by double-click, works offline)
 //   node build.mjs out.html   -> same page written to another path
-// Inputs: data/cleaned/*.csv (the Task 2 tables), data/official/*.csv (published standings),
+// Inputs: data/cleaned/*.csv (one per table), data/official/*.csv (published standings),
 // data/weather, data/geo_2025.json, src/*, src/plugins/*, vendor/* (chart libraries, inlined).
 import fs from 'node:fs';
 import path from 'node:path';

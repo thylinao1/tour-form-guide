@@ -8,8 +8,7 @@ from pathlib import Path
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent
-# team repo: ../../data/cleaned ; local Task 3 folder: ../../cleaned
-CLEAN = next(d for d in (HERE.parent.parent / "data" / "cleaned", HERE.parent.parent / "cleaned") if (d / "result.csv").exists())
+CLEAN = HERE.parent / "data" / "cleaned"
 OUT = HERE / "expected"
 
 rider = pd.read_csv(CLEAN / "rider.csv")

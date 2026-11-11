@@ -243,7 +243,7 @@ h3 { font-family: var(--font-display); font-weight: 600; font-size: 17px; letter
 .note { color: var(--muted); font-size: 13px; margin: 0; }
 .note b { color: var(--ink-2); font-weight: 600; }
 
-/* function tag: which brief function a panel implements */
+/* function tag: which analysis function (E1 to E15) a panel implements */
 .fn {
   display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-display); font-weight: 600; font-size: 12px;
   letter-spacing: 0.08em; color: var(--ink-2); border: 1px solid var(--rule-strong); border-radius: 4px; padding: 1px 6px; vertical-align: 3px; margin-left: 6px; white-space: nowrap;
@@ -1390,7 +1390,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
  * browser (window.TDF) and in Node tests (module.exports), so the numbers the
  * tests check are the numbers the dashboard shows.
  *
- * Definitions follow the group's verified data notes (cleaned/README.md):
+ * Definitions follow the data notes in data/cleaned/README.md:
  *   adjusted time = finish_time - time_bonus + time_penalty
  *   placings use rank (crossing order); time gaps use finish_time (credited time)
  *   GC after stage s ranks only riders with a result on every stage 1..s
@@ -4294,7 +4294,7 @@ ORDER BY f.rank LIMIT 10;`,
     pivot: { label: 'Pivot', tip: 'turn the same numbers to see them from another side, for example a stage seen by team' },
   };
 
-  // The view for each code is fixed by the project plan; other tabs and the docs rely on it.
+  // Each code maps to one view; other tabs and the docs use the same mapping.
   const LIST = [
     { code: 'E1', view: 'outright', brief: 'GC leaderboard with contextual descent', title: 'Final overall standings', ops: ['rollup', 'drill'],
       see: 'The final overall standings (GC, the general classification: lowest total time wins). Click any rider to see the day they gained or lost the most time on the top ten.',
@@ -4692,7 +4692,7 @@ ORDER BY f.rank LIMIT 10;`,
 
 </script>
 <script>/* plugin 20-coverage.js */
-/* plugin 20-coverage: two brief functions the core tabs lacked.
+/* plugin 20-coverage: two analysis views added to existing tabs.
  *   E13 Depth of squads  (Teams tab)  : distinct riders per team, who reached Paris, how many nationalities.
  *   E15 The long day     (Stages tab) : stages sorted by distance, with the leading finishers of the chosen one.
  * The pure calculations at the top also run under Node (module.exports) for tests/coverage.test.mjs.
@@ -5263,7 +5263,7 @@ ORDER BY f.rank LIMIT 10;`,
       h('button', { type: 'button', class: 'btn', 'aria-label': `${betLabel(s)}: ${s.title}`, on: { click: () => onJump(s) } }, betLabel(s), ' →'))));
   }
   const limitsEl = () => h('p', { class: 'gd-limits', text: LIMITS });
-  // a closing joke under the five checks window, at the owner's request
+  // closing line under the five checks window
   const QUIP = 'It’s not a bet if you bet your money on Pogacar, it’s a guarantee.';
   function openBetGuide() {
     openDialog({

@@ -4,7 +4,7 @@
  * browser (window.TDF) and in Node tests (module.exports), so the numbers the
  * tests check are the numbers the dashboard shows.
  *
- * Definitions follow the group's verified data notes (cleaned/README.md):
+ * Definitions follow the data notes in data/cleaned/README.md:
  *   adjusted time = finish_time - time_bonus + time_penalty
  *   placings use rank (crossing order); time gaps use finish_time (credited time)
  *   GC after stage s ranks only riders with a result on every stage 1..s

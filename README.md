@@ -1,6 +1,6 @@
 # Tour de France 2025 Race Analyst
 
-An interactive dashboard of the 2025 Tour de France, built by BT5110 Group 31 for Task 3 (develop and demo an OLAP dashboard). It lets you open any total to see what is inside it, compare the four jerseys, follow cumulative race times for riders and teams, and see how many riders and teams each country sent. The angle is a "form guide", the kind of sheet people read before making an educated bet: it shows what the settled 2025 results say about riders, teams and terrain. It is a summary of one past race. It is not a forecast, and it has no money, stakes or "place bet" button anywhere.
+An interactive dashboard of the 2025 Tour de France, built by BT5110 Group 31. It is an OLAP dashboard: it lets you open any total to see what is inside it, compare the four jerseys, follow cumulative race times for riders and teams, and see how many riders and teams each country sent. The angle is a "form guide", the kind of sheet people read before making an educated bet: it shows what the settled 2025 results say about riders, teams and terrain. It is a summary of one past race. It is not a forecast, and it has no money, stakes or "place bet" button anywhere.
 
 **Live page:** https://thylinao1.github.io/tour-form-guide/
 
@@ -25,9 +25,9 @@ New here? The yellow **Help** button (top right) offers a one minute tour, a sho
 | Bet builder | If I pick two riders (or two teams) and a type of day, what does 2025 say? A three step builder with the record, a "History says" share, fair odds and a checklist. |
 | Method | Where do the numbers come from, and what do the words mean? Definitions, caveats and sources. |
 
-## Where each demonstration prompt lives
+## Where each function lives
 
-The lecturer listed 15 demonstration prompts, E1 to E15. Every one is built. On the page, each panel carries a small yellow badge such as **E7**, and the Function map tab has a button that jumps to each panel.
+The dashboard implements 15 analysis functions, E1 to E15. On the page, each panel carries a small yellow badge such as **E7**, and the Function map tab has a button that jumps to each panel.
 
 | Code | Tab | Panel title | What to click |
 |---|---|---|---|
@@ -49,15 +49,15 @@ The lecturer listed 15 demonstration prompts, E1 to E15. Every one is built. On 
 
 More detail, with the matching SQL, is in [docs/FUNCTION_MAP.md](docs/FUNCTION_MAP.md).
 
-## How the Task 3 requirements a to e are met
+## The main kinds of analysis
 
-| Requirement | How |
+| Analysis | Where in the dashboard |
 |---|---|
-| a. Drill down by stage, rider or team | Stages tab: terrain, then stage, then the top riders. Overall winner tab: rider, then their key stage. Teams tab: team, then rider, then stage. Nations tab: country, then riders. Click any rider name anywhere for a full profile. |
-| b. Compare General, Points, Mountains and Young Rider | Jerseys tab: the top 10 of all four standings side by side, plus each rider's place in all of them (panels "Official final classifications" and "Parallel classifications"). |
-| c. Cumulative race times by rider, team and classification | Overall winner tab: total time for every rider after every stage. Teams tab: team classification and running team time. Jerseys tab: young rider and mountains standings. Head-to-head tab: the running gap between two riders or two teams. |
-| d. Teams per country and riders per country | Nations tab: a map and ranked bars for riders and teams per country. France is first with 38 riders and 5 teams. |
-| e. Clear, intuitive, good looking design | One colour and icon per terrain, jersey colours for standings, a plain sentence at the top of every tab, a Help button with tour, video and glossary, light and dark themes, a phone layout, keyboard focus rings, and animation that switches off if the visitor asks for reduced motion. Interactive charts include a 3D bar chart and a bar chart race. |
+| Drill down by stage, rider or team | Stages tab: terrain, then stage, then the top riders. Overall winner tab: rider, then their key stage. Teams tab: team, then rider, then stage. Nations tab: country, then riders. Click any rider name anywhere for a full profile. |
+| Compare General, Points, Mountains and Young Rider | Jerseys tab: the top 10 of all four standings side by side, plus each rider's place in all of them (panels "Official final classifications" and "Parallel classifications"). |
+| Cumulative race times by rider, team and classification | Overall winner tab: total time for every rider after every stage. Teams tab: team classification and running team time. Jerseys tab: young rider and mountains standings. Head-to-head tab: the running gap between two riders or two teams. |
+| Teams per country and riders per country | Nations tab: a map and ranked bars for riders and teams per country. France is first with 38 riders and 5 teams. |
+| Design and interaction | One colour and icon per terrain, jersey colours for standings, a plain sentence at the top of every tab, a Help button with tour, video and glossary, light and dark themes, a colour blind switch, seven languages, a phone layout, keyboard focus rings, and animation that switches off if the visitor asks for reduced motion. Interactive charts include a 3D bar chart and a bar chart race. |
 
 ## Repository layout
 
@@ -66,13 +66,15 @@ More detail, with the matching SQL, is in [docs/FUNCTION_MAP.md](docs/FUNCTION_M
 | `index.html` | The built dashboard. One file, works offline. Made by `build.mjs`. |
 | `build.mjs` | Reads the data and the source files and writes the single `index.html`. |
 | `src/` | `engine.js` (pure calculations), `app.js` (the interface and the ten core tabs), `styles.css` (design tokens and components), `body.html` (page skeleton). |
-| `src/plugins/` | Extra features, joined into the page in file name order: `05-sql.js` (short SQL for each prompt), `10-functions.*` (Function map tab), `20-coverage.*` (E13 and E15), `30-guide.*` (Help, tour, glossary, video), `40-showcase.*` (podium, race replay, 3D chart, motion), `50-bet.*` (Bet builder tab), `60-theme.*` (light and dark switch). |
-| `data/` | `cleaned/` (one CSV per table, see its README), `official/` (official classifications, published points and mountains standings, sources note), `source/` (the three original course files), `weather/` (race-day weather), `geo_2025.json` (map outlines). |
-| `sql/` | The Task 2 schema, the load script, the star schema, one query per prompt, and the Task 4 comparison. See `sql/README.md`. |
-| `tests/` | Node tests, a SQL check script and the expected values from an independent reference. |
-| `tools/` | `clean_data.py`, `make_geo.py`, `smoke.sh` (headless browser check) and `video/` (scripts that build the tutorial video). |
+| `src/plugins/` | Extra features, joined into the page in file name order: `05-sql.js` (short SQL for each function), `10-functions.*` (Function map tab), `20-coverage.*` (E13 and E15), `30-guide.*` (Help, tour, glossary, video), `40-showcase.*` (podium, race replay, 3D chart, motion), `45-routemap.*` (enlarged route map), `50-bet.*` (Bet builder tab), `60-theme.*` (light and dark switch), `65-colorblind.*` (colour blind colours), `70-i18n.*` (languages), `75-terms.*` (terms window). |
+| `data/` | `cleaned/` (one CSV per table, see its README), `official/` (official classifications, published points and mountains standings, sources note), `source/` (the three original course files), `weather/` (race-day weather), `geo_2025.json` (map outlines), `relief_france.jpg` (terrain image for the route map). |
+| `i18n/` | `strings.json` (the English text of the page), one translation file per language, and `chunks/` (the blocks the translation tool works on). |
+| `assets/` | The tutorial video and its poster image. |
+| `sql/` | The relational schema, the load script, the star schema, one query per function, and the same questions written on both schemas. See `sql/README.md`. |
+| `tests/` | Node tests, a SQL check script and the expected values from an independent reference (`extra_truth.py` writes part of them). |
+| `tools/` | `clean_data.py` (source files to cleaned tables), `make_geo.py` (map outlines), `i18n_extract.py` and `i18n_translate.py` (translations), `smoke.sh` (headless browser check) and `video/` (scripts that build the tutorial video). |
 | `vendor/` | ECharts, ECharts GL and the embedded fonts, so nothing loads from the internet. |
-| `docs/` | `DEMO_SCRIPT.md`, `FUNCTION_MAP.md`, `DATA_AND_METHODS.md` and the ER diagram. |
+| `docs/` | `FUNCTION_MAP.md`, `DATA_AND_METHODS.md` and the ER diagram. |
 
 ## Rebuild and test
 
@@ -92,6 +94,10 @@ node tests/coverage.test.mjs   # E13 and E15
 node tests/guide.test.mjs      # guide, tour, glossary
 node tests/showcase.test.mjs   # podium, replay and 3D data
 node tests/bet.test.mjs        # Bet builder
+node tests/routemap.test.mjs   # enlarged route map
+node tests/colorblind.test.mjs # colour blind colours
+node tests/i18n.test.mjs       # translations
+node tests/terms.test.mjs      # terms window
 tests/sql_check.sh             # SQL layer, needs DuckDB (brew install duckdb)
 ```
 
@@ -110,7 +116,7 @@ Handy web page switches for recordings: add `?welcome=0` to hide the first-visit
 
 The header has a language menu: English, Hindi, Spanish, French, Chinese, Arabic and Hebrew. The page is written in English; the plugin `src/plugins/70-i18n.js` swaps the text on screen for the chosen language, and anything without a translation (rider, team and town names, and a few sentences built around a name) stays as it is. Numbers are looked up as `#`, so "Stage 4" and "Stage 12" share one entry. Arabic and Hebrew are shown right to left. In Arabic a **Halal friendly** switch appears next to the Colour blind button. It is on by default, and while it is on the Bet builder tab and the betting panels are hidden. The Arabic wording is neutral analysis either way. `?lang=es` in the address opens a language directly.
 
-The translations are in `i18n/*.json`. They were made by machine (`tools/i18n_extract.py` collects the text, then language models translate it in blocks) and checked by tests for completeness, number slots and script, but not yet read by native speakers.
+The translations are in `i18n/*.json`. They are machine translations (`tools/i18n_extract.py` collects the text and `tools/i18n_translate.py` sends it to a translation service in blocks). Tests check them for completeness, number slots and script, but native speakers have not read them yet.
 
 The **Colour blind** button swaps the data colours for the Okabe-Ito set. `tests/colorblind.test.mjs` simulates red-blind and green-blind vision to check the colours stay apart.
 
@@ -120,14 +126,13 @@ Because the site has a betting theme, a first-time visitor sees a short terms wi
 
 ## Data sources and credits
 
-- **Race results:** BT5110 course CSVs (riders, individual results, exits), cleaned by Group 31 into one CSV per table of our Task 2 schema. See `data/cleaned/README.md` for every cleaning step.
+- **Race results:** BT5110 course CSVs (riders, individual results, exits), cleaned by Group 31 into one CSV per table of our relational schema. See `data/cleaned/README.md` for every cleaning step.
 - **Official final classifications:** the top 10 of the General, Points, Mountains, Young Rider and Team standings after stage 21, each checked against at least two sources. Full details and links are in `data/official/official_sources.md`.
 - **Published points and mountains standings:** the full lists (132 and 55 riders) were collected from CyclingDB. Their top 10 lists match the official ones exactly.
 - **Race-day weather:** Open-Meteo historical weather (open-meteo.com), used for the wet, hot and windy filters in the Bet builder.
 - **Maps:** country outlines from Natural Earth (public domain, via world-atlas). Stage town positions are from OpenStreetMap, © OpenStreetMap contributors. The terrain image in the enlarged route map is NASA Blue Marble shaded relief (public domain), saved as `data/relief_france.jpg` from the NASA GIBS map service.
 - **Charts:** Apache ECharts 5.6.0 (Apache License 2.0) and ECharts GL 2.0.9 (BSD 3-Clause), copied into `vendor/`.
-- **Tutorial video:** `assets/tutorial.mp4` (about 2 minutes) is a recording of this dashboard, made by the scripts in `tools/video/`. The voice is computer generated with the open Kokoro speech model (Apache License 2.0), run on the NUS School of Computing compute cluster. Open it from Help, then Watch the video.
-- **Fonts:** Barlow and Barlow Condensed (SIL Open Font License 1.1), embedded in the page.
+- **Tutorial video:** `assets/tutorial.mp4` (about 2 minutes) is a recording of this dashboard, made by the scripts in `tools/video/`. The voice is computer generated with the open Kokoro speech model (Apache License 2.0). Open it from Help, then Watch the video.
 - **Fonts:** Barlow and Barlow Condensed (SIL Open Font License 1.1), embedded in `vendor/fonts.css`.
 - **Team:** BT5110 Group 31.
 
@@ -139,7 +144,3 @@ Because the site has a betting theme, a first-time visitor sees a short terms wi
 - Stage 21 was timed for the overall at 50.3 km before the finish because of rain, so total times in our data are 3,717 seconds longer than the official ones. Every gap is the same.
 - The data has no intermediate sprint or climb points, so the green and polka dot jerseys use published standings.
 - One rider (Aleksandr Vlasov) has no nationality in the course data and is listed as "Not specified".
-
-## Acknowledgement of AI use
-
-Large language models (Claude, from Anthropic) assisted with code and drafting for this project. The authors reviewed the output and take responsibility for the work.

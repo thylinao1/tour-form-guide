@@ -23,9 +23,9 @@ $(check "row counts: 184 riders, 23 teams, 21 stages, 3602 results, 24 exits" \
   "(SELECT COUNT(*) FROM rider) = 184 AND (SELECT COUNT(*) FROM team) = 23 AND (SELECT COUNT(*) FROM stage) = 21 AND (SELECT COUNT(*) FROM result) = 3602 AND (SELECT COUNT(*) FROM exit) = 24")
 $(check "fact table has one row per result (3602)" "(SELECT COUNT(*) FROM fact_results) = 3602")
 $(check "every team has 8 riders" "(SELECT MIN(n) = 8 AND MAX(n) = 8 FROM (SELECT COUNT(*) n FROM rider GROUP BY rider_team))")
-$(check "every location is a start or finish (Task 2 trigger rule)" \
+$(check "every location is a start or finish (trigger rule)" \
   "NOT EXISTS (SELECT 1 FROM location l WHERE l.location_name NOT IN (SELECT start_location FROM stage UNION SELECT finish_location FROM stage))")
-$(check "no result from a rider's exit stage onwards (Task 2 trigger rule)" \
+$(check "no result from a rider's exit stage onwards (trigger rule)" \
   "NOT EXISTS (SELECT 1 FROM result x JOIN exit e USING (bib_number) WHERE x.stage_id >= e.exit_stage)")
 $(check "GC: 160 ranked riders" \
   "(SELECT COUNT(*) FROM (SELECT rider_key FROM fact_results GROUP BY rider_key HAVING COUNT(*) = 21)) = 160")

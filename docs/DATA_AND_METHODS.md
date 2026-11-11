@@ -42,7 +42,7 @@ The "+ 1" and "+ 2" pull small samples towards 50 percent, so 1 win from 1 stage
 
 ## Data cleaning summary
 
-The three course files (`riders.csv`, `individual_results.csv`, `exits.csv`) were split by `tools/clean_data.py` into one CSV per table of the Task 2 schema. The full list of steps, with row counts, is in `data/cleaned/README.md`. In short:
+The three course files (`riders.csv`, `individual_results.csv`, `exits.csv`) were split by `tools/clean_data.py` into one CSV per table of the relational schema. The full list of steps, with row counts, is in `data/cleaned/README.md`. In short:
 
 - Country codes were mapped to ISO 3166-1 alpha-3 (for example GER to DEU, NED to NLD, UAE to ARE). The code BRN is Brunei in ISO, so the source's Bahrain code was mapped to BHR.
 - One rider (Aleksandr Vlasov) has no nationality in the source. He gets the placeholder country `XXX` "Not specified", so no nationality is invented.
@@ -54,13 +54,13 @@ The three course files (`riders.csv`, `individual_results.csv`, `exits.csv`) wer
 
 Official classifications were collected and checked separately. See `data/official/official_sources.md` for sources, rules and the disagreements found between sources.
 
-## Task 2 schema corrections
+## Schema notes
 
-The schema in `sql/01_normalized_schema.sql` is the Task 2 schema with four corrections, each marked "CORRECTION" in the file:
+The schema in `sql/01_normalized_schema.sql` is our relational schema of 10 tables. Four points are marked "NOTE" in the file:
 
 1. **Award recipient type.** `classification_award` has a `recipient_type` ('rider' or 'team') and a unique pair (`award_name`, `recipient_type`). WIN is fixed to 'rider' and EARN to 'team', and each uses a composite foreign key to the award. A team award such as Best Team cannot be inserted into WIN, and Points cannot be inserted into EARN. `tests/sql_check.sh` tries five wrong inserts and checks that all fail.
-2. **Rank at least 1.** The report said rank is "greater than 1", which rejects every stage winner. The check is `rank >= 1`.
-3. **Loop stages.** The check `start_location <> finish_location` is removed. Stages 1 (Lille Metropole), 5 (Caen) and 11 (Toulouse) start and finish in the same town. With the check, those 3 stages, their 533 results and 4 exits would be rejected, and the overall standing would be wrong.
+2. **Rank at least 1.** The check is `rank >= 1`, because a stage winner has rank 1.
+3. **Loop stages.** There is no check `start_location <> finish_location`. Stages 1 (Lille Metropole), 5 (Caen) and 11 (Toulouse) start and finish in the same town. With the check, those 3 stages, their 533 results and 4 exits would be rejected, and the overall standing would be wrong.
 4. **Dead heat.** There is no unique constraint on (`stage_id`, `rank`), because two riders share rank 108 on stage 13.
 
 DuckDB has no triggers. The three cross-table rules (every team has a rider, every location is used by a stage, no result from a rider's exit stage onwards) are kept as PostgreSQL trigger code in a comment at the end of the schema file, and checked as queries in `tests/sql_check.sh`.
@@ -73,6 +73,6 @@ The star schema (`sql/03_star_schema.sql`) has `fact_results` (3,602 rows, one r
 - **Stage 21 timing.** Rain meant the overall was timed 50.3 km before the finish. The data holds the full stage time, so total times are 3,717 seconds longer than official (77:02:29 for Pogacar, official 76:00:32). All gaps are unchanged. The team classification uses the same full-stage times, which is the only way to reproduce the official team totals.
 - **Points and mountains.** The race data has no intermediate sprint or climb points. These two jerseys use published standings (top 10 official, full lists from CyclingDB, checked against the top 10). Published points are at least the finish points we compute for all 132 riders. The difference is intermediate sprint points.
 - **Source disagreements.** Sources differ on a few details, such as one French source giving 232:03:32 for the winning team where other sources and our own recomputation give 232:01:32. The choice made in each case, and why, is in `data/official/official_sources.md`.
-- **Team total in E3 (SQL).** The ROLLUP counts the three best times of each team on every stage (the official rule), so team totals can be compared and match the Teams tab. Under each team total it shows how many stages and seconds each rider supplied. The brief's all rider adjusted total is shown on the page by the Official / With bonuses switch and the workload figure.
+- **Team total in E3 (SQL).** The ROLLUP counts the three best times of each team on every stage (the official rule), so team totals can be compared and match the Teams tab. Under each team total it shows how many stages and seconds each rider supplied. The all rider adjusted total is shown on the page by the Official / With bonuses switch and the workload figure.
 - **Weather.** One weather point per finish town and one time window. It describes the finish, not the whole route.
 - **Betting.** Nothing here is a prediction or advice. There is no money, stake or bet button. Past results do not guarantee future ones.

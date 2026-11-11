@@ -63,7 +63,7 @@ check('the five betting checks jump to real tabs, falling back to head-to-head',
   assert.match(G.LIMITS, /not a forecast/);
 });
 
-check('glossary covers the required terms in one line each', () => {
+check('glossary covers the main terms in one line each', () => {
   assert.ok(G.GLOSSARY.length >= 14);
   const terms = G.GLOSSARY.map(([t]) => t.toLowerCase()).join(' | ');
   ['general classification', 'yellow', 'green', 'polka dot', 'white', 'time trial', 'flat', 'hilly', 'mountain', 'time bonus',

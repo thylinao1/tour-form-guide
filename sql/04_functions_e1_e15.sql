@@ -1,9 +1,9 @@
 -- =====================================================================================
 -- 04_functions_e1_e15.sql
--- One query (sometimes a summary plus its drill down) for each of the lecturer's 15
--- demonstration prompts E1 to E15, written on the star schema of 03_star_schema.sql.
+-- One query (sometimes a summary plus its drill down) for each of the 15
+-- analysis functions E1 to E15, written on the star schema of 03_star_schema.sql.
 -- Times are in seconds. adjusted_time = finish_time - time_bonus + time_penalty.
--- Values to change for the live demo (a rider, a stage, a team, a country) are marked
+-- Values you can change (a rider, a stage, a team, a country) are marked
 -- "-- choose".
 --
 -- Overall standing (GC) rule used everywhere: only riders with a result on all 21

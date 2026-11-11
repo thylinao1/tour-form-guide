@@ -1,6 +1,6 @@
 -- =====================================================================================
 -- 02_load.sql
--- Loads the cleaned CSV files (one per Task 2 table, made by tools/clean_data.py) into the
+-- Loads the cleaned CSV files (one per table, made by tools/clean_data.py) into the
 -- schema of 01_normalized_schema.sql, then seeds the five classification awards.
 -- Paths are relative to the repository root. Order follows the foreign keys.
 -- =====================================================================================

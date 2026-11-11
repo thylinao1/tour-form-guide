@@ -291,7 +291,7 @@
       h('button', { type: 'button', class: 'btn', 'aria-label': `${betLabel(s)}: ${s.title}`, on: { click: () => onJump(s) } }, betLabel(s), ' →'))));
   }
   const limitsEl = () => h('p', { class: 'gd-limits', text: LIMITS });
-  // a closing joke under the five checks window, at the owner's request
+  // closing line under the five checks window
   const QUIP = 'It’s not a bet if you bet your money on Pogacar, it’s a guarantee.';
   function openBetGuide() {
     openDialog({

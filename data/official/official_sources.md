@@ -1,7 +1,6 @@
 # Official final classifications, Tour de France 2025 (after stage 21, 27 July 2025)
 
 File: `official_classifications_2025.csv` has 50 rows, the top 10 of each of gc, points, kom, young and team.
-Builder: `../../tools/build_official_csv.py`. Checks: `../../tools/verify_official_csv.py` and `../../tools/crosscheck_rte.py`. Raw downloads: `../downloads/<site>/`.
 
 ## Jersey winners
 | Classification | Winner | Value |
@@ -71,7 +70,7 @@ Full-table checks. All 160 rows of the official letour.fr GC match `rider.csv` a
 
 ## Full published points and mountains standings (published_points_kom_2025.csv)
 
-`official_classifications_2025.csv` holds only the top 10 of each classification. `published_points_kom_2025.csv` holds the complete 2025 final points (132 riders) and mountains (55 riders) standings, as collected by our teammate Jay from CyclingDB for his dashboard (`jay.html`, 2025 edition data; source links in the file). Checks:
+`official_classifications_2025.csv` holds only the top 10 of each classification. `published_points_kom_2025.csv` holds the complete 2025 final points (132 riders) and mountains (55 riders) standings, as collected by our teammate Jay from CyclingDB (2025 edition data; source links in the file). Checks:
 
 - The top 10 of both lists is identical (rank, rider and points) to `official_classifications_2025.csv` (letour.fr / Wikipedia).
 - Ranks run 1..n with no gaps or ties, and every bib exists in `data/cleaned/rider.csv`.
