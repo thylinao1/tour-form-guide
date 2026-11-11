@@ -108,7 +108,7 @@ Handy web page switches for recordings: add `?welcome=0` to hide the first-visit
 
 ## Languages and colour blind colours
 
-The header has a language menu: English, Hindi, Spanish, Chinese and Arabic. The page is written in English; the plugin `src/plugins/70-i18n.js` swaps the text on screen for the chosen language, and anything without a translation (rider, team and town names, and a few sentences built around a name) stays as it is. Numbers are looked up as `#`, so "Stage 4" and "Stage 12" share one entry. Arabic is shown right to left and has **no betting content**: the Bet builder tab and the betting panels are hidden, and the wording is neutral analysis. `?lang=es` in the address opens a language directly.
+The header has a language menu: English, Hindi, Spanish, French, Chinese, Arabic and Hebrew. The page is written in English; the plugin `src/plugins/70-i18n.js` swaps the text on screen for the chosen language, and anything without a translation (rider, team and town names, and a few sentences built around a name) stays as it is. Numbers are looked up as `#`, so "Stage 4" and "Stage 12" share one entry. Arabic and Hebrew are shown right to left. Arabic also has **no betting content**: the Bet builder tab and the betting panels are hidden, and the wording is neutral analysis. `?lang=es` in the address opens a language directly.
 
 The translations are in `i18n/*.json`. They were made by machine (`tools/i18n_extract.py` collects the text, then language models translate it in blocks) and checked by tests for completeness, number slots and script, but not yet read by native speakers.
 

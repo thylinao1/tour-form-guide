@@ -118,7 +118,7 @@ function reliefImage() {
 function dictionaries() {
   const MIN_ENTRIES = 800;
   const out = {};
-  for (const lang of ['hi', 'es', 'zh', 'ar']) {
+  for (const lang of ['hi', 'es', 'fr', 'zh', 'ar', 'he']) {
     const file = path.join(here, 'i18n', `${lang}.json`);
     if (!fs.existsSync(file)) continue;
     const dict = JSON.parse(fs.readFileSync(file, 'utf8'));

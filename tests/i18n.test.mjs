@@ -52,8 +52,8 @@ check('number runs are wrapped in left to right marks for Arabic, the letters ar
 
 const source = JSON.parse(fs.readFileSync(path.join(here, '..', 'i18n', 'strings.json'), 'utf8'));
 const DASH = new RegExp(`[${String.fromCharCode(0x2013)}${String.fromCharCode(0x2014)}]`);
-const SCRIPT = { hi: /[ऀ-ॿ]/, zh: /[一-鿿]/, ar: /[؀-ۿ]/, es: /[a-záéíóúñü]/i };
-for (const lang of ['hi', 'es', 'zh', 'ar']) {
+const SCRIPT = { hi: /[\u0900-\u097F]/, zh: /[\u4E00-\u9FFF]/, ar: /[\u0600-\u06FF]/, he: /[\u0590-\u05FF]/, es: /[a-záéíóúñü]/i, fr: /[a-zàâçéèêëîïôûùüœ]/i };
+for (const lang of ['hi', 'es', 'fr', 'zh', 'ar', 'he']) {
   const dict = load(lang);
   check(`${lang}: at least 95% of the text has a translation, and no entry is unknown`, () => {
     const have = source.filter((s) => typeof dict[s] === 'string' && dict[s].trim()).length;
@@ -76,6 +76,11 @@ for (const lang of ['hi', 'es', 'zh', 'ar']) {
     assert.ok(right >= long.length * 0.97, `${right} of ${long.length}`);
   });
 }
+
+check('Arabic and Hebrew are the right to left languages', () => {
+  assert.deepEqual([...L.rtl], ['ar', 'he']);
+  assert.ok(L.langs.includes('fr') && L.langs.includes('he'));
+});
 
 check('Arabic has no betting words', () => {
   const words = ['مراهن', 'رهان', 'قمار', 'احتمالات الرهان', 'وكيل المراهنات'];

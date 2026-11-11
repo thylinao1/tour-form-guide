@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Translate the interface text chunks with an OpenAI-compatible chat API (the NUS SoCLaaS gateway).
 
-  python3 tools/i18n_translate.py [lang ...] [--merge]   langs: hi es zh ar (default: all)
+  python3 tools/i18n_translate.py [lang ...] [--merge]   langs: hi es zh ar fr he (default: all)
 
 Reads i18n/chunks/en-NN.json ({"index": "English"}), writes i18n/chunks/<lang>-NN.json with the same indexes,
 then joins them into i18n/<lang>.json ({"English": "translation"}). A chunk is accepted only when every index
@@ -17,6 +17,8 @@ LANGS = {
     'es': 'Spanish, neutral international Spanish',
     'zh': 'Simplified Chinese (Mandarin, mainland usage)',
     'ar': 'Modern Standard Arabic',
+    'fr': 'French (France)',
+    'he': 'Modern Hebrew, without vowel points',
 }
 RULES = """You translate the interface text of a web dashboard about the 2025 Tour de France (a cycling race) called "Race Analyst".
 Translate every value of the JSON object from English into {lang}.
@@ -102,6 +104,10 @@ def main():
         table.update(numbered(lang))
         extra = os.path.join(ROOT, 'i18n', 'extra.json')  # hand-added entries: {lang: {English: translation}}
         if os.path.exists(extra): table.update(json.load(open(extra, encoding='utf8')).get(lang, {}))
+        more, more_en = os.path.join(CH, f'extra-{lang}.json'), os.path.join(CH, 'extra-en.json')  # the same hand-added entries, translated as a chunk
+        if os.path.exists(more):
+            en, tr = json.load(open(more_en, encoding='utf8')), json.load(open(more, encoding='utf8'))
+            table.update({en[k]: tr[k].strip() for k in en if isinstance(tr.get(k), str) and tr[k].count('#') == en[k].count('#')})
         json.dump(table, open(os.path.join(ROOT, 'i18n', lang + '.json'), 'w', encoding='utf8'), ensure_ascii=False, indent=0, sort_keys=True)
         total = sum(len(json.load(open(p, encoding='utf8'))) for p in glob.glob(os.path.join(CH, 'en-*.json')))
         print(f'{lang}: {len(table)} of {total} translations', flush=True)

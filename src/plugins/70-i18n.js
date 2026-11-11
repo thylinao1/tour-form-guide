@@ -1,17 +1,19 @@
-/* Languages: English (the source text), Hindi, Spanish, Chinese and Arabic.
+/* Languages: English (the source text), Hindi, Spanish, French, Chinese, Arabic and Hebrew.
+   Arabic and Hebrew are shown right to left.
    The page is written in English. This plugin swaps the text that is on screen for the chosen language and
    keeps doing so as the page draws new parts. Text without a translation stays in English.
    Numbers are looked up as "#", so "Stage 4" and "Stage 12" share one entry ("Stage #"). A text with two or more
    numbers is translated with numbered slots ({1}, {2}), so each number lands in the right place.
    In Arabic the betting parts are switched off: the Bet builder tab and the betting panels are hidden.
-   Dictionaries arrive as window.TDF_I18N = { hi: {...}, es: {...}, zh: {...}, ar: {...} } (built from i18n/*.json).
+   Dictionaries arrive as window.TDF_I18N = { hi: {...}, es: {...}, ... } (built from i18n/*.json).
    Exposes window.TDF_LANG = { get, set, translate, key }. */
 (function () {
   'use strict';
   const W = typeof window !== 'undefined' ? window : globalThis;
   const NUM = /\d+(?:[.,]\d+)*/g;
   const BET = /\b(bet|bets|betting|bettor)\b/i;
-  const LANGS = [['en', 'English'], ['hi', 'हिन्दी'], ['es', 'Español'], ['zh', '中文'], ['ar', 'العربية']];
+  const LANGS = [['en', 'English'], ['hi', 'हिन्दी'], ['es', 'Español'], ['fr', 'Français'], ['zh', '中文'], ['ar', 'العربية'], ['he', 'עברית']];
+  const RTL = ['ar', 'he'];
   const NO_BET_NOTE = 'المراهنة غير متاحة في النسخة العربية. تعرض هذه النسخة تحليل السباق فقط.';
 
   /* =================== pure helpers (tested in tests/i18n.test.mjs) =================== */
@@ -35,12 +37,12 @@
     return text.match(/^\s*/)[0] + out + text.match(/\s*$/)[0];
   }
 
-  /** In right to left text a time such as +4' 24" would be drawn back to front. Wrapping each number run
+  /** In right to left text (Arabic, Hebrew) a time such as +4' 24" would be drawn back to front. Wrapping each number run
       (digits with their signs, quotes and units) in left to right isolate marks keeps it in order. */
   const NUMBER_RUN = /[+\-\u2212]?\d[\d\s'"\u2032\u2033:.,%hms]*[\d'"\u2032\u2033%hms]|\d/g;
   const isolateNumbers = (text) => text.replace(NUMBER_RUN, (m) => `\u2066${m}\u2069`);
 
-  const API = { get: () => 'en', set: () => false, translate, key, isolateNumbers, langs: LANGS.map((l) => l[0]) };
+  const API = { get: () => 'en', set: () => false, translate, key, isolateNumbers, langs: LANGS.map((l) => l[0]), rtl: RTL };
   W.TDF_LANG = API;
   if (!W.document) return;
 
@@ -63,7 +65,7 @@
     if (!st || cur !== st.shown) st = { orig: cur, shown: cur }; // new text, or the page changed it
     const t = lang === 'en' ? null : translate(st.orig, DICT[lang]);
     st.shown = t == null ? st.orig : t;
-    if (lang === 'ar') st.shown = isolateNumbers(st.shown);
+    if (RTL.includes(lang)) st.shown = isolateNumbers(st.shown);
     texts.set(node, st);
     if (cur !== st.shown) node.nodeValue = st.shown;
     if (p.firstChild === node) p.dataset.i18nOrig = st.orig.replace(/\s+/g, ' ').trim(); // lets page code still find things by their English text
@@ -117,7 +119,7 @@
     if (!LANGS.some((l) => l[0] === next) || (next !== 'en' && !DICT[next])) return false;
     lang = next;
     root.lang = next;
-    root.dir = next === 'ar' ? 'rtl' : 'ltr';
+    root.dir = RTL.includes(next) ? 'rtl' : 'ltr';
     root.classList.toggle('no-bet', noBet());
     watcher.disconnect();
     walk(document.body);
