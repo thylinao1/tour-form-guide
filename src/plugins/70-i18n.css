@@ -1,6 +1,13 @@
 /* language picker in the header, right to left layout for Arabic, and the Arabic no betting mode */
 .lang-sel { margin-left: auto; margin-right: 8px; padding: 6px 10px; font: 600 13px/1.2 var(--font-body); text-transform: none; letter-spacing: 0; appearance: auto; color-scheme: dark; }
-.lang-sel + .cb-btn, .lang-sel + .th-btn { margin-left: 0; }
+.lang-sel + .cb-btn, .lang-sel + .th-btn, .halal-sw + .cb-btn, .halal-sw + .th-btn { margin-left: 0; }
+/* Halal friendly switch (Arabic only): a small sliding switch in the header pill */
+.halal-sw { display: inline-flex; align-items: center; gap: 8px; margin-right: 8px; text-transform: none; letter-spacing: 0; font: 600 13px/1.2 var(--font-body); }
+.halal-sw[hidden] { display: none; }
+.halal-track { position: relative; flex: none; width: 34px; height: 18px; border-radius: 999px; background: var(--asphalt-muted); transition: background 160ms ease; }
+.halal-track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform 160ms ease; }
+.halal-sw[aria-checked="true"] .halal-track { background: var(--hilly); }
+.halal-sw[aria-checked="true"] .halal-track::after { transform: translateX(16px); }
 .lang-sel option { color: #14181d; background: #fff; }
 /* Arabic and Hebrew read right to left. Charts, maps and code keep their left to right drawing. */
 [dir="rtl"] .chart, [dir="rtl"] svg, [dir="rtl"] pre, [dir="rtl"] code, [dir="rtl"] .rm-map { direction: ltr; }

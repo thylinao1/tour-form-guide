@@ -82,6 +82,14 @@ check('Arabic and Hebrew are the right to left languages', () => {
   assert.ok(L.langs.includes('fr') && L.langs.includes('he'));
 });
 
+check('betting is hidden only in Arabic and only while Halal friendly is on (the default)', () => {
+  assert.equal(L.hidesBetting('ar', true), true);
+  assert.equal(L.hidesBetting('ar', undefined), true);
+  assert.equal(L.hidesBetting('ar', false), false);
+  assert.equal(L.hidesBetting('he', true), false);
+  assert.equal(L.hidesBetting('en', true), false);
+});
+
 check('Arabic has no betting words', () => {
   const words = ['مراهن', 'رهان', 'قمار', 'احتمالات الرهان', 'وكيل المراهنات'];
   const hits = Object.entries(load('ar')).filter(([, v]) => words.some((w) => v.includes(w)));

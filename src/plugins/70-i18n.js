@@ -4,7 +4,8 @@
    keeps doing so as the page draws new parts. Text without a translation stays in English.
    Numbers are looked up as "#", so "Stage 4" and "Stage 12" share one entry ("Stage #"). A text with two or more
    numbers is translated with numbered slots ({1}, {2}), so each number lands in the right place.
-   In Arabic the betting parts are switched off: the Bet builder tab and the betting panels are hidden.
+   In Arabic a "Halal friendly" switch appears next to the Colour blind button. It is on by default, and while it is on
+   the betting parts are switched off: the Bet builder tab and the betting panels are hidden.
    Dictionaries arrive as window.TDF_I18N = { hi: {...}, es: {...}, ... } (built from i18n/*.json).
    Exposes window.TDF_LANG = { get, set, translate, key }. */
 (function () {
@@ -14,7 +15,9 @@
   const BET = /\b(bet|bets|betting|bettor)\b/i;
   const LANGS = [['en', 'English'], ['hi', 'हिन्दी'], ['es', 'Español'], ['fr', 'Français'], ['zh', '中文'], ['ar', 'العربية'], ['he', 'עברית']];
   const RTL = ['ar', 'he'];
-  const NO_BET_NOTE = 'المراهنة غير متاحة في النسخة العربية. تعرض هذه النسخة تحليل السباق فقط.';
+  // "Halal friendly mode is on: betting content is hidden. You can switch it off with the button at the top."
+  const NO_BET_NOTE = 'وضع حلال مفعّل: محتوى المراهنة مخفي. يمكنك إيقافه من الزر في الأعلى.';
+  const HALAL_LABEL = 'حلال · Halal friendly';
 
   /* =================== pure helpers (tested in tests/i18n.test.mjs) =================== */
   /** The lookup key of a piece of text: single spaces, no outer space, every number written as "#". */
@@ -42,7 +45,10 @@
   const NUMBER_RUN = /[+\-\u2212]?\d[\d\s'"\u2032\u2033:.,%hms]*[\d'"\u2032\u2033%hms]|\d/g;
   const isolateNumbers = (text) => text.replace(NUMBER_RUN, (m) => `\u2066${m}\u2069`);
 
-  const API = { get: () => 'en', set: () => false, translate, key, isolateNumbers, langs: LANGS.map((l) => l[0]), rtl: RTL };
+  /** Are the betting parts hidden? Only in Arabic, and only while the Halal friendly switch is on (it starts on). */
+  const hidesBetting = (language, halalOn) => language === 'ar' && halalOn !== false;
+
+  const API = { get: () => 'en', set: () => false, translate, key, isolateNumbers, hidesBetting, langs: LANGS.map((l) => l[0]), rtl: RTL };
   W.TDF_LANG = API;
   if (!W.document) return;
 
@@ -112,7 +118,22 @@
   /* =================== choosing a language =================== */
   const read = () => { try { return localStorage.getItem(STORE); } catch (e) { return null; } };
   const write = (v) => { try { localStorage.setItem(STORE, v); } catch (e) { /* private mode: the choice lasts for this visit only */ } };
-  const noBet = () => lang === 'ar';
+  const HALAL_STORE = 'tdf-halal';
+  let halal = (() => { try { return localStorage.getItem(HALAL_STORE) !== '0'; } catch (e) { return true; } })(); // on unless switched off
+  let halalBtn = null;
+  const noBet = () => hidesBetting(lang, halal);
+  /** Apply the Halal friendly state: hide or show the betting parts, and show the switch only in Arabic. */
+  function applyHalal() {
+    root.classList.toggle('no-bet', noBet());
+    if (halalBtn) { halalBtn.hidden = lang !== 'ar'; halalBtn.setAttribute('aria-checked', String(halal)); }
+    leaveBetTab();
+  }
+  function setHalal(on) {
+    halal = !!on;
+    try { localStorage.setItem(HALAL_STORE, halal ? '1' : '0'); } catch (e) { /* private mode: lasts for this visit only */ }
+    applyHalal();
+  }
+  API.halal = { get: () => halal, set: setHalal };
   function leaveBetTab() { if (noBet() && location.hash === '#bet') location.hash = 'race'; }
 
   function set(next) {
@@ -120,7 +141,7 @@
     lang = next;
     root.lang = next;
     root.dir = RTL.includes(next) ? 'rtl' : 'ltr';
-    root.classList.toggle('no-bet', noBet());
+    applyHalal();
     watcher.disconnect();
     walk(document.body);
     if (next !== 'en') watcher.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ATTRS });
@@ -148,6 +169,18 @@
     picker.addEventListener('change', () => API.set(picker.value));
     const before = mast.querySelector('.cb-btn') || mast.querySelector('.th-btn') || mast.querySelector('.gd-help-btn');
     if (before) before.parentNode.insertBefore(picker, before); else mast.appendChild(picker);
+    // the Halal friendly switch: between the language menu and the Colour blind button, shown only in Arabic
+    halalBtn = document.createElement('button');
+    halalBtn.type = 'button';
+    halalBtn.className = 'th-btn halal-sw';
+    halalBtn.setAttribute('role', 'switch');
+    halalBtn.setAttribute('data-no-i18n', '');
+    halalBtn.title = 'Halal friendly: while it is on, the betting tab and betting panels are hidden';
+    halalBtn.hidden = true;
+    const track = document.createElement('span'); track.className = 'halal-track'; track.setAttribute('aria-hidden', 'true');
+    halalBtn.append(track, document.createTextNode(HALAL_LABEL));
+    halalBtn.addEventListener('click', () => setHalal(!halal));
+    picker.insertAdjacentElement('afterend', halalBtn);
     const note = document.createElement('p');
     note.className = 'no-bet-note'; note.lang = 'ar'; note.dir = 'rtl'; note.setAttribute('data-no-i18n', ''); note.textContent = NO_BET_NOTE;
     const main = document.querySelector('main') || document.body;
