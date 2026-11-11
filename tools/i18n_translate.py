@@ -72,8 +72,7 @@ def do_chunk(job):
 
 def numbered(lang):
     """Texts with two or more numbers, translated with numbered slots ({1}, {2}) so a language can reorder them.
-    Files i18n/chunks/multi-en-N.json and multi-<lang>-N.json; the keys are positions in i18n/strings.json."""
-    strings = json.load(open(os.path.join(ROOT, 'i18n', 'strings.json'), encoding='utf8'))
+    Files i18n/chunks/multi-en-N.json and multi-<lang>-N.json, with matching keys."""
     out = {}
     for p in sorted(glob.glob(os.path.join(CH, 'multi-en-*.json'))):
         d = p.replace('multi-en-', f'multi-{lang}-')
@@ -82,7 +81,7 @@ def numbered(lang):
         for k, en in src.items():
             v = tr.get(k)
             if isinstance(v, str) and sorted(re.findall(r'\{\d+\}', v)) == sorted(re.findall(r'\{\d+\}', en)) and not re.search('[\u2013\u2014]', v):
-                out[strings[int(k)]] = v.strip()
+                out[re.sub(r'\{\d+\}', '#', en)] = v.strip()  # the lookup key is the English with # slots
     return out
 
 def main():
@@ -101,6 +100,8 @@ def main():
             bad = set(problems(src, tr))
             table.update({src[k]: tr[k].strip() for k in src if k not in bad})
         table.update(numbered(lang))
+        extra = os.path.join(ROOT, 'i18n', 'extra.json')  # hand-added entries: {lang: {English: translation}}
+        if os.path.exists(extra): table.update(json.load(open(extra, encoding='utf8')).get(lang, {}))
         json.dump(table, open(os.path.join(ROOT, 'i18n', lang + '.json'), 'w', encoding='utf8'), ensure_ascii=False, indent=0, sort_keys=True)
         total = sum(len(json.load(open(p, encoding='utf8'))) for p in glob.glob(os.path.join(CH, 'en-*.json')))
         print(f'{lang}: {len(table)} of {total} translations', flush=True)

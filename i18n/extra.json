@@ -1,0 +1,34 @@
+{
+ "hi": {
+  "This tab answers: how do the four jersey competitions compare?": "यह टैब बताता है: चारों जर्सी की प्रतियोगिताएँ आपस में कैसी हैं?",
+  "Yellow = lowest total time": "येलो = सबसे कम कुल समय",
+  "Green = most points": "ग्रीन = सबसे ज़्यादा अंक",
+  "Polka dot = best climber": "पोल्का डॉट = सबसे अच्छा क्लाइंबर",
+  "White = best young rider (born # or later)": "सफ़ेद = सबसे अच्छा यंग राइडर (# या बाद में जन्मे)",
+  "What each jersey rewards": "हर जर्सी किसके लिए मिलती है"
+ },
+ "es": {
+  "This tab answers: how do the four jersey competitions compare?": "Esta pestaña responde: ¿cómo se comparan las cuatro clasificaciones de maillots?",
+  "Yellow = lowest total time": "Amarillo = menor tiempo total",
+  "Green = most points": "Verde = más puntos",
+  "Polka dot = best climber": "Lunares = mejor escalador",
+  "White = best young rider (born # or later)": "Blanco = mejor joven (nacido en # o después)",
+  "What each jersey rewards": "Qué premia cada maillot"
+ },
+ "zh": {
+  "This tab answers: how do the four jersey competitions compare?": "本标签页回答：四项衫的竞争如何比较？",
+  "Yellow = lowest total time": "黄衫 = 总用时最短",
+  "Green = most points": "绿衫 = 积分最多",
+  "Polka dot = best climber": "圆点衫 = 最佳爬坡手",
+  "White = best young rider (born # or later)": "白衫 = 最佳新秀（出生于 # 年或之后）",
+  "What each jersey rewards": "每件领骑衫奖励什么"
+ },
+ "ar": {
+  "This tab answers: how do the four jersey competitions compare?": "يجيب هذا التبويب عن سؤال: كيف تقارن منافسات القمصان الأربعة؟",
+  "Yellow = lowest total time": "الأصفر = أقل زمن إجمالي",
+  "Green = most points": "الأخضر = أكثر النقاط",
+  "Polka dot = best climber": "المنقط = أفضل متسلق",
+  "White = best young rider (born # or later)": "الأبيض = أفضل شاب (وُلد في # أو بعده)",
+  "What each jersey rewards": "ما الذي يكافئه كل قميص"
+ }
+}

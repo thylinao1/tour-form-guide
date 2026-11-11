@@ -1079,7 +1079,11 @@
     add(root, h('div', { class: 'view-head' }, h('div', null,
       h('p', { class: 'eyebrow', text: 'Jersey bets' }),
       h('h1', { text: 'Yellow, green, polka-dot, white' }),
-      h('p', { class: 'lede', text: 'This tab answers: how do the four jersey competitions compare? Yellow = lowest total time, green = most points, polka dot = best climber, white = best young rider (born 2000 or later). First the official top 10 of each, then two extra views from our data: young riders under different age rules, and a mountains-only standing.' }))));
+      h('p', { class: 'lede', text: 'This tab answers: how do the four jersey competitions compare?' })),
+      // what each jersey rewards, in the top right corner of the tab
+      h('ul', { class: 'jersey-key', 'aria-label': 'What each jersey rewards' },
+        [['yellow', 'Yellow = lowest total time'], ['green', 'Green = most points'], ['polka', 'Polka dot = best climber'], ['white', 'White = best young rider (born 2000 or later)']]
+          .map(([cls, text]) => h('li', null, h('span', { class: `jersey ${cls}`, 'aria-hidden': 'true' }), h('b', { text }))))));
 
     const off = (c) => E.official.filter((o) => o.c === c).sort((a, b) => a.rank - b.rank);
     const op = panel({ title: 'Official final classifications', fn: [['3b', 'Classification comparison']], sub: 'Top 10 of each classification after stage 21.' });
