@@ -112,7 +112,7 @@ Handy web page switches for recordings: add `?welcome=0` to hide the first-visit
 - **Official final classifications:** the top 10 of the General, Points, Mountains, Young Rider and Team standings after stage 21, each checked against at least two sources. Full details and links are in `data/official/official_sources.md`.
 - **Published points and mountains standings:** the full lists (132 and 55 riders) were collected from CyclingDB. Their top 10 lists match the official ones exactly.
 - **Race-day weather:** Open-Meteo historical weather (open-meteo.com), used for the wet, hot and windy filters in the Bet builder.
-- **Maps:** country outlines from Natural Earth (public domain, via world-atlas). Stage town positions are from OpenStreetMap, © OpenStreetMap contributors.
+- **Maps:** country outlines from Natural Earth (public domain, via world-atlas). Stage town positions are from OpenStreetMap, © OpenStreetMap contributors. The terrain image in the enlarged route map is NASA Blue Marble shaded relief (public domain), saved as `data/relief_france.jpg` from the NASA GIBS map service.
 - **Charts:** Apache ECharts 5.6.0 (Apache License 2.0) and ECharts GL 2.0.9 (BSD 3-Clause), copied into `vendor/`.
 - **Tutorial video:** `assets/tutorial.mp4` (about 2 minutes) is a recording of this dashboard, made by the scripts in `tools/video/`. The voice is computer generated with the open Kokoro speech model (Apache License 2.0), run on the NUS School of Computing compute cluster. Open it from Help, then Watch the video.
 - **Fonts:** Barlow and Barlow Condensed (SIL Open Font License 1.1), embedded in the page.

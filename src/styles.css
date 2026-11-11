@@ -382,6 +382,10 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
 .drawer .close { position: sticky; top: 0; align-self: end; margin-bottom: -40px; z-index: 2; }
 .drawer .who { display: flex; gap: 12px; align-items: center; padding-right: 60px; }
 .drawer .who .bib { font-size: 20px; padding: 8px 8px 6px; }
+/* the list behind a clicked grid cell: rises in and shows a yellow edge for a moment */
+.ti-detail { scroll-margin-block: 120px; border-radius: 8px; }
+.ti-detail.reveal { animation: ti-reveal 900ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes ti-reveal { from { opacity: 0; transform: translateY(10px); box-shadow: -4px 0 0 var(--maillot); } 60% { box-shadow: -4px 0 0 var(--maillot); } }
 /* reveal: the backdrop fades, the drawer slides in from the right, then its blocks rise in reading order.
    Only transform and opacity move. The reduced-motion rule further down switches all of it off. */
 .scrim:not([hidden]) { animation: scrim-in 280ms ease-out both; }

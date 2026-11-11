@@ -741,8 +741,13 @@
     add(sp.head.appendChild(h('div', { class: 'panel-tools' })), prev, stageSel, next);
     const top = h('div', { style: 'min-width:0' });
     const routeBox = h('div', { class: 'chart route-map', role: 'img', 'aria-label': 'Map of the 21 stages; select a number to open that stage' });
-    const routeWrap = h('div', { class: 'route-wrap' }, routeBox, legend(TERR.map((c) => ({ color: `var(--${c})`, label: TL[c] }))),
-      h('p', { class: 'note', text: 'Select a stage number. Lines join start and finish towns (not the roads raced); loops mark stages that start and finish in one town. Outlines: Natural Earth; towns: © OpenStreetMap contributors.' }));
+    // The enlarged map (plugin 45-routemap) opens from the button or from a click on the map background.
+    let routeItemClicked = false;
+    const openBigMap = () => { if (window.TDF_ROUTEMAP) window.TDF_ROUTEMAP.open(S.stage, (id) => { S.stage = id; teamFilter = null; drawStage(); }); };
+    const bigBtn = h('button', { class: 'btn rm-open', type: 'button', text: 'Enlarge map: towns and terrain', on: { click: openBigMap } });
+    routeBox.addEventListener('click', () => { if (routeItemClicked) { routeItemClicked = false; return; } openBigMap(); });
+    const routeWrap = h('div', { class: 'route-wrap' }, routeBox, bigBtn, legend(TERR.map((c) => ({ color: `var(--${c})`, label: TL[c] }))),
+      h('p', { class: 'note', text: 'Select a stage number, or click the map to enlarge it. Lines join start and finish towns (not the roads raced); loops mark stages that start and finish in one town. Outlines: Natural Earth; towns: © OpenStreetMap contributors.' }));
     const stageTop = h('div', { class: 'stage-top' }, top, routeWrap);
     const split = h('div', { class: 'split' });
     const left = h('div', { style: 'display:flex;flex-direction:column;gap:10px;min-width:0' });
@@ -801,7 +806,7 @@
           });
         }, { onClick: (p) => { const list = E.stageDetail(S.stage).teamsTop10.slice().reverse(); teamFilter = list[p.dataIndex].team; drawStage(); } });
       } else redraw(teamChart);
-      if (!routeChart) routeChart = chart(routeBox, (t) => routeOption(t, S.stage), { onClick: (p) => { if (p.data && p.data.stage) { S.stage = p.data.stage; teamFilter = null; drawStage(); } } });
+      if (!routeChart) routeChart = chart(routeBox, (t) => routeOption(t, S.stage), { onClick: (p) => { routeItemClicked = true; if (p.data && p.data.stage) { S.stage = p.data.stage; teamFilter = null; drawStage(); } } });
       else redraw(routeChart);
     }
     hooks.stage = () => { if (built.has('stages')) { teamFilter = null; drawStage(); } };
@@ -1368,13 +1373,23 @@
     drawTeam();
 
     // E14
-    const ti = panel({ title: 'Top-ten intensity by team', fn: [['E14', 'Top-ten intensity by team']], span: 7, sub: 'Top-10 stage finishes per team and terrain. Click a cell to list the stages and riders behind it.' });
+    const ti = panel({ title: 'Top-ten intensity by team', fn: [['E14', 'Top-ten intensity by team']], span: 7, sub: 'Each number counts how many times a rider from that team finished a stage in the top ten on that kind of terrain. Click a cell to list the stages and riders behind it; the list opens under the grid.' });
     const tiBody = h('div', { style: 'display:flex;flex-direction:column;gap:14px;min-width:0' });
-    const tiDetail = h('div', { style: 'display:flex;flex-direction:column;gap:8px;min-width:0' });
+    const tiDetail = h('div', { class: 'ti-detail', style: 'display:flex;flex-direction:column;gap:8px;min-width:0' });
     ti.body.appendChild(tiBody);
     root.appendChild(ti.el);
     root.appendChild(tb.el);
     let cellSel = { team: E.teams.slice().sort((a, b) => b.top10s - a.top10s)[0].name, code: 'all' };
+    // The list sits under a 23-row grid, so a click scrolls it into view and marks it for a moment.
+    const pickCell = (team, code) => {
+      cellSel = { team, code };
+      drawTi();
+      const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      tiDetail.scrollIntoView({ block: 'center', behavior: calm ? 'auto' : 'smooth' });
+      tiDetail.classList.remove('reveal');
+      void tiDetail.offsetWidth;
+      tiDetail.classList.add('reveal');
+    };
     function drawTi() {
       clear(tiBody);
       const t = tokens();
@@ -1385,7 +1400,7 @@
         const on = cellSel.team === tm.name && cellSel.code === c;
         return h('td', { class: `cell${on ? ' on' : ''}`, tabindex: '0', role: 'button', 'aria-label': `${teamShort(tm.name)}, ${c === 'all' ? 'all terrain' : TL[c]}: ${v} top-10s`,
           style: `background:${k == null ? 'transparent' : t.seq[k]};color:${k != null && k >= 3 ? 'var(--sheet)' : 'var(--ink)'}`, text: String(v),
-          on: { click: () => { cellSel = { team: tm.name, code: c }; drawTi(); }, keydown: (e) => { if (e.key === 'Enter') { cellSel = { team: tm.name, code: c }; drawTi(); } } } });
+          on: { click: () => pickCell(tm.name, c), keydown: (e) => { if (e.key === 'Enter') pickCell(tm.name, c); } } });
       };
       tiBody.appendChild(h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl heat' },
         h('thead', null, h('tr', null, h('th', { text: 'Team' }), TERR.map((c) => h('th', { class: 'n' }, terrEl(c))), h('th', { class: 'n', text: 'All' }))),
@@ -1797,7 +1812,7 @@
       h('li', { text: 'Race results: BT5110 course CSVs (riders, individual results, exits), cleaned by Group 31 into rider, team, stage, result, exit and country tables; 184 riders, 3,602 stage results, 24 exits.' }),
       h('li', null, 'Official final classifications: ', [...new Set(E.official.map((o) => o.url))].map((u, i) => [i ? ', ' : '', h('a', { href: u, target: '_blank', rel: 'noopener', text: u.replace(/^https?:\/\//, '').slice(0, 70) })]), '. Cross-checked against RTÉ, cyclingstage and NBC Sports. The 2025 race regulations give the points scales, the young-rider rule and the team method.'),
       h('li', null, 'Full points and mountains standings (132 and 55 riders): ', h('a', { href: 'https://cyclingdb.com/race/tour-de-france/2025/points', target: '_blank', rel: 'noopener', text: 'CyclingDB points' }), ', ', h('a', { href: 'https://cyclingdb.com/race/tour-de-france/2025/kom', target: '_blank', rel: 'noopener', text: 'CyclingDB mountains' }), ', as collected for our teammate Jay’s dashboard; top 10s identical to the official results.'),
-      h('li', null, 'Maps: country outlines from ', h('a', { href: 'https://www.naturalearthdata.com/', target: '_blank', rel: 'noopener', text: 'Natural Earth' }), ' (via world-atlas); stage town positions © ', h('a', { href: 'https://www.openstreetmap.org/copyright', target: '_blank', rel: 'noopener', text: 'OpenStreetMap contributors' }), ' (Nominatim).'))));
+      h('li', null, 'Terrain image in the enlarged route map: NASA Blue Marble, shaded relief (public domain, via NASA GIBS). Maps: country outlines from ', h('a', { href: 'https://www.naturalearthdata.com/', target: '_blank', rel: 'noopener', text: 'Natural Earth' }), ' (via world-atlas); stage town positions © ', h('a', { href: 'https://www.openstreetmap.org/copyright', target: '_blank', rel: 'noopener', text: 'OpenStreetMap contributors' }), ' (Nominatim).'))));
     root.appendChild(src.el);
   };
 

@@ -104,6 +104,15 @@ window.addEventListener('load',function(){var cs=(q.get('click')||'').split('|')
 (function next(){if(i>=cs.length){setTimeout(done,700);return;}var el=null;try{el=document.querySelector(cs[i]);}catch(x){errs.push('bad selector: '+cs[i]);}
 if(el)el.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));else errs.push('click target not found: '+cs[i]);i++;setTimeout(next,450);})();});})();`;
 
+/** Satellite terrain image behind the enlarged route map: NASA Blue Marble shaded relief (public domain),
+    one WMS image in plain longitude and latitude. bbox = [lonMin, latMin, lonMax, latMax]. */
+function reliefImage() {
+  const file = path.join(here, 'data', 'relief_france.jpg');
+  const meta = { bbox: [-5.4, 41.9, 8.6, 51.6], w: 1600, h: 1618 };
+  if (!fs.existsSync(file)) return Object.assign(meta, { src: '' });
+  return Object.assign(meta, { src: `data:image/jpeg;base64,${fs.readFileSync(file).toString('base64')}` });
+}
+
 export function build(outFile) {
   const data = loadData();
   const css = fs.readFileSync(path.join(SRC, 'styles.css'), 'utf8');
@@ -125,6 +134,7 @@ export function build(outFile) {
     `<script>/* ECharts 5.6.0, Apache-2.0 */\n${escScript(echarts)}\n</script>`,
     `<script>/* ECharts GL 2.0.9, BSD-3-Clause */\n${escScript(gl)}\n</script>`,
     `<script>window.TDF_DATA = ${escScript(JSON.stringify(data))};</script>`,
+    `<script>window.TDF_RELIEF = ${JSON.stringify(reliefImage())};</script>`,
     `<script>\n${escScript(engine)}\n</script>`,
     `<script>\n${escScript(app)}\n</script>`,
     ...pjs.map((p) => `<script>/* plugin ${p.name} */\n${escScript(p.text)}\n</script>`),
