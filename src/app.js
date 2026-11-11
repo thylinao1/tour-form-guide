@@ -1811,6 +1811,8 @@
     dropCharts(drawer); clear(drawer); drawer.hidden = true; scrim.hidden = true;
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
+  // Charts in the rider profile start after the drawer has slid in and draw slowly enough to follow.
+  const DRAWER_CHART_MOTION = { animationDuration: 900, animationDelay: 380, animationEasing: 'cubicOut' };
   function openRider(bib) {
     const r = R(bib);
     if (!r) return;
@@ -1833,7 +1835,7 @@
     const t0 = tokens();
     const b1 = chartBox('short');
     add(drawer, h('h3', { text: 'Place on each stage' }), legend(TERR.map((c) => ({ color: t0.terr[c], label: TL[c] }))), b1);
-    chart(b1, (t) => Object.assign(base(t), {
+    chart(b1, (t) => Object.assign(base(t), DRAWER_CHART_MOTION, {
       grid: { left: 8, right: 12, top: 10, bottom: 6, containLabel: true },
       xAxis: axisCat(t, rows.map((x) => String(x.stage))),
       yAxis: axisY(t, { type: 'log', inverse: true, min: 1, axisLabel: { color: t.muted, formatter: (v) => ordinal(v) } }),
@@ -1844,7 +1846,7 @@
     if (gcRows.length) {
       const b2 = chartBox('short');
       add(drawer, h('h3', { text: 'Overall position after each stage' }), b2);
-      chart(b2, (t) => Object.assign(base(t), {
+      chart(b2, (t) => Object.assign(base(t), DRAWER_CHART_MOTION, {
         grid: { left: 8, right: 12, top: 10, bottom: 6, containLabel: true },
         xAxis: axisCat(t, rows.slice(0, gcRows.length).map((x) => String(x.stage)), { boundaryGap: false }),
         yAxis: axisY(t, { inverse: true, min: 1, minInterval: 1 }),

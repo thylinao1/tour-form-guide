@@ -145,7 +145,9 @@
   });
 
   /* =================== 2. Outright tab: race replay =================== */
-  const SPEEDS = [{ value: 1700, label: 'Slow' }, { value: 1100, label: 'Normal' }, { value: 600, label: 'Fast' }];
+  // Milliseconds per stage. Each move takes MOVE_SHARE of that; the rest is a pause on the new order.
+  const SPEEDS = [{ value: 4200, label: 'Slow' }, { value: 2800, label: 'Normal' }, { value: 1600, label: 'Fast' }];
+  const MOVE_SHARE = 0.6;
   const GONE = -1e7; // value for riders who have left the race: always sorted last, never shown
 
   function replayColor(t, position) {
@@ -167,7 +169,7 @@
 
   function replayOption(t, cast, frame, dur) {
     return Object.assign(base(t), {
-      animationDuration: 0, animationDurationUpdate: dur, animationEasing: 'linear', animationEasingUpdate: 'linear',
+      animationDuration: 0, animationDurationUpdate: dur, animationEasing: 'linear', animationEasingUpdate: 'cubicInOut',
       grid: { left: 8, right: 92, top: 8, bottom: 6, containLabel: true },
       xAxis: axisVal(t, { min: replayMin(frame), max: 0, startValue: replayMin(frame), axisLabel: { color: t.muted, fontSize: 11, showMinLabel: false, formatter: (v) => (v === 0 ? 'Leader' : fmtBy(Math.round(-v))) } }),
       yAxis: axisCat(t, cast.map((b) => R(b).short), { inverse: true, max: 9, animationDuration: 300, animationDurationUpdate: dur, axisLine: { onZero: false, lineStyle: { color: t.axis } } }),
@@ -219,7 +221,7 @@
     const box = API.chartBox('tall sc-replay');
     box.setAttribute('aria-label', 'Bar chart race of the overall top 10 after each stage');
     const frame = () => CALC.replayFrame(E, st.stage, cast);
-    const dur = () => (reduceMotion() ? 0 : Math.round(st.speed * 0.8));
+    const dur = () => (reduceMotion() ? 0 : Math.round(st.speed * MOVE_SHARE));
     const ctl = replayControls(st, () => (st.playing ? stop() : play()), (id) => { stop(); setStage(id); }, (v) => { st.speed = v; });
 
     function setStage(id) {
