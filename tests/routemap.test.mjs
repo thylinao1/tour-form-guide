@@ -54,4 +54,12 @@ check('a label avoids a blocked box', () => {
   assert.notEqual(l.anchor, 'start');
 });
 
+check('text gets larger in image pixels when the map is drawn small, within limits', () => {
+  const small = M.sizes(0.28), big = M.sizes(0.6);
+  assert.ok(small.font > big.font && small.r > big.r);
+  assert.ok(Math.abs(small.font * 0.28 - 12) < 0.01, 'about 12 px on screen');
+  assert.equal(M.sizes(0.05).font, 48);
+  assert.equal(M.sizes(5).font, 24);
+});
+
 console.log(`\n${pass} checks passed`);
