@@ -1360,7 +1360,7 @@
         h('h3', { text: 'Whose times counted' }),
         h('p', { class: 'note', text: `Cells show each rider’s place on every stage. Outlined cells are the stages where that rider was one of the team’s three counted times. Total workload of the team’s finishers: ${fmtTime(tm.workload)}.` }),
         h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl heat' },
-          h('thead', null, h('tr', null, h('th', { text: 'Rider' }), h('th', { class: 'n', text: 'Counted' }), E.stages.map((s) => h('th', { class: 'n', title: `Stage ${s.id} · ${TL[s.code]}`, text: String(s.id) })))),
+          h('thead', null, h('tr', null, h('th', { text: 'Rider' }), h('th', { class: 'n', text: 'Counted' }), E.stages.map((s) => h('th', { class: 'n wc-h', title: `Stage ${s.id} · ${TL[s.code]}`, text: String(s.id) })))),
           h('tbody', null, c.grid.slice().sort((a, b) => (c.list.find((x) => x.bib === b.bib).stagesCounted - c.list.find((x) => x.bib === a.bib).stagesCounted) || a.bib - b.bib).map((row) => {
             const cnt = c.list.find((x) => x.bib === row.bib);
             return h('tr', null,
