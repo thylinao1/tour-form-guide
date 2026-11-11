@@ -122,7 +122,7 @@
   const ACCENT = { outright: 'maillot', stages: 'flat', terrain: 'mountain', jerseys: 'green', form: 'itt', teams: 's5', nations: 'b' };
   function tabLabel(view) {
     const a = document.querySelector(`.tabs a[href="#${view}"]`);
-    return (a && a.textContent.trim()) || TAB_FALLBACK[view] || view;
+    return (a && (a.dataset.i18nOrig || a.textContent.trim())) || TAB_FALLBACK[view] || view;
   }
 
   /** Make sure a tab is open and drawn, then run fn. Waits for the hash change the app handles. */
@@ -145,7 +145,7 @@
     if (!root) return null;
     return [...root.querySelectorAll('.panel')].find((p) => {
       const h2 = p.querySelector('h2');
-      return h2 && h2.textContent.trim().startsWith(title);
+      return h2 && (h2.dataset.i18nOrig || h2.textContent.trim()).startsWith(title); // i18nOrig: the English title, kept by the language plugin
     }) || null;
   }
   const prefersReduced = () => !!(W.matchMedia && W.matchMedia('(prefers-reduced-motion: reduce)').matches);

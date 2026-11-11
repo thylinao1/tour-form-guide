@@ -113,6 +113,20 @@ function reliefImage() {
   return Object.assign(meta, { src: `data:image/jpeg;base64,${fs.readFileSync(file).toString('base64')}` });
 }
 
+/** Translations of the interface text, one file per language in i18n/ ({"English": "translation"}).
+    Made by tools/i18n_extract.py and tools/i18n_translate.py. A missing file just leaves that language out. */
+function dictionaries() {
+  const MIN_ENTRIES = 800;
+  const out = {};
+  for (const lang of ['hi', 'es', 'zh', 'ar']) {
+    const file = path.join(here, 'i18n', `${lang}.json`);
+    if (!fs.existsSync(file)) continue;
+    const dict = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (Object.keys(dict).length >= MIN_ENTRIES) out[lang] = dict; // a half-made language is not offered
+  }
+  return out;
+}
+
 export function build(outFile) {
   const data = loadData();
   const css = fs.readFileSync(path.join(SRC, 'styles.css'), 'utf8');
@@ -135,6 +149,7 @@ export function build(outFile) {
     `<script>/* ECharts GL 2.0.9, BSD-3-Clause */\n${escScript(gl)}\n</script>`,
     `<script>window.TDF_DATA = ${escScript(JSON.stringify(data))};</script>`,
     `<script>window.TDF_RELIEF = ${JSON.stringify(reliefImage())};</script>`,
+    `<script>window.TDF_I18N = ${escScript(JSON.stringify(dictionaries()))};</script>`,
     `<script>\n${escScript(engine)}\n</script>`,
     `<script>\n${escScript(app)}\n</script>`,
     ...pjs.map((p) => `<script>/* plugin ${p.name} */\n${escScript(p.text)}\n</script>`),

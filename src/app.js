@@ -1364,8 +1364,8 @@
               h('td', { class: 'n', text: `${cnt.stagesCounted}/21` }),
               row.cells.map((cell) => {
                 const bk = bucket(cell.rank);
-                return h('td', { class: 'n', title: cell.rank ? `Stage ${cell.stage}: ${ordinal(cell.rank)}${cell.counted ? ' · counted for the team' : ''}` : `Stage ${cell.stage}: not in race`,
-                  style: `background:${fill(bk)};color:${ink(bk)};padding:4px 3px;font-size:12px;${cell.counted ? `outline:2px solid ${t.ink};outline-offset:-2px;` : ''}`, text: cell.rank ? String(cell.rank) : '·' });
+                return h('td', { class: `n wc${cell.counted ? ' counted' : ''}`, title: cell.rank ? `Stage ${cell.stage}: ${ordinal(cell.rank)}${cell.counted ? ' · counted for the team' : ''}` : `Stage ${cell.stage}: not in race`,
+                  style: `background:${fill(bk)};color:${ink(bk)}`, text: cell.rank ? String(cell.rank) : '·' });
               }));
           })))),
         legend([{ color: t.seq[4], label: 'Podium' }, { color: t.seq[3], label: '4th to 10th' }, { color: t.seq[2], label: '11th to 30th' }, { color: t.seq[1], label: '31st to 80th' }, { color: t.seq[0], label: '81st+' }]));
