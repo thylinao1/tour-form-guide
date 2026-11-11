@@ -42,10 +42,10 @@
 
   /* =================== formatting =================== */
   const nf = new Intl.NumberFormat('en-GB');
-  const fmtInt = (n) => (n == null ? '–' : nf.format(n));
-  const pct = (x, d) => (x == null ? '–' : `${(x * 100).toFixed(d || 0)}%`);
+  const fmtInt = (n) => (n == null ? '-' : nf.format(n));
+  const pct = (x, d) => (x == null ? '-' : `${(x * 100).toFixed(d || 0)}%`);
   function ordinal(n) {
-    if (n == null) return '–';
+    if (n == null) return '-';
     const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
   }
@@ -59,7 +59,7 @@
   const secs = (s) => `${(Math.round(s * 10) / 10).toFixed(Math.abs(s % 1) > 1e-9 ? 1 : 0)} s`;
   const mins = (s) => Math.round((s / 60) * 100) / 100;
   /** winning margins: 16 -> "16 s", 195 -> "3' 15\"" */
-  const fmtBy = (s) => (s == null ? '–' : Math.abs(s) < 60 ? `${Math.round(Math.abs(s))} s` : fmtGap(Math.abs(s)).slice(1));
+  const fmtBy = (s) => (s == null ? '-' : Math.abs(s) < 60 ? `${Math.round(Math.abs(s))} s` : fmtGap(Math.abs(s)).slice(1));
 
   /* names: surname, or initial + surname when the surname is shared */
   const surnameOf = (name) => {
@@ -252,16 +252,19 @@
         h('button', { class: 'rlink', type: 'button', dataset: { rider: String(bib) }, title: `Open ${r.name}'s profile`, text: o.short ? r.short : r.name }),
         o.team === false ? null : [' ', h('span', { class: 'team-s', text: teamShort(r.team) })]));
   }
-  const fnTag = (code, name) => h('span', { class: 'fn', title: `Brief function ${code}: ${name}` }, code);
+  // also = this panel supports a function whose main panel is elsewhere on the tab (badge drawn dashed).
+  const fnTag = (code, name, also) => h('span', { class: also ? 'fn also' : 'fn', title: `${also ? 'Also part of brief function' : 'Brief function'} ${code}: ${name}` }, code);
   function panel(o) {
     const head = h('div', { class: 'panel-head' },
       h('div', null,
-        h('h2', null, o.title, o.fn ? o.fn.map((f) => fnTag(f[0], f[1])) : null),
+        h('h2', null, o.title, o.fn ? o.fn.map((f) => fnTag(f[0], f[1])) : null, o.fnAlso ? o.fnAlso.map((f) => fnTag(f[0], f[1], true)) : null),
         o.sub ? h('p', { class: 'sub', text: o.sub }) : null),
       o.tools ? h('div', { class: 'panel-tools' }, o.tools) : null);
     const body = h('div', { style: 'display:flex;flex-direction:column;gap:12px;min-width:0' });
     const el = h('section', { class: `panel ${o.span ? 'span-' + o.span : ''}` }, head, body);
+    // data-fn marks the one main panel per function (goToFunction jumps there); data-fn-also marks supporting panels.
     if (o.fn) el.dataset.fn = o.fn.map((f) => f[0]).join(' ');
+    if (o.fnAlso) el.dataset.fnAlso = o.fnAlso.map((f) => f[0]).join(' ');
     if (o.id) el.id = o.id;
     return { el, body, head };
   }
@@ -318,7 +321,7 @@
       if (opt.onRow) { tr.addEventListener('click', (e) => { if (e.target.closest('button,a,select,input')) return; opt.onRow(r, i); }); tr.tabIndex = 0; tr.addEventListener('keydown', (e) => { if (e.key === 'Enter') opt.onRow(r, i); }); }
       cols.forEach((c) => {
         const v = c.render ? c.render(r, i) : r[c.key];
-        tr.appendChild(h('td', { class: [c.n ? 'n' : '', c.cls || ''].join(' ').trim() || null }, v == null ? '–' : v));
+        tr.appendChild(h('td', { class: [c.n ? 'n' : '', c.cls || ''].join(' ').trim() || null }, v == null ? '-' : v));
       });
       tbody.appendChild(tr);
     });
@@ -345,6 +348,17 @@
     if (active && active.scrollIntoView) active.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
   function go(name) { if (location.hash !== `#${name}`) location.hash = name; else show(name); window.scrollTo({ top: 0 }); }
+  // The masthead has one or two rows depending on the width. Jumps to a panel use --mast-h
+  // (see scroll-margin-top in styles.css) so the panel title never hides under it.
+  function trackMasthead() {
+    const m = document.querySelector('.masthead');
+    if (!m) return;
+    const set = () => document.documentElement.style.setProperty('--mast-h', `${Math.ceil(m.getBoundingClientRect().height)}px`);
+    set();
+    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(set).observe(m);
+    else window.addEventListener('resize', set);
+  }
+  trackMasthead();
   window.addEventListener('hashchange', () => { route(); window.scrollTo({ top: 0 }); });
 
   /* global delegation: rider links open the profile; stage links jump to the stage */
@@ -377,9 +391,9 @@
 
     add(root, h('div', { class: 'hero' },
       h('div', null,
-        h('p', { class: 'eyebrow', text: `Tour de France 2025 · ${dateShort(first.date, false)}–${dateShort(last.date, false)} · ${E.stages.length} stages · ${fmtInt(Math.round(km))} km` }),
-        h('h1', null, h('span', { class: 'hl', text: w.name }), ` won by ${fmtGap(E.gcFinal[1].gap).slice(1)}. Here is what 2025 says about 2026.`),
-        h('p', { class: 'lede', text: 'A form guide built from every stage result of the 2025 Tour: who wins which kind of stage, who keeps finishing near the front, which teams deliver, and how the head-to-heads went. Click any rider for their full race.' })),
+        h('p', { class: 'eyebrow', text: `Tour de France 2025 · ${dateShort(first.date, false)} to ${dateShort(last.date, false)} · ${E.stages.length} stages · ${fmtInt(Math.round(km))} km` }),
+        h('h1', null, h('span', { class: 'hl', text: w.name }), ` won by ${fmtGap(E.gcFinal[1].gap).slice(1)}. Here is how the 2025 race played out.`),
+        h('p', { class: 'lede', text: 'This page answers: what happened in the 2025 Tour, on one screen? Every number is a summary of settled 2025 results, not a prediction. Each tab above answers one question. Click any rider name to see their full race.' })),
       h('div', { class: 'tiles' },
         tile('Riders', fmtInt(E.riders.length), `${E.teams.length} teams of 8`),
         tile('Nations', String(nations), '+1 rider with no listed nationality'),
@@ -409,11 +423,13 @@
     root.appendChild(jp.el);
 
     // road book
+    // Stage 21 was timed for the overall 50.3 km from the finish, so its times say nothing about a bunch finish.
+    const NEUTRALISED = new Set([21]);
     const rp = panel({ title: 'Road book', sub: 'Every stage by race week, with its terrain and winner. The rest days fell on 15 and 21 July. Click a stage to open it.' });
     const book = h('div', { class: 'roadbook' });
     [1, 2, 3].forEach((wk) => {
       const st = E.stages.filter((s) => s.week === wk);
-      const row = h('div', { class: 'rb-row' }, h('div', { class: 'rb-week' }, h('b', { text: `Week ${wk}` }), h('span', { text: `Stages ${st[0].id}–${st[st.length - 1].id}` })));
+      const row = h('div', { class: 'rb-row' }, h('div', { class: 'rb-week' }, h('b', { text: `Week ${wk}` }), h('span', { text: `Stages ${st[0].id} to ${st[st.length - 1].id}` })));
       const strip = h('div', { class: 'rb-strip' });
       st.forEach((s) => {
         const wr = R(s.winnerBib);
@@ -422,7 +438,7 @@
           h('span', { class: 'rb-d', text: dateShort(s.date) }),
           terrEl(s.code),
           h('span', { class: 'rb-w', text: wr.short }),
-          h('span', { class: 'rb-k', text: `${s.distance.toFixed(1)} km${s.bunch ? ' · bunch' : ''}` })));
+          h('span', { class: 'rb-k', text: `${s.distance.toFixed(1)} km${NEUTRALISED.has(s.id) ? ' · times frozen' : s.bunch ? ' · bunch' : ''}` })));
       });
       row.appendChild(strip);
       book.appendChild(row);
@@ -434,8 +450,10 @@
     const lastChange = E.leaders.reduce((acc, l, i) => (l.changed ? i : acc), 0);
     const lc = E.leaders[lastChange];
     const lcStage = E.stageById.get(lc.stage);
-    const flat = E.stages.filter((s) => s.code === 'flat');
+    const flat = E.stages.filter((s) => s.code === 'flat' && !NEUTRALISED.has(s.id));
     const flatBunch = flat.filter((s) => s.bunch);
+    const flatWinners = new Set(flatBunch.map((s) => s.winnerBib)).size;
+    const earlyLeaders = new Set(E.leaders.slice(0, lastChange).map((l) => l.bib)).size;
     const flatWins = {};
     flatBunch.forEach((s) => { const n = R(s.winnerBib).short; flatWins[n] = (flatWins[n] || 0) + 1; });
     const flatTop = Object.entries(flatWins).sort((a, b) => b[1] - a[1]).filter(([, n]) => n > 1).map(([n, k]) => `${n} ${k}`).join(', ');
@@ -457,47 +475,47 @@
       h('div', { class: 'slip-k' }, h('span', { text: 'Bet note' }), h('span', { class: 'mkt', text: mkt })),
       h('div', { class: 'slip-t', text: title }),
       h('p', { class: 'slip-b', text: body }),
-      h('p', { class: 'slip-bet' }, h('b', { text: 'Angle: ' }), bet),
+      h('p', { class: 'slip-bet' }, h('b', { text: 'What the 2025 results show: ' }), bet),
       h('a', { href, text: `${linkText} →` }));
-    const sp = panel({ title: 'Bet notes from 2025', sub: 'Each note is computed from the race data and links to the view that backs it up.' });
+    const sp = panel({ title: 'Bet notes from 2025', sub: 'Each note describes settled 2025 results. None of them is a tip or a prediction, and each links to the tab that backs it up.' });
     add(sp.body, h('div', { class: 'slips' },
-      slip('Outright', `Yellow was settled on stage ${lc.stage}`,
+      slip('Overall winner', `Yellow was settled on stage ${lc.stage}`,
         `${R(lc.bib).short} took the lead for good at ${lcStage.finish} and led the last ${E.stages.length - lc.stage + 1} stages. That evening the lead was ${fmtGap(lc.margin).slice(1)}, already ${pct(lc.margin / E.gcFinal[1].gap)} of the final margin.`,
-        'Price the overall market off the first big summit finish. Before it, yellow is a sprinter’s and puncheur’s jersey.', '#outright', 'GC story'),
+        `Before stage ${lc.stage}, ${earlyLeaders} different riders wore the yellow jersey. After it, the leader never changed.`, '#outright', 'Overall winner'),
       slip('Stage winner', `${flatBunch.length} of ${flat.length} flat stages ended in a bunch`,
-        `At least ${E.BUNCH_MIN} riders shared the winner’s time on those days. ${flatTop ? `Multiple winners: ${flatTop}.` : ''}${odd.length ? ` The exception: stage ${odd.map((s) => s.id).join(', ')} (${odd.map((s) => R(s.winnerBib).short).join(', ')}).` : ''}`,
-        'Flat-stage markets are sprinter markets: shortlist the two or three fastest finishers.', '#terrain', 'Terrain specialists'),
+        `A bunch finish means at least ${E.BUNCH_MIN} riders shared the winner’s time. ${flatTop ? `Riders with more than one: ${flatTop}.` : ''}${odd.length ? ` The exception: stage ${odd.map((s) => s.id).join(', ')} (${odd.map((s) => R(s.winnerBib).short).join(', ')}).` : ''} Stage 21 is left out: its times were taken 50 km from the finish.`,
+        `${flatWinners} different riders won the ${flatBunch.length} bunch finishes.`, '#terrain', 'Terrain'),
       slip('Stage winner', `Only ${mtnGc.length} of ${mtn.length} mountain stages went to a top-10 rider`,
         `The rest went to climbers outside the final top 10${bestOutsider ? `; ${bestOutsider[0]} won ${bestOutsider[1]}` : ''}. The favourites still finished top 10 on almost every mountain day.`,
-        'For a mountain stage winner, look at strong climbers already out of the overall fight; use the favourites for top-3 bets.', '#terrain', 'Mountain contours'),
+        `Mountain stage wins: ${mtnGc.length} to riders in the final top 10, ${mtn.length - mtnGc.length} to riders outside it.`, '#terrain', 'Terrain'),
       slip('Top 10', `${w.short} was top 10 on ${w.top10s} of ${w.starts} stages`,
-        `That is a ${pct(w.top10s / w.starts)} strike rate, the best of the race, with an average stage placing of ${w.avgRank.toFixed(1)}.`,
-        '“Top 10 on the stage” is the steadiest market on the favourite, on any terrain.', '#form', 'Consistency'),
+        `That is ${pct(w.top10s / w.starts)} of his stages, more top 10 finishes than any other rider, with an average stage place of ${w.avgRank.toFixed(1)}.`,
+        `Top 10 stage finishes: ${w.short} ${w.top10s}, ${sec.short} ${sec.top10s}.`, '#form', 'Form and risk'),
       slip('Head-to-head', `${w.short} beat ${sec.short} on ${hp.aAhead} of ${hp.common} stages`,
-        `By terrain: ${TERR.map((c) => `${TL[c].toLowerCase()} ${hp.byTerrain[c].a}–${hp.byTerrain[c].b}`).join(', ')}.`,
-        'Head-to-heads between GC riders rarely flip. For sprinters, use the flat-stage record only.', '#h2h', 'Head-to-head'),
+        `By terrain: ${TERR.map((c) => `${TL[c].toLowerCase()} ${hp.byTerrain[c].a}-${hp.byTerrain[c].b}`).join(', ')}.`,
+        `Over the ${hp.common} stages both finished, the record was ${hp.aAhead} to ${hp.bAhead}.`, '#h2h', 'Head-to-head'),
       slip('Young rider', `${R(yo[0].bib).short} won white by ${fmtGap(yo[1].gap).slice(1)}`,
         `${youngTop10} of the overall top 10 were born in 2000 or later. The young-rider race went to the wire between ${R(yo[0].bib).short} and ${R(yo[1].bib).short}.`,
-        'Young riders are already podium-level: value in the white jersey and in each-way overall bets.', '#jerseys', 'Jersey markets'),
+        `The best young rider, ${R(yo[0].bib).short}, finished ${ordinal(R(yo[0].bib).gcRank)} overall.`, '#jerseys', 'Jerseys'),
       slip('Teams', `${teamShort(teamWinner.team)} won the team prize by ${fmtGap(teamSecond.gap).slice(1)}`,
         `${teamShort(mostWinsTeam.name)} won the most stages (${mostWinsTeam.wins}). The team prize rewards depth: three riders count every day.`,
-        'In team-versus-team markets, back the deeper squad, not the one with the star.', '#teams', 'Team markets'),
+        teamWinner.team === mostWinsTeam.name ? 'The team prize winner also won the most stages.' : 'The team prize and the most stage wins went to different teams.', '#teams', 'Teams'),
       slip('Nationality', `${topNation.name} won ${topNation.wins} stages`,
         `${mostRiders.name} sent the most riders (${mostRiders.riders}) and won ${mostRiders.wins} stage${mostRiders.wins === 1 ? '' : 's'}.`,
-        'Rider count is a weak signal for “top nation” bets; the nation with the in-form winners is what matters.', '#nations', 'Nations')));
+        `${topNation.name} had ${topNation.riders} rider${topNation.riders === 1 ? '' : 's'} in the race.`, '#nations', 'Nations')));
     root.appendChild(sp.el);
   };
 
   /* =================== outright: E1, E10, E7 =================== */
   renderers.outright = (root) => {
     add(root, h('div', { class: 'view-head' }, h('div', null,
-      h('p', { class: 'eyebrow', text: 'Outright market · the yellow jersey' }),
+      h('p', { class: 'eyebrow', text: 'Overall winner (in betting: the outright) · the yellow jersey' }),
       h('h1', { text: 'How the 2025 Tour was won' }),
-      h('p', { class: 'lede', text: 'Start from the final standings, pick a contender, and drill down to the stage that changed their race. Then replay the race with bonuses or penalties switched off.' }))));
+      h('p', { class: 'lede', text: 'This tab answers: who won the race overall, and on which days was it decided? The yellow jersey goes to the rider with the lowest total time. Pick a rider in the standings to see the day they gained or lost the most time on the top ten, then replay the race without time bonuses or penalties.' }))));
 
     // E1 leaderboard
     let showAll = false;
-    const lb = panel({ title: 'Final overall standings', fn: [['E1', 'GC leaderboard with contextual descent']], span: 5, sub: 'Total adjusted time (finish time − bonuses + penalties). Click a row to see where that rider’s race turned.' });
+    const lb = panel({ title: 'Final overall standings', fn: [['E1', 'GC leaderboard with contextual descent']], span: 5, sub: 'Total adjusted time: finish time minus time bonuses plus time penalties. Click a row to see that rider’s biggest day against the top ten.' });
     const lbBody = h('div');
     const more = h('button', { class: 'btn', type: 'button', text: 'Show all 160 finishers', on: { click: () => { showAll = !showAll; more.textContent = showAll ? 'Show top 20' : 'Show all 160 finishers'; drawLb(); } } });
     function drawLb() {
@@ -507,7 +525,7 @@
         { label: 'Pos', render: (e) => String(e.position), cls: 'pos' },
         { label: 'Rider', render: (e) => riderEl(e.bib) },
         { label: 'Time', n: true, render: (e) => (e.position === 1 ? fmtTime(e.cum) : fmtGap(e.gap)) },
-        { label: 'Wins', n: true, render: (e) => String(R(e.bib).wins || '–') },
+        { label: 'Wins', n: true, render: (e) => String(R(e.bib).wins || '-') },
         { label: '', render: (e) => (R(e.bib).young ? h('span', { class: 'pill', title: 'Young rider (born 2000 or later)', text: 'Young' }) : '') },
       ], rows, { onRow: (e) => { S.outrightBib = e.bib; drawLb(); drawPivot(); addStory(e.bib); }, rowClass: (e) => (e.bib === S.outrightBib ? 'sel' : ''), scroll: showAll }));
     }
@@ -515,7 +533,7 @@
     drawLb();
 
     // E1 descent: pivotal day
-    const pv = panel({ title: 'Where the race turned', fn: [['E1', 'GC leaderboard with contextual descent']], span: 7 });
+    const pv = panel({ title: 'Biggest day against the top ten', fnAlso: [['E1', 'GC leaderboard with contextual descent']], span: 7 });
     const pvText = h('p', { class: 'verdict' });
     const pvBox = chartBox();
     const pvNote = h('p', { class: 'note', text: 'Each bar: the rider’s adjusted time minus the median of the final top 10 that day. Below zero = faster than the contenders. Click a bar to open that stage.' });
@@ -541,14 +559,14 @@
             tooltip: Object.assign(base(t).tooltip, { trigger: 'item', formatter: (prm) => {
               const x = pp.days[prm.dataIndex]; const s2 = E.stageById.get(x.stage);
               const gc = E.gcPositionAfter(S.outrightBib, x.stage);
-              return tipHead(`Stage ${x.stage} · ${TL[s2.code]}`) + `<div style="color:${t.muted};margin-bottom:4px">${esc(s2.route)}</div>` + tipRow(null, 'vs top-10 median', `${x.delta > 0 ? '+' : x.delta < 0 ? '−' : ''}${secs(Math.abs(x.delta))}`) + tipRow(null, 'Overall after stage', gc ? ordinal(gc.position) : '–');
+              return tipHead(`Stage ${x.stage} · ${TL[s2.code]}`) + `<div style="color:${t.muted};margin-bottom:4px">${esc(s2.route)}</div>` + tipRow(null, 'vs top-10 median', `${x.delta > 0 ? '+' : x.delta < 0 ? '-' : ''}${secs(Math.abs(x.delta))}`) + tipRow(null, 'Overall after stage', gc ? ordinal(gc.position) : '-');
             } }),
             series: [{
               type: 'bar', barMaxWidth: 22,
               data: pp.days.map((x) => ({
                 value: x.delta,
                 itemStyle: { color: x.delta < 0 ? t.divNeg : t.divPos, opacity: x.stage === pp.pivotal.stage ? 1 : 0.5, borderRadius: x.delta < 0 ? [0, 0, 4, 4] : [4, 4, 0, 0] },
-                label: x.stage === pp.pivotal.stage ? { show: true, position: x.delta < 0 ? 'bottom' : 'top', color: t.ink, fontWeight: 600, formatter: () => `${x.delta > 0 ? '+' : '−'}${secs(Math.abs(x.delta))}` } : { show: false },
+                label: x.stage === pp.pivotal.stage ? { show: true, position: x.delta < 0 ? 'bottom' : 'top', color: t.ink, fontWeight: 600, formatter: () => `${x.delta > 0 ? '+' : '-'}${secs(Math.abs(x.delta))}` } : { show: false },
               })),
             }],
           });
@@ -559,10 +577,12 @@
     drawPivot();
 
     // E10 storyline
-    const story = panel({ title: 'The fight for yellow, stage by stage', fn: [['E10', 'Temporal GC storyline']], sub: 'Minutes behind the race leader after each stage. Shaded bands are mountain stages (red) and time trials (violet). Pick up to six riders: use the buttons, search any of the 184 starters, or click a row in the standings above.' });
+    const story = panel({ title: 'The fight for yellow, stage by stage', fn: [['E10', 'Temporal GC storyline']], sub: 'Minutes behind the race leader after each stage. Shaded bands are mountain stages (red) and time trials (violet). Dashed yellow lines mark the stages where the yellow jersey (race leader) changed hands. Pick up to six riders with the buttons, the search box, a team, or a row in the standings above.' });
     const chipsBox = h('div', { class: 'chips' });
+    // team filter: show a team's six best placed riders (riders who left the race come last)
+    const teamPick = selectEl('story-team', [{ options: [{ value: '', label: 'Show a team…' }, ...E.teams.slice().sort((a, b) => teamShort(a.name).localeCompare(teamShort(b.name))).map((tm) => ({ value: tm.name, label: teamShort(tm.name) }))] }], '', (v) => { if (v) showTeam(v); }, 'Show the riders of one team on the chart');
     // search any starter, including riders who left the race (their line stops at their last stage)
-    const pickRow = h('div', { class: 'story-pick' }, chipsBox, riderFinder((b) => addStory(b)));
+    const pickRow = h('div', { class: 'story-pick' }, chipsBox, riderFinder((b) => addStory(b)), teamPick);
     const storyBox = chartBox('tall');
     const ribbon = h('div', { class: 'yellow-ribbon', 'aria-label': 'Yellow jersey after each stage' });
     E.leaders.forEach((l) => ribbon.appendChild(h('div', { class: l.changed || l.stage === 1 ? 'chg' : null, title: `After stage ${l.stage}: ${R(l.bib).name} (lead ${fmtGap(l.margin)})`, text: R(l.bib).short })));
@@ -578,6 +598,12 @@
       const used = new Set(slots.values());
       let k = 0; while (used.has(k)) k++;
       slots.set(bib, k); S.story.push(bib);
+      drawChips(); redraw(storyChart);
+    }
+    function showTeam(name) {
+      const bibs = E.riders.filter((r) => r.team === name).sort((a, b) => (a.gcRank ?? 999) - (b.gcRank ?? 999) || a.bib - b.bib).slice(0, 6).map((r) => r.bib);
+      S.story = []; slots.clear();
+      bibs.forEach((b, i) => { slots.set(b, i); S.story.push(b); });
       drawChips(); redraw(storyChart);
     }
     function drawChips() {
@@ -607,8 +633,12 @@
         };
       });
       // the stage bands sit on their own empty series so they stay visible when no rider is picked
+      // dashed lines where the yellow jersey changed hands, labelled with the new leader
+      const swaps = E.leaders.filter((l) => l.changed).map((l) => ({ xAxis: l.stage, label: { formatter: `${R(l.bib).short} in yellow` } }));
       series.unshift({ type: 'line', name: 'stage types', data: [], silent: true, tooltip: { show: false },
-        markArea: { silent: true, data: [...bands('mountain', t.terr.mountain), ...bands('itt', t.terr.itt)] } });
+        markArea: { silent: true, data: [...bands('mountain', t.terr.mountain), ...bands('itt', t.terr.itt)] },
+        markLine: { silent: true, symbol: ['none', 'none'], animation: false, lineStyle: { color: t.maillot, type: 'dashed', width: 2 },
+          label: { position: 'insideEndTop', color: t.ink, fontSize: 11, fontWeight: 600 }, data: swaps } });
       const empty = S.story.length === 0;
       return Object.assign(base(t), {
         grid: { left: 8, right: 90, top: 20, bottom: 6, containLabel: true },
@@ -629,17 +659,18 @@
     });
 
     // E7 counterfactual
-    const cf = panel({ title: 'What if bonuses or penalties didn’t count?', fn: [['E7', 'Bonuses, penalties and counterfactuals']], sub: 'Replay the standings with finish-line time bonuses (10, 6 and 4 s for the first three) or time penalties removed, up to any stage.' });
-    const state = { bonus: true, penalty: true, stage: 21 };
+    const cf = panel({ title: 'What if bonuses or penalties did not count?', fnAlso: [['E7', 'Bonuses, penalties and counterfactuals']], sub: 'A time bonus is seconds taken off a rider\'s total for finishing 1st, 2nd or 3rd on a stage (10, 6 and 4 s). A penalty is seconds added by the judges. Switch either off and the standings are replayed up to the stage you choose. Riders level on time are split by the lowest total of stage places.' });
+    const state = { bonus: true, penalty: true, stage: 2 };
     const sw = (label, key) => {
       const inp = h('input', { type: 'checkbox', id: `cf-${key}`, checked: true });
       inp.addEventListener('change', () => { state[key] = inp.checked; drawCf(); });
       return h('label', { class: 'switch', for: `cf-${key}` }, inp, label);
     };
-    const stageSel = selectEl('cf-stage', [{ options: E.stages.map((s) => ({ value: s.id, label: `after stage ${s.id}` })) }], 21, (v) => { state.stage = Number(v); drawCf(); }, 'Replay through stage');
+    const stageSel = selectEl('cf-stage', [{ options: E.stages.map((s) => ({ value: s.id, label: `after stage ${s.id}` })) }], 2, (v) => { state.stage = Number(v); drawCf(); }, 'Replay up to stage');
     add(cf.head.querySelector('.panel-tools') || cf.head.appendChild(h('div', { class: 'panel-tools' })), sw('Count bonuses', 'bonus'), sw('Count penalties', 'penalty'), stageSel);
+    const cfHint = h('p', { class: 'verdict', text: 'Try this: the replay opens after stage 2. With bonuses switched off, six riders, Van der Poel included, are level on time, and Pogacar goes top only on the tie-break (the lowest total of stage places). By the final stage the gaps are so big that no switch moves anyone in the top 10.' });
     const cfOut = h('div', { class: 'split' });
-    cf.body.appendChild(cfOut);
+    add(cf.body, cfHint, cfOut);
     root.appendChild(cf.el);
     function drawCf() {
       clear(cfOut);
@@ -657,11 +688,11 @@
       add(cfOut,
         h('div', null, tbl([
           { label: 'Pos', render: (e) => String(e.position), cls: 'pos' },
-          { label: 'Move', render: (e) => { const d = basePos.get(e.bib) - e.position; return d > 0 ? h('span', { class: 'move-up', text: `▲ ${d}` }) : d < 0 ? h('span', { class: 'move-down', text: `▼ ${-d}` }) : '–'; } },
+          { label: 'Move', render: (e) => { const d = basePos.get(e.bib) - e.position; return d > 0 ? h('span', { class: 'move-up', text: `▲ ${d}` }) : d < 0 ? h('span', { class: 'move-down', text: `▼ ${-d}` }) : '-'; } },
           { label: 'Rider', render: (e) => riderEl(e.bib) },
           { label: 'Gap', n: true, render: (e) => (e.position === 1 ? fmtTime(e.cum) : fmtGap(e.gap)) },
-          { label: 'Bonus', n: true, render: (e) => { const b = upto(e.bib).reduce((a, x) => a + x.bonus, 0); return b ? `${b} s` : '–'; } },
-          { label: 'Penalty', n: true, render: (e) => { const p = upto(e.bib).reduce((a, x) => a + x.penalty, 0); return p ? `${p} s` : '–'; } },
+          { label: 'Bonus', n: true, render: (e) => { const b = upto(e.bib).reduce((a, x) => a + x.bonus, 0); return b ? `${b} s` : '-'; } },
+          { label: 'Penalty', n: true, render: (e) => { const p = upto(e.bib).reduce((a, x) => a + x.penalty, 0); return p ? `${p} s` : '-'; } },
         ], top)),
         h('div', { style: 'display:flex;flex-direction:column;gap:10px' },
           h('div', { class: 'tiles' },
@@ -671,18 +702,37 @@
           h('p', { class: 'note' }, changed
             ? (ins.length || outs.length ? [h('b', { text: 'Into the top 10: ' }), ins.join(', ') || 'nobody', '. ', h('b', { text: 'Out: ' }), outs.join(', ') || 'nobody', '.'] : 'The same ten riders make the top 10 in this replay.')
             : 'These are the actual standings. Switch off bonuses or penalties to see who they helped.'),
-          h('p', { class: 'note', text: 'Bonuses are the only time awarded at the finish line; penalties appear on 4 results in 2025.' })));
+          h('p', { class: 'note', text: 'Bonuses are the only time awarded at the finish line. Penalties appear on 4 results in 2025.' })));
     }
     drawCf();
+
+    // E7 part 1: cumulative bonuses and penalties for every rider who had any
+    const led = panel({ title: 'Bonuses and penalties per rider', fn: [['E7', 'Bonuses, penalties and counterfactuals']], sub: 'Every rider who gained a time bonus or got a time penalty, over the whole race. Net effect = penalty minus bonus: below zero means the rules saved the rider time overall.' });
+    const ledger = E.bonusLedger();
+    add(led.body,
+      h('div', { class: 'tiles' },
+        tile('Riders with a bonus', String(ledger.filter((x) => x.bonus).length), `${fmtInt(ledger.reduce((a, x) => a + x.bonus, 0))} s handed out in total`, true),
+        tile('Riders with a penalty', String(ledger.filter((x) => x.penalty).length), `${fmtInt(ledger.reduce((a, x) => a + x.penalty, 0))} s added in total`, true),
+        tile('Most time saved', R(ledger[0].bib).short, `${-ledger[0].net} s over ${ledger[0].bonusDays} stages`, true)),
+      ledger.length ? tbl([
+        { label: '#', render: (x, i) => String(i + 1), cls: 'pos' },
+        { label: 'Rider', render: (x) => riderEl(x.bib) },
+        { label: 'Bonus', n: true, render: (x) => (x.bonus ? `-${x.bonus} s` : '-') },
+        { label: 'Stages with a bonus', n: true, render: (x) => String(x.bonusDays || '-') },
+        { label: 'Penalty', n: true, render: (x) => (x.penalty ? h('span', { class: 'move-down', text: `+${x.penalty} s` }) : '-') },
+        { label: 'Net effect', n: true, render: (x) => h('b', { class: x.net < 0 ? 'move-up' : 'move-down', text: `${x.net > 0 ? '+' : x.net < 0 ? '-' : ''}${Math.abs(x.net)} s` }) },
+        { label: 'Overall', n: true, render: (x) => (R(x.bib).finished ? ordinal(R(x.bib).gcRank) : 'out') },
+      ], ledger, { scroll: true, caption: 'Sorted by net effect, most time saved first. Overall = final position in the overall standings.' }) : h('p', { class: 'note', text: 'No rider had a bonus or a penalty.' }));
+    root.insertBefore(led.el, cf.el);
     hooks.outright = () => { drawLb(); drawPivot(); };
   };
 
   /* =================== stages: E2, E11, drill-down =================== */
   renderers.stages = (root) => {
     add(root, h('div', { class: 'view-head' }, h('div', null,
-      h('p', { class: 'eyebrow', text: 'Stage-winner markets' }),
+      h('p', { class: 'eyebrow', text: 'Stage winner bets' }),
       h('h1', { text: 'One stage at a time' }),
-      h('p', { class: 'lede', text: 'Pick a stage on the route map to see who won, by how much and which teams filled the top 10. The explorer below rolls stages up by terrain and drills down to the riders.' }))));
+      h('p', { class: 'lede', text: 'This tab answers: who did best on a single day? Pick a stage on the map or in the list to see who won, by how much, their adjusted times and which teams filled the top 10. Further down: all stages grouped by terrain, the time trials and the longest day.' }))));
 
     const sp = panel({ title: 'Stage in focus', fn: [['E2', 'A stage in focus']] });
     const stageSel = selectEl('stage-sel', TERR.map((c) => ({ label: TL[c], options: E.stages.filter((s) => s.code === c).map((s) => ({ value: s.id, label: `Stage ${s.id} · ${s.route}` })) })), S.stage, (v) => { S.stage = Number(v); teamFilter = null; drawStage(); }, 'Stage');
@@ -721,6 +771,7 @@
       clear(left);
       const rows = teamFilter ? d.rows.filter((r) => R(r.bib).team === teamFilter) : d.rows.slice(0, depth);
       const gcMap = new Map(d.gcAfter.map((e) => [e.bib, e.position]));
+      const hasPen = d.rows.some((r) => r.penalty);
       add(left,
         h('div', { class: 'panel-tools' },
           teamFilter ? [h('span', { class: 'pill', text: `${teamShort(teamFilter)} riders` }), h('button', { class: 'btn', type: 'button', text: 'Show everyone', on: { click: () => { teamFilter = null; drawStage(); } } })]
@@ -730,9 +781,11 @@
           { label: 'Rider', render: (r) => riderEl(r.bib) },
           { label: 'Nation', render: (r) => R(r.bib).countryName },
           { label: 'Time', n: true, render: (r) => (r.rank === 1 ? fmtClock(r.time) : r.gap === 0 ? 's.t.' : fmtGap(r.gap)) },
-          { label: 'Bonus', n: true, render: (r) => (r.bonus ? `−${r.bonus}"` : '') },
+          { label: 'Bonus', n: true, render: (r) => (r.bonus ? `-${r.bonus} s` : '') },
+          hasPen ? { label: 'Penalty', n: true, render: (r) => (r.penalty ? h('span', { class: 'move-down', text: `+${r.penalty} s` }) : '') } : null,
+          { label: 'Adjusted time', n: true, render: (r) => h('b', { text: fmtClock(r.adj) }) },
           { label: 'Overall', n: true, render: (r) => ordinal(gcMap.get(r.bib)) },
-        ], rows, { scroll: depth > 25 || !!teamFilter, caption: 's.t. = same time as the winner. Overall = position in the general classification after this stage.' }));
+        ].filter(Boolean), rows, { scroll: depth > 25 || !!teamFilter, caption: `s.t. = same time as the winner. Adjusted time = finish time minus bonus${hasPen ? ' plus penalty' : ''}, the time that counts for the overall standings. Overall = position in the overall standings after this stage.` }));
       clear(right);
       add(right, h('h3', { text: 'Which teams filled the top 10' }), h('p', { class: 'note', text: 'Click a team to list all its riders on this stage.' }), teamBox);
       if (!teamChart) {
@@ -755,7 +808,7 @@
     drawStage();
 
     // drill-down explorer
-    const dx = panel({ title: 'Roll up and drill down', fn: [['OLAP', 'Drill-down: terrain → stage → rider']], sub: 'Totals by terrain. Open a terrain to see its stages, and a stage to see its top five.' });
+    const dx = panel({ title: 'Roll up and drill down', fn: [['OLAP', 'Drill down: terrain, then stage, then rider']], sub: 'Totals by terrain. Open a terrain to see its stages, and a stage to see its top five.' });
     const dxBody = h('div');
     dx.body.appendChild(dxBody);
     root.appendChild(dx.el);
@@ -787,14 +840,16 @@
             h('td', { class: 'n' }, riderEl(s.winnerBib, { short: true, bib: false, team: false })),
             h('td', { text: s.route })));
           if (!so) return;
-          E.byStage.get(s.id).slice(0, 5).forEach((r) => {
-            tbody.appendChild(h('tr', { class: 'sub2' },
-              h('td', { style: 'padding-left:52px', text: ordinal(r.rank) }),
-              h('td', { colspan: '3' }, riderEl(r.bib)),
-              h('td', { class: 'n', text: r.rank === 1 ? fmtClock(r.time) : r.gap === 0 ? 's.t.' : fmtGap(r.gap) }),
-              h('td', { class: 'n', text: r.bonus ? `−${r.bonus}"` : '' }),
-              h('td', { text: R(r.bib).countryName })));
-          });
+          // level 3 has different columns, so it gets its own small table with its own headers
+          tbody.appendChild(h('tr', { class: 'sub2' }, h('td', { colspan: '7', style: 'padding:4px 8px 10px 52px' },
+            tbl([
+              { label: 'Place', render: (r) => ordinal(r.rank), cls: 'pos' },
+              { label: 'Rider', render: (r) => riderEl(r.bib) },
+              { label: 'Nation', render: (r) => R(r.bib).countryName },
+              { label: 'Time', n: true, render: (r) => (r.rank === 1 ? fmtClock(r.time) : r.gap === 0 ? 's.t.' : fmtGap(r.gap)) },
+              { label: 'Bonus', n: true, render: (r) => (r.bonus ? `-${r.bonus} s` : '') },
+              { label: 'Adjusted time', n: true, render: (r) => fmtClock(r.adj) },
+            ], E.byStage.get(s.id).slice(0, 5), { caption: `Top five on stage ${s.id}. s.t. = same time as the winner.` }))));
         });
       });
       dxBody.appendChild(h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl' },
@@ -820,9 +875,9 @@
   /* =================== terrain: E5, E6, specialists =================== */
   renderers.terrain = (root) => {
     add(root, h('div', { class: 'view-head' }, h('div', null,
-      h('p', { class: 'eyebrow', text: 'Stage-winner markets · terrain' }),
+      h('p', { class: 'eyebrow', text: 'Stage winner bets · terrain' }),
       h('h1', { text: 'Who wins where' }),
-      h('p', { class: 'lede', text: 'Match the rider to the road. Pick a terrain to see who placed there, how those stages were won, and who gets faster when the road climbs.' }))));
+      h('p', { class: 'lede', text: 'This tab answers: which riders do well on which kind of road? Terrain is the stage type: flat, hilly, mountain, or individual time trial (ITT), where riders start alone and race the clock. Pick a terrain to see who placed there and who gets faster when the road climbs.' }))));
     const tools = h('div', { class: 'panel', style: 'flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:10px 14px' },
       h('span', { class: 'note', text: 'Terrain:' }),
       seg(TERR.map((c) => ({ value: c, label: TL[c], icon: glyph(c) })), S.terrain, (v) => { S.terrain = v; drawAll(); }, 'Terrain'));
@@ -840,7 +895,7 @@
       pa.head.querySelector('h2').textContent = `Who places on ${TL[code].toLowerCase()} stages`;
       const t = tokens();
       clear(paLegend).appendChild(legend([
-        { color: t.terr[code], label: 'Win' }, { color: blend(t.terr[code], t.sheet, 0.45), label: '2nd–3rd' }, { color: blend(t.terr[code], t.sheet, 0.72), label: '4th–10th' }]));
+        { color: t.terr[code], label: 'Win' }, { color: blend(t.terr[code], t.sheet, 0.45), label: '2nd to 3rd' }, { color: blend(t.terr[code], t.sheet, 0.72), label: '4th to 10th' }]));
       if (!paChart) {
         paChart = chart(paBox, (tk) => {
           const c2 = S.terrain;
@@ -856,7 +911,7 @@
               const e = list[ps[0].dataIndex];
               return tipHead(R(e.bib).name) + `<div style="color:${tk.muted};margin-bottom:4px">${esc(teamShort(R(e.bib).team))}</div>` + tipRow(null, 'Starts', e.starts) + tipRow(null, 'Wins', e.wins) + tipRow(null, 'Podiums', e.podiums) + tipRow(null, 'Top 10s', `${e.top10s} (${pct(e.rate)})`) + tipRow(null, 'Average placing', e.avgRank.toFixed(1));
             } }),
-            series: [mk('Win', (e) => e.wins, col), mk('2nd–3rd', (e) => e.podiums - e.wins, blend(col, tk.sheet, 0.45)), mk('4th–10th', (e) => e.top10s - e.podiums, blend(col, tk.sheet, 0.72), true)],
+            series: [mk('Win', (e) => e.wins, col), mk('2nd to 3rd', (e) => e.podiums - e.wins, blend(col, tk.sheet, 0.45)), mk('4th to 10th', (e) => e.top10s - e.podiums, blend(col, tk.sheet, 0.72), true)],
           });
         }, { onClick: (p) => { const list = E.consistency(S.terrain).slice(0, 12).reverse(); openRider(list[p.dataIndex].bib); } });
       } else redraw(paChart);
@@ -873,12 +928,12 @@
           tile('Stages', String(st.length), `${fmtInt(Math.round(st.reduce((a, s) => a + s.distance, 0)))} km in total`, true),
           tile('Bunch finishes', `${st.filter((s) => s.bunch).length} of ${st.length}`, `${E.BUNCH_MIN}+ riders on the winner’s time`, true),
           tile('Won by a top-10 rider', `${gcw} of ${st.length}`, 'final overall top 10', true),
-          tile('Average gap to next group', margins.length ? fmtBy(Math.round(margins.reduce((a, m) => a + m, 0) / margins.length)) : '–', `${new Set(st.map((s) => s.winnerBib)).size} different winners`, true)),
+          tile('Average gap to next group', margins.length ? fmtBy(Math.round(margins.reduce((a, m) => a + m, 0) / margins.length)) : '-', `${new Set(st.map((s) => s.winnerBib)).size} different winners`, true)),
         tbl([
           { label: 'Stage', render: (s) => h('button', { class: 'rlink', type: 'button', dataset: { gotoStage: String(s.id) }, text: String(s.id) }) },
           { label: 'Winner', render: (s) => riderEl(s.winnerBib, { bib: false, short: true }) },
           { label: 'Finish', render: (s) => (s.bunch ? `bunch (${s.inWinnerTime})` : s.inWinnerTime > 1 ? `group of ${s.inWinnerTime}` : 'solo') },
-          { label: 'By', n: true, render: (s) => (s.marginNextGroup == null ? '–' : fmtBy(s.marginNextGroup)) },
+          { label: 'By', n: true, render: (s) => (s.marginNextGroup == null ? '-' : fmtBy(s.marginNextGroup)) },
           { label: 'Winner overall', n: true, render: (s) => (s.winnerFinalGc ? ordinal(s.winnerFinalGc) : 'did not finish') },
         ], st));
     }
@@ -945,7 +1000,7 @@
     }));
 
     // E6 speed by terrain
-    const spd = panel({ title: 'Speed by terrain', fn: [['E6', 'Speed as a simple ratio']], sub: 'Speed = distance ÷ time over each terrain, compared with the median finisher on the same terrain. A rider whose bar grows on mountain stages gains when the road climbs. Compare up to four riders: use the buttons or search any rider.' });
+    const spd = panel({ title: 'Speed by terrain', fn: [['E6', 'Speed as a simple ratio']], sub: 'Speed = distance divided by time over each terrain, compared with the median finisher on the same terrain. A rider whose bar grows on mountain stages gains when the road climbs. Compare up to four riders: use the buttons or search any rider.' });
     let spdMode = 'riders';
     let pickR = [E.gcFinal[0].bib, E.gcFinal[1].bib, 81, 21];
     let pickT = [E.TEAMCLASS.list[0].team, E.TEAMCLASS.list[1].team, 'LIDL-TREK', 'SOUDAL QUICK-STEP'];
@@ -987,7 +1042,7 @@
           { label: 'Team', render: (x) => teamShort(x.tm.name) },
           { label: 'Flat + hilly', n: true, render: (x) => `${((x.fh - 1) * 100).toFixed(1)}%` },
           { label: 'Mountain', n: true, render: (x) => `${((x.mo - 1) * 100).toFixed(1)}%` },
-        ], gain, { caption: 'Team speed = all rider-kilometres ÷ rider-hours; % vs the median team.' }));
+        ], gain, { caption: 'Team speed = all rider kilometres divided by rider hours. % = compared with the median team.' }));
       }
       if (!spdChart) spdChart = chart(spdBox, (tk) => {
         const isR = spdMode === 'riders';
@@ -1017,9 +1072,9 @@
   /* =================== jerseys: E4 + official =================== */
   renderers.jerseys = (root) => {
     add(root, h('div', { class: 'view-head' }, h('div', null,
-      h('p', { class: 'eyebrow', text: 'Jersey markets' }),
+      h('p', { class: 'eyebrow', text: 'Jersey bets' }),
       h('h1', { text: 'Yellow, green, polka-dot, white' }),
-      h('p', { class: 'lede', text: 'The official top 10 of every classification, then two views our data adds: the young-rider race under different age rules, and a mountains-only standing that shows who climbs better than their overall place suggests.' }))));
+      h('p', { class: 'lede', text: 'This tab answers: how do the four jersey competitions compare? Yellow = lowest total time, green = most points, polka dot = best climber, white = best young rider (born 2000 or later). First the official top 10 of each, then two extra views from our data: young riders under different age rules, and a mountains-only standing.' }))));
 
     const off = (c) => E.official.filter((o) => o.c === c).sort((a, b) => a.rank - b.rank);
     const op = panel({ title: 'Official final classifications', fn: [['3b', 'Classification comparison']], sub: 'Top 10 of each classification after stage 21.' });
@@ -1070,7 +1125,7 @@
           { label: 'Rider', render: (y) => riderEl(y.bib) },
           { label: 'Age', n: true, render: (y) => String(R(y.bib).age) },
           { label: 'Overall', n: true, render: (y) => ordinal(y.gcRank) },
-          { label: 'Mountains only', n: true, render: (y) => (R(y.bib).mountainRank ? ordinal(R(y.bib).mountainRank) : '–') },
+          { label: 'Mountains only', n: true, render: (y) => (R(y.bib).mountainRank ? ordinal(R(y.bib).mountainRank) : '-') },
           { label: 'Gap', n: true, render: (y) => (y.youngRank === 1 ? fmtTime(y.total) : fmtGap(y.gap)) },
         ], yl.slice(0, 12), { caption: 'Young-rider standings are the overall standings filtered to eligible riders. Times are race-data totals (official totals are about an hour shorter after the stage-21 neutralisation); gaps are official.' }));
     }
@@ -1107,7 +1162,7 @@
     const ppBox = chartBox('tall');
     const w0 = pTop[0], fin0 = bySprint[bySprint.length - 1];
     add(pp.body, legend([{ color: 'var(--rule-strong)', label: 'Stage finishes (race data)' }, { color: 'var(--green)', label: 'Intermediate sprints' }]), ppBox,
-      h('p', { class: 'verdict' }, `${R(w0.bib).short} won green with ${w0.points} points, ${Math.round(shareOf(w0) * 100)}% of them at intermediate sprints. ${R(bySprint[0].bib).short} took ${Math.round(shareOf(bySprint[0]) * 100)}% of his there; ${R(fin0.bib).short} scored ${shareOf(fin0) === 0 ? 'all' : `${Math.round((1 - shareOf(fin0)) * 100)}%`} of his at stage finishes. For the green market, look for riders who also chase points mid-stage, not only stage winners.`));
+      h('p', { class: 'verdict' }, `${R(w0.bib).short} won green with ${w0.points} points, ${Math.round(shareOf(w0) * 100)}% of them at intermediate sprints. ${R(bySprint[0].bib).short} took ${Math.round(shareOf(bySprint[0]) * 100)}% of his there; ${R(fin0.bib).short} scored ${shareOf(fin0) === 0 ? 'all' : `${Math.round((1 - shareOf(fin0)) * 100)}%`} of his at stage finishes. Green is won at intermediate sprints as well as at stage finishes.`));
     root.appendChild(pp.el);
     chart(ppBox, (t) => {
       const rows = pTop.slice().reverse();
@@ -1127,18 +1182,18 @@
       { label: 'Pos', render: (o) => String(o.rank), cls: 'pos' },
       { label: 'Rider', render: (o) => riderEl(o.bib, { bib: false }) },
       { label: 'Points', n: true, render: (o) => String(o.points) },
-      { label: 'Mtn only', n: true, render: (o) => (R(o.bib).mountainRank ? ordinal(R(o.bib).mountainRank) : '–') },
+      { label: 'Mtn only', n: true, render: (o) => (R(o.bib).mountainRank ? ordinal(R(o.bib).mountainRank) : '-') },
       { label: 'Mtn podiums', n: true, render: (o) => String(R(o.bib).terrain.mountain ? R(o.bib).terrain.mountain.podiums : 0) },
-    ], E.published.kom.slice(0, 15)), h('p', { class: 'note', text: `Climb points are not in the race data, so this market can only be read through mountain-stage results. Riders who hunt climb points in breakaways (Martinez) rank low on time. Full standings: ${E.published.kom.length} riders scored mountain points, ${E.published.points.length} scored green-jersey points.` }));
+    ], E.published.kom.slice(0, 15)), h('p', { class: 'note', text: `Climb points are not in the race data, so the polka-dot jersey can only be read here through mountain-stage results. Riders who hunt climb points in breakaways (Martinez) rank low on time. Full standings: ${E.published.kom.length} riders scored mountain points, ${E.published.points.length} scored green-jersey points.` }));
     root.appendChild(kp.el);
   };
 
   /* =================== form & risk: E12 =================== */
   renderers.form = (root) => {
     add(root, h('div', { class: 'view-head' }, h('div', null,
-      h('p', { class: 'eyebrow', text: 'Top-10 and each-way markets · risk' }),
+      h('p', { class: 'eyebrow', text: 'Top 10 finishes · reliability' }),
       h('h1', { text: 'Who keeps finishing near the front' }),
-      h('p', { class: 'lede', text: 'Consistency is what pays in top-10 and each-way markets. This view also shows who faded in the third week and how often riders never made it to Paris.' }))));
+      h('p', { class: 'lede', text: 'This tab answers: who keeps finishing near the front, and who might not finish at all? Steady riders matter for questions like "will this rider finish in the top 10?", not only "will they win?". You can also see who faded in week 3 and who left the race.' }))));
 
     const cp = panel({ title: 'Consistency near the front', fn: [['E12', 'Consistency near the front']], sub: 'Riders with the most top-10 stage finishes. Click a bar to list the stages behind the count.' });
     let code = 'all', selBib = null;
@@ -1166,7 +1221,7 @@
       const r = R(e.bib);
       add(cpDetail,
         h('h3', null, riderEl(e.bib)),
-        h('div', { class: 'tiles' }, tile('Top-10 finishes', `${e.top10s}/${e.starts}`, `${pct(e.rate)} strike rate`, true), tile('Podiums', String(e.podiums), `${e.wins} win${e.wins === 1 ? '' : 's'}`, true), tile('Average placing', e.avgRank.toFixed(1), r.archetype, true)),
+        h('div', { class: 'tiles' }, tile('Top-10 finishes', `${e.top10s}/${e.starts}`, `${pct(e.rate)} of stages ridden`, true), tile('Podiums', String(e.podiums), `${e.wins} win${e.wins === 1 ? '' : 's'}`, true), tile('Average placing', e.avgRank.toFixed(1), r.archetype, true)),
         tbl([
           { label: 'Stage', render: (x) => h('button', { class: 'rlink', type: 'button', dataset: { gotoStage: String(x.stage) }, text: String(x.stage) }) },
           { label: 'Terrain', render: (x) => terrEl(x.code) },
@@ -1200,7 +1255,7 @@
         return Object.assign(base(tk), {
           grid: { left: 8, right: 16, top: 52, bottom: 6, containLabel: true },
           legend: { show: true, top: 0, left: 0, icon: 'roundRect', itemWidth: 14, itemHeight: 3, textStyle: { color: tk.ink2 } },
-          xAxis: axisCat(tk, ['Week 1 (stages 1–9)', 'Week 2 (10–15)', 'Week 3 (16–21)']),
+          xAxis: axisCat(tk, ['Week 1 (stages 1 to 9)', 'Week 2 (10 to 15)', 'Week 3 (16 to 21)']),
           yAxis: axisY(tk, { inverse: true, min: 0, name: 'avg minutes lost to stage winner', nameLocation: 'start' }),
           tooltip: Object.assign(base(tk).tooltip, { trigger: 'axis', formatter: (ps) => tipHead(ps[0].axisValue) + ps.filter((p) => p.value != null).sort((a, b) => a.value - b.value).map((p) => tipRow(p.color, p.seriesName, `${p.value.toFixed(2)} min`)).join('') }),
           series: wfPick.map((b, i) => ({ type: 'line', name: chipLabel(b), symbolSize: 8, lineStyle: { width: 2, color: tk.s[i] }, itemStyle: { color: tk.s[i], borderColor: tk.sheet, borderWidth: 2 },
@@ -1249,9 +1304,9 @@
   /* =================== teams: E3, E14 =================== */
   renderers.teams = (root) => {
     add(root, h('div', { class: 'view-head' }, h('div', null,
-      h('p', { class: 'eyebrow', text: 'Team markets' }),
+      h('p', { class: 'eyebrow', text: 'Team bets' }),
       h('h1', { text: 'Which squads deliver' }),
-      h('p', { class: 'lede', text: 'The team classification adds each team’s three best times on every stage. Roll it up, then open a team to see which riders carried the load.' }))));
+      h('p', { class: 'lede', text: 'This tab answers: which teams were strongest, and which riders carried them? The team classification adds each team\'s three best times on every stage. Start from the team totals, then open a team to see its riders.' }))));
 
     const tc = panel({ title: 'Team classification', span: 5, sub: 'Gap to the winning team. Official method: the three best finish times per team on each stage, without bonuses or penalties.' });
     let variant = 'raw';
@@ -1272,7 +1327,7 @@
     }, { onClick: (p) => { const list = (variant === 'raw' ? E.TEAMCLASS : E.TEAMCLASS_ADJ).list.slice().reverse(); S.team = list[p.dataIndex].team; teamSel.value = S.team; redraw(tcChart); drawTeam(); tb.el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
 
     // E3
-    const tb = panel({ title: 'Team burden and contribution', fn: [['E3', 'Team burden and contribution']], sub: 'Roll the team down to its riders: who supplied the three counted times, stage by stage.' });
+    const tb = panel({ title: 'Team burden and contribution', fn: [['E3', 'Team burden and contribution']], sub: 'Roll the team down to its riders: who supplied the three counted times, stage by stage. The brief asks for total adjusted time: this panel uses the official rule (three best times per stage), while the Official / With bonuses switch above and the workload figure below show the other totals.' });
     const teamSel = selectEl('team-sel', [{ options: E.TEAMCLASS.list.map((x) => ({ value: x.team, label: `${ordinal(x.rank)} · ${teamShort(x.team)}` })) }], S.team, (v) => { S.team = v; redraw(tcChart); drawTeam(); }, 'Team');
     tb.head.appendChild(h('div', { class: 'panel-tools' }, teamSel));
     const tbBody = h('div', { style: 'display:flex;flex-direction:column;gap:12px;min-width:0' });
@@ -1292,7 +1347,7 @@
           tile('Team classification', ordinal(tm.classRank), tm.classRank === 1 ? fmtTime(tm.classTotal) : `${fmtGap(tm.classGap)} behind`, true),
           tile('Stage wins', String(tm.wins), `${tm.podiums} podiums · ${tm.top10s} top-10s`, true),
           tile('Riders in Paris', `${tm.finished} of ${tm.riders}`, tm.exits ? `${tm.exits} left the race` : 'nobody left', true),
-          tile('Best rider overall', tm.bestGcBib ? R(tm.bestGcBib).short : '–', tm.bestGcRank ? ordinal(tm.bestGcRank) : '', true)),
+          tile('Best rider overall', tm.bestGcBib ? R(tm.bestGcBib).short : '-', tm.bestGcRank ? ordinal(tm.bestGcRank) : '', true)),
         h('h3', { text: 'Whose times counted' }),
         h('p', { class: 'note', text: `Cells show each rider’s place on every stage. Outlined cells are the stages where that rider was one of the team’s three counted times. Total workload of the team’s finishers: ${fmtTime(tm.workload)}.` }),
         h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl heat' },
@@ -1308,7 +1363,7 @@
                   style: `background:${fill(bk)};color:${ink(bk)};padding:4px 3px;font-size:12px;${cell.counted ? `outline:2px solid ${t.ink};outline-offset:-2px;` : ''}`, text: cell.rank ? String(cell.rank) : '·' });
               }));
           })))),
-        legend([{ color: t.seq[4], label: 'Podium' }, { color: t.seq[3], label: '4th–10th' }, { color: t.seq[2], label: '11th–30th' }, { color: t.seq[1], label: '31st–80th' }, { color: t.seq[0], label: '81st+' }]));
+        legend([{ color: t.seq[4], label: 'Podium' }, { color: t.seq[3], label: '4th to 10th' }, { color: t.seq[2], label: '11th to 30th' }, { color: t.seq[1], label: '31st to 80th' }, { color: t.seq[0], label: '81st+' }]));
     }
     drawTeam();
 
@@ -1352,9 +1407,9 @@
   /* =================== head-to-head =================== */
   renderers.h2h = (root) => {
     add(root, h('div', { class: 'view-head' }, h('div', null,
-      h('p', { class: 'eyebrow', text: 'Head-to-head markets' }),
+      h('p', { class: 'eyebrow', text: 'Head-to-head bets' }),
       h('h1', { text: 'Pick two, settle the bet' }),
-      h('p', { class: 'lede', text: 'Compare any two riders or any two teams across every stage they shared in 2025.' })),
+      h('p', { class: 'lede', text: 'This tab answers: in a straight match-up, who finished ahead more often? A head-to-head bet asks which of two riders (or teams) does better. Pick any two and compare every stage they both rode in 2025.' })),
       seg([{ value: 'riders', label: 'Riders' }, { value: 'teams', label: 'Teams' }], S.h2hMode, (v) => { S.h2hMode = v; mode(); }, 'Compare riders or teams')));
     const rWrap = h('div', { class: 'subview' });
     const tWrap = h('div', { class: 'subview' });
@@ -1391,7 +1446,7 @@
       else if (!hh.common) verdict = `${A.short} and ${B.short} never finished the same stage.`;
       else {
         const lead = hh.aAhead > hh.bAhead ? A : hh.bAhead > hh.aAhead ? B : null;
-        const rec = `${A.short} ${hh.aAhead}–${hh.bAhead} ${B.short}`;
+        const rec = `${A.short} ${hh.aAhead}-${hh.bAhead} ${B.short}`;
         const gcTxt = hh.finalGap == null ? (A.finished ? `${B.short} did not finish the race.` : B.finished ? `${A.short} did not finish the race.` : 'Neither finished the race.')
           : `Overall, ${hh.finalGap > 0 ? A.short : B.short} finished ${fmtGap(Math.abs(hh.finalGap)).slice(1)} ahead.`;
         verdict = [`Stage record: `, h('span', { class: lead === B ? 'b' : 'a', text: rec }), ` over ${hh.common} shared stage${hh.common === 1 ? '' : 's'}${lead ? `; ${lead.short} finished ahead more often` : ''}. ${gcTxt}`];
@@ -1412,9 +1467,9 @@
         vsRow('Stage wins', String(A.wins), String(B.wins), cmp(A.wins, B.wins)),
         vsRow('Podiums', String(A.podiums), String(B.podiums), cmp(A.podiums, B.podiums)),
         vsRow('Top-10s', `${A.top10s}/${A.starts}`, `${B.top10s}/${B.starts}`, cmp(A.top10s, B.top10s)),
-        vsRow('Average placing', ar(A) == null ? '–' : ar(A).toFixed(1), ar(B) == null ? '–' : ar(B).toFixed(1), cmp(ar(A), ar(B), true)),
+        vsRow('Average placing', ar(A) == null ? '-' : ar(A).toFixed(1), ar(B) == null ? '-' : ar(B).toFixed(1), cmp(ar(A), ar(B), true)),
         vsRow('Finish points', String(A.points), String(B.points), cmp(A.points, B.points)),
-        vsRow('Mountains only', A.mountainRank ? ordinal(A.mountainRank) : '–', B.mountainRank ? ordinal(B.mountainRank) : '–', cmp(A.mountainRank, B.mountainRank, true)),
+        vsRow('Mountains only', A.mountainRank ? ordinal(A.mountainRank) : '-', B.mountainRank ? ordinal(B.mountainRank) : '-', cmp(A.mountainRank, B.mountainRank, true)),
         vsRow('Bonus seconds', `${A.bonuses} s`, `${B.bonuses} s`, cmp(A.bonuses, B.bonuses)),
         vsRow('Age at start', String(A.age), String(B.age)));
       add(st.body, grid, h('p', { class: 'note', text: '◀ ▶ marks the better figure.' }));
@@ -1486,12 +1541,12 @@
       const days = hh.rows.filter((r) => r.dayDiff < 0).length, daysB = hh.rows.filter((r) => r.dayDiff > 0).length;
       add(pick.body, h('p', { class: 'verdict' }, S.ta === S.tb ? 'Pick two different teams.' : [
         'Team classification: ', h('span', { class: hh.finalDiff <= 0 ? 'a' : 'b', text: teamShort(hh.finalDiff <= 0 ? A.name : B.name) }),
-        ` finished ${fmtGap(Math.abs(hh.finalDiff)).slice(1)} ahead. Daily best-three times: ${teamShort(A.name)} faster on ${days} stages, ${teamShort(B.name)} on ${daysB}. Stage wins ${A.wins}–${B.wins}.`]));
+        ` finished ${fmtGap(Math.abs(hh.finalDiff)).slice(1)} ahead. Daily best-three times: ${teamShort(A.name)} faster on ${days} stages, ${teamShort(B.name)} on ${daysB}. Stage wins ${A.wins}-${B.wins}.`]));
       tWrap.appendChild(pick.el);
       if (S.ta === S.tb) return;
 
       const st = panel({ title: 'Side by side', span: 5 });
-      const best = (tm) => (tm.bestGcBib ? `${R(tm.bestGcBib).short} (${ordinal(tm.bestGcRank)})` : '–');
+      const best = (tm) => (tm.bestGcBib ? `${R(tm.bestGcBib).short} (${ordinal(tm.bestGcRank)})` : '-');
       add(st.body, h('div', { class: 'vs-grid' },
         h('div', { class: 'va', text: teamShort(A.name) }), h('div', { class: 'lab', text: 'vs' }), h('div', { class: 'vb', text: teamShort(B.name) }),
         vsRow('Team classification', ordinal(A.classRank), ordinal(B.classRank), cmp(A.classRank, B.classRank, true)),
@@ -1536,8 +1591,8 @@
           { label: 'Rider', render: (r) => riderEl(r.bib, { team: false }) },
           { label: 'Type', render: (r) => r.archetype },
           { label: 'Overall', n: true, render: (r) => (r.gcRank ? ordinal(r.gcRank) : r.status) },
-          { label: 'Wins', n: true, render: (r) => String(r.wins || '–') },
-          { label: 'Top-10s', n: true, render: (r) => String(r.top10s || '–') },
+          { label: 'Wins', n: true, render: (r) => String(r.wins || '-') },
+          { label: 'Top-10s', n: true, render: (r) => String(r.top10s || '-') },
         ], E.teamRiders.get(tm.name).slice().sort((a, b) => (a.gcRank || 999) - (b.gcRank || 999))));
         tWrap.appendChild(rp.el);
       });
@@ -1548,9 +1603,9 @@
   /* =================== nations: E8, E9 =================== */
   renderers.nations = (root) => {
     add(root, h('div', { class: 'view-head' }, h('div', null,
-      h('p', { class: 'eyebrow', text: 'Nationality markets' }),
+      h('p', { class: 'eyebrow', text: 'Nations' }),
       h('h1', { text: 'Which countries supply the winners' }),
-      h('p', { class: 'lede', text: 'Participation by nation (riders by nationality, teams by registration) and what each nation’s riders achieved. Click a nation to list its riders.' }))));
+      h('p', { class: 'lede', text: 'This tab answers: which countries sent the most riders and teams, and whose riders did best? Riders count by nationality, teams by the country they are registered in. Click a country to list its riders and teams.' }))));
     const ns = E.nations.filter((n) => n.riders > 0);
     const most = ns.slice().sort((a, b) => b.riders - a.riders)[0];
     const teamCountries = E.nations.filter((n) => n.teams > 0);
@@ -1574,7 +1629,7 @@
     let meas = 'riders';
     const pool = E.nations.filter((n) => n.riders > 0 || n.teams > 0);
     const valOf = (n) => MEAS[meas].val(n);
-    const mp = panel({ title: 'Where the riders and teams come from', fn: [['E8', 'Participation by nation'], ['E9', 'National outcomes']], span: 7, sub: 'Shade the map by participation or by results. Select a country to drill down to its riders below.' });
+    const mp = panel({ title: 'Where the riders and teams come from', fn: [['E8', 'Participation by nation']], fnAlso: [['E9', 'National outcomes']], span: 7, sub: 'Shade the map by participation or by results. Select a country to drill down to its riders below.' });
     mp.head.appendChild(h('div', { class: 'panel-tools' }, seg(Object.entries(MEAS).map(([k, m]) => ({ value: k, label: m.label })), meas, (v) => { meas = v; drawMeas(); }, 'Measure')));
     const mapBox = h('div', { class: 'chart nation-map', role: 'img', 'aria-label': 'Map of Europe shaded by the selected measure' });
     const tilesBox = h('div', { class: 'map-tiles' });
@@ -1623,7 +1678,7 @@
       pool.filter((n) => !GEO.euNames[n.code]).sort((a, b) => (valOf(b) ?? -1) - (valOf(a) ?? -1) || a.name.localeCompare(b.name)).forEach((n) => {
         const v = valOf(n), fill = v ? seqColor(t, 0.12 + 0.88 * (v / mx)) : t.sheet;
         tilesBox.appendChild(h('button', { type: 'button', class: 'map-tile', 'aria-pressed': String(n.code === selNation), style: `background:${fill};color:${v ? onColor(fill) : 'var(--ink-2)'}`, on: { click: () => pickNation(n.code) } },
-          h('b', { text: v ? MEAS[meas].fmt(v) : '–' }), n.name));
+          h('b', { text: v ? MEAS[meas].fmt(v) : '-' }), n.name));
       });
     }
     function drawMeas() {
@@ -1645,10 +1700,10 @@
         { label: 'Nation', render: (n) => n.name },
         { label: 'Riders', n: true, render: (n) => String(n.riders) },
         { label: 'Finished', n: true, render: (n) => String(n.finished) },
-        { label: 'Stage wins', n: true, render: (n) => String(n.wins || '–') },
-        { label: 'Podiums', n: true, render: (n) => String(n.podiums || '–') },
-        { label: 'Top-10s', n: true, render: (n) => String(n.top10s || '–') },
-        { label: 'Best overall', render: (n) => (n.bestGcBib ? [ordinal(n.bestGcRank), ' ', h('span', { class: 'team-s', text: R(n.bestGcBib).short })] : '–') },
+        { label: 'Stage wins', n: true, render: (n) => String(n.wins || '-') },
+        { label: 'Podiums', n: true, render: (n) => String(n.podiums || '-') },
+        { label: 'Top-10s', n: true, render: (n) => String(n.top10s || '-') },
+        { label: 'Best overall', render: (n) => (n.bestGcBib ? [ordinal(n.bestGcRank), ' ', h('span', { class: 'team-s', text: R(n.bestGcBib).short })] : '-') },
       ], E.nations.filter((n) => n.riders > 0), { onRow: (n) => pickNation(n.code), rowClass: (n) => (n.code === selNation ? 'sel' : ''), scroll: true }));
     }
     function drawDrill() {
@@ -1661,9 +1716,9 @@
         n.stagesWon.length ? h('p', { class: 'note' }, h('b', { text: 'Stages won: ' }), n.stagesWon.map((x, i) => [i ? ', ' : '', h('button', { class: 'rlink', type: 'button', dataset: { gotoStage: String(x.stage) }, text: `stage ${x.stage}` }), ` (${R(x.bib).short})`])) : null,
         tbl([
           { label: 'Rider', render: (r) => riderEl(r.bib) },
-          { label: 'Overall', n: true, render: (r) => (r.gcRank ? ordinal(r.gcRank) : r.starts ? `left s${r.exitStage}` : '–') },
-          { label: 'Wins', n: true, render: (r) => String(r.wins || '–') },
-          { label: 'Best stage', n: true, render: (r) => (r.starts ? ordinal(Math.min(...E.byRider.get(r.bib).map((x) => x.rank))) : '–') },
+          { label: 'Overall', n: true, render: (r) => (r.gcRank ? ordinal(r.gcRank) : r.starts ? `left s${r.exitStage}` : '-') },
+          { label: 'Wins', n: true, render: (r) => String(r.wins || '-') },
+          { label: 'Best stage', n: true, render: (r) => (r.starts ? ordinal(Math.min(...E.byRider.get(r.bib).map((x) => x.rank))) : '-') },
         ], rs, { scroll: true }));
     }
     drawOut(); drawDrill();
@@ -1674,54 +1729,57 @@
     add(root, h('div', { class: 'view-head' }, h('div', null,
       h('p', { class: 'eyebrow', text: 'Method and sources' }),
       h('h1', { text: 'How this form guide is built' }),
-      h('p', { class: 'lede', text: 'Every number on these pages is computed in your browser from the 2025 race data, except the official points and mountains standings, which come from published results.' }))));
-    const fc = panel({ title: 'Brief functions covered', span: 7, sub: '13 of the 15 suggested OLAP narratives, chosen for the betting audience, plus rider and team head-to-heads.' });
+      h('p', { class: 'lede', text: 'This tab answers: where do the numbers come from, and which of the 15 brief functions are built? Every number is computed in your browser from the 2025 race data, except the official points and mountains standings, which come from published results.' }))));
+    const fc = panel({ title: 'Brief functions covered', span: 7, sub: 'All 15 of the lecturer\'s demonstration prompts (E1 to E15) are built in. The Function map tab takes you straight to each one.' });
+    add(fc.body, h('p', { class: 'verdict' }, 'Want to see a function working? Open the ', h('a', { href: '#functions', text: 'Function map' }), ' and press any code from E1 to E15: it opens the right tab and highlights the panel.'));
     const F = [
-      ['E1', 'GC leaderboard with contextual descent', 'Outright', '#outright', 'Final standings → click a rider → the stage that changed their race (vs the final top-10 median) → click through to that stage.'],
-      ['E2', 'A stage in focus', 'Stages', '#stages', 'Pick any stage: winner, times, gaps, teams, nations, distance, terrain; reframe by team.'],
-      ['E3', 'Team burden and contribution', 'Teams', '#teams', 'Team classification roll-up → per-rider counted stages and stage-by-stage profile.'],
-      ['E4', 'Parallel classifications', 'Jerseys', '#jerseys', 'Overall vs young-rider rank with an age filter at race start; mountains-only standing and where it diverges.'],
-      ['E5', 'Mountain contours', 'Terrain', '#terrain', 'Mountain podiums and mean gap to the stage winner → daily traces.'],
-      ['E6', 'Speed as a simple ratio', 'Terrain', '#terrain', 'Distance ÷ time by terrain for riders and teams, indexed to the median; who gains when the road climbs.'],
-      ['E7', 'Bonuses, penalties, counterfactuals', 'Outright', '#outright', 'Replay the standings to any stage without bonuses and/or penalties; moves into and out of the top 10.'],
-      ['E8', 'Participation by nation', 'Nations', '#nations', 'Map and ranked bars of riders per nationality and teams per registration country; drill to riders and teams.'],
-      ['E9', 'National outcomes', 'Nations', '#nations', 'Best overall place, wins, podiums and top-10s per nation; drill to riders and stages.'],
-      ['E10', 'Temporal GC storyline', 'Outright', '#outright', 'Minutes behind the leader after each stage, mountain and time-trial stages marked, yellow-jersey ribbon.'],
-      ['E11', 'Against the clock', 'Stages', '#stages', 'Time-trial catalogue: date, distance, winner, speed, top five.'],
-      ['E12', 'Consistency near the front', 'Form & risk', '#form', 'Most top-10 finishes, filter by terrain, list of contributing stages.'],
-      ['E14', 'Top-ten intensity by team', 'Teams', '#teams', 'Team × terrain matrix of top-10 finishes, drill to stages and riders.'],
-      ['E13', 'Depth of squads', 'not used', null, 'Every team started with exactly 8 riders, so squad size does not separate teams; team depth is covered by E3 and E14 instead.'],
-      ['E15', 'The long day', 'not used', null, 'The longest stage is trivia rather than a betting signal; stage distance is shown in the stage view and road book.'],
+      ['E1', 'GC leaderboard with contextual descent', 'Overall winner', '#outright', 'Final standings. Click a rider to see the day they gained or lost the most time on the top ten, then click through to that stage.'],
+      ['E2', 'A stage in focus', 'Stages', '#stages', 'Pick any stage: winner, finish and adjusted times, teams, nations, distance and terrain. Click a team to see only its riders.'],
+      ['E3', 'Team burden and contribution', 'Teams', '#teams', 'Team totals, then the riders whose times counted, stage by stage.'],
+      ['E4', 'Parallel classifications', 'Jerseys', '#jerseys', 'Overall place next to young rider place (with an age filter at race start) and a mountains-only standing.'],
+      ['E5', 'Mountain contours', 'Terrain', '#terrain', 'Podiums on mountain stages and average gap to the stage winner, with the daily gaps behind them.'],
+      ['E6', 'Speed as a simple ratio', 'Terrain', '#terrain', 'Distance divided by time on each terrain, for riders and teams, compared with the median.'],
+      ['E7', 'Bonuses, penalties, counterfactuals', 'Overall winner', '#outright', 'Bonus and penalty seconds for every rider, then a replay of the standings with them switched off.'],
+      ['E8', 'Participation by nation', 'Nations', '#nations', 'Riders and teams per country on a map and a ranked list. Pick a country to list its riders and teams.'],
+      ['E9', 'National outcomes', 'Nations', '#nations', 'Best overall place, stage wins and podiums per country, with links to the riders.'],
+      ['E10', 'Temporal GC storyline', 'Overall winner', '#outright', 'Minutes behind the leader after each stage, mountain stages shaded, yellow jersey changes marked, rider and team filters.'],
+      ['E11', 'Against the clock', 'Stages', '#stages', 'The time trials: date, distance, winner, speed and top five.'],
+      ['E12', 'Consistency near the front', 'Form and risk', '#form', 'Riders with the most top-10 stage finishes, and the stages behind each count.'],
+      ['E13', 'Depth of squads', 'Teams', '#teams', 'Distinct riders per team, with a way in to each team\'s full rider list and countries.'],
+      ['E14', 'Top-ten intensity by team', 'Teams', '#teams', 'Top-10 finishes per team and terrain, with links to the stages and riders.'],
+      ['E15', 'The long day', 'Stages', '#stages', 'Stages sorted by distance, the longest route in detail and its leading finishers with adjusted times.'],
     ];
+    // Each code and tab link jumps straight to the panel that implements it and flashes it.
+    const jumpTo = (f) => (e) => { e.preventDefault(); API.goToFunction(f[3].slice(1), f[0]); };
     add(fc.body, tbl([
-      { label: 'Code', render: (f) => h('span', { class: 'fn', style: 'margin:0', text: f[0] }) },
+      { label: 'Code', render: (f) => h('button', { class: 'fn fn-jump', type: 'button', style: 'margin:0', title: `Show ${f[0]} on the ${f[2]} tab`, 'aria-label': `Show ${f[0]}, ${f[1]}, on the ${f[2]} tab`, text: f[0], on: { click: jumpTo(f) } }) },
       { label: 'Function', render: (f) => h('b', { text: f[1] }) },
-      { label: 'Where', render: (f) => (f[3] ? h('a', { href: f[3], text: f[2] }) : h('span', { class: 'pill', text: f[2] })) },
+      { label: 'Where', render: (f) => h('a', { href: f[3], title: `Open the ${f[2]} tab at ${f[0]}`, text: `${f[2]} ›`, on: { click: jumpTo(f) } }) },
       { label: 'What it does', render: (f) => f[4] },
-    ], F));
+    ], F, { caption: 'Press a code or a tab name to jump to that panel. It flashes yellow when you arrive.' }));
     root.appendChild(fc.el);
 
-    const req = panel({ title: 'Task 3 requirements', span: 5 });
+    const req = panel({ title: 'What the brief asks for (Task 3, a to e)', span: 5 });
     add(req.body, h('dl', { class: 'kv' },
-      h('dt', { text: 'a. Drill-down' }), h('dd', { text: 'Stages: terrain → stage → rider explorer; overall → rider → stage (E1); team → rider → stage (E3, E14); nation → rider (E9); rider profile from any name.' }),
-      h('dt', { text: 'b. Classifications' }), h('dd', { text: 'Jerseys: official top 10 for overall, points, mountains, young rider and teams; full published points and mountains standings; parallel ranks (E4); green points split into stage finishes and intermediate sprints.' }),
-      h('dt', { text: 'c. Cumulative times' }), h('dd', { text: 'Outright: cumulative time after every stage (E10); teams: team classification and running team time; head-to-head running gaps.' }),
-      h('dt', { text: 'd. Countries' }), h('dd', { text: 'Nations: map and ranked bars of riders per nationality, teams per country, stage wins and top-10 rate (E8, E9); outcomes table and drill-down to riders. Stages: route map of all 21 stages.' }),
-      h('dt', { text: 'e. Design' }), h('dd', { text: 'One colour per terrain with matching icons, jersey colours for classifications, light and dark themes, phone layout.' })));
+      h('dt', { text: 'a. Drill down' }), h('dd', { text: 'Go from a total to the detail behind it. Stages tab: terrain, then stage, then rider. Overall winner tab: rider, then their key stage. Teams tab: team, then rider, then stage. Nations tab: country, then riders. Click any rider name for a profile.' }),
+      h('dt', { text: 'b. Compare the jerseys' }), h('dd', { text: 'Jerseys tab: the top 10 of the overall (yellow), points (green), mountains (polka dot) and young rider (white) standings side by side, plus each rider\'s places in all of them.' }),
+      h('dt', { text: 'c. Running race times' }), h('dd', { text: 'Overall winner tab: each rider\'s total time after every stage. Teams tab: team totals and running team time. Head-to-head tab: the running gap between two riders or two teams.' }),
+      h('dt', { text: 'd. Countries' }), h('dd', { text: 'Nations tab: how many riders and how many teams come from each country, on a map and in a ranked list, with results per country.' }),
+      h('dt', { text: 'e. Clear design' }), h('dd', { text: 'One colour and icon per terrain, jersey colours for the standings, a plain sentence at the top of every tab, light and dark themes and a phone layout.' })));
     root.appendChild(req.el);
 
     const df = panel({ title: 'Definitions', span: 7 });
     add(df.body, h('div', { class: 'prose' },
       h('ul', null,
-        h('li', null, h('b', { text: 'Adjusted time' }), ' = finish time − time bonus + time penalty. Overall standings add adjusted time over the stages and rank only riders who finished every stage so far; ties are broken by the sum of stage placings, as in the UCI rules.'),
+        h('li', null, h('b', { text: 'Adjusted time' }), ' = finish time minus time bonus plus time penalty. Overall standings add adjusted time over the stages and rank only riders who finished every stage so far; ties are broken by the sum of stage placings, as in the UCI rules.'),
         h('li', null, h('b', { text: 'Placings vs gaps' }), ': placings use the order riders crossed the line; gaps use the credited time. Riders in one bunch get the same time, so “s.t.” means same time as the winner.'),
         h('li', null, h('b', { text: 'Bunch finish' }), `: at least ${E.BUNCH_MIN} riders on the winner’s time.`),
         h('li', null, h('b', { text: 'Pivotal day (E1)' }), ': the stage with the largest difference between a rider’s adjusted time and the median adjusted time of the final top 10 that day.'),
         h('li', null, h('b', { text: 'Young rider' }), ': born on or after 1 January 2000 (2025 regulations, art. 24d); the age slider applies an age-at-race-start rule instead.'),
         h('li', null, h('b', { text: 'Team classification' }), ': the three best finish times per team on each stage, summed, without bonuses or penalties (art. 24e). Our totals equal the official ones.'),
         h('li', null, h('b', { text: 'Finish points' }), ': the official 2025 stage-finish scale for each stage (50, 30 or 20 points for the winner). Intermediate sprints are not in the data.'),
-        h('li', null, h('b', { text: 'Speed index (E6)' }), ': total distance × 3,600 ÷ total time on a terrain, divided by the median finisher (riders) or median team (teams).'),
-        h('li', null, h('b', { text: 'Rider types' }), ': first matching rule. Fewer than 5 starts → too few; final top 10 → GC contender; ≥2 flat top-10s+wins and more flat top-10s than hilly and mountain combined → sprinter; strong time-trial percentile → time-trialist; mountain top-10s → climber; hilly top-10s → puncheur; otherwise support rider.'))));
+        h('li', null, h('b', { text: 'Speed index (E6)' }), ': total distance divided by total time on a terrain (in km/h), divided by the median finisher (riders) or median team (teams).'),
+        h('li', null, h('b', { text: 'Rider types' }), ': the first rule that matches. Fewer than 5 starts: too few. Final top 10: GC contender (GC = general classification, the overall standings). Flat top-10s plus flat wins of at least 2, and more flat top-10s than hilly and mountain together: sprinter. Strong time-trial results: time-trialist. Mountain top-10s: climber. Hilly top-10s: puncheur (a rider for short, steep climbs). Otherwise: support rider.'))));
     root.appendChild(df.el);
 
     const cv = panel({ title: 'Caveats', span: 5 });
@@ -1731,7 +1789,7 @@
       h('li', { text: 'No intermediate-sprint or climb points in the data, so the green and polka-dot jerseys use published standings. The full lists come from CyclingDB (collected by our teammate Jay); their top 10s are identical to the official results.' }),
       h('li', { text: 'Aleksandr Vlasov has no nationality in the source data and is listed as “Not specified”.' }),
       h('li', { text: 'Filippo Ganna and Stefan Bissegger left on stage 1 and have no results.' }),
-      h('li', null, h('b', { text: 'Responsible gambling: ' }), 'this is a university analytics project. Past results do not guarantee future ones. Only bet what you can afford to lose.'))));
+      h('li', null, h('b', { text: 'No money: ' }), 'this site has no money, stakes or bets. It is a university analytics project that summarises one finished race, and past results do not guarantee future ones.'))));
     root.appendChild(cv.el);
 
     const src = panel({ title: 'Data sources' });
@@ -1766,11 +1824,11 @@
         h('h2', { text: r.name }),
         h('div', { class: 'note' }, `${teamShort(r.team)} · ${r.countryName} · ${r.age} at the start · `, h('span', { class: 'pill', text: r.archetype }), r.young ? [' ', h('span', { class: 'jersey white', title: 'Young rider' })] : null))),
       h('div', { class: 'tiles' },
-        tile('Overall', r.gcRank ? ordinal(r.gcRank) : '–', r.gcRank ? (r.gcRank === 1 ? fmtTime(r.gcTotal) : fmtGap(r.gcGap)) : r.status, true),
+        tile('Overall', r.gcRank ? ordinal(r.gcRank) : '-', r.gcRank ? (r.gcRank === 1 ? fmtTime(r.gcTotal) : fmtGap(r.gcGap)) : r.status, true),
         tile('Stage wins', String(r.wins), `${r.podiums} podiums`, true),
         tile('Top-10s', `${r.top10s}/${r.starts}`, r.starts ? `avg placing ${r.avgRank.toFixed(1)}` : 'no stages finished', true),
-        tile('Green points', r.pubPoints ? String(r.pubPoints.points) : '–', r.pubPoints ? `${ordinal(r.pubPoints.rank)} · ${r.otherPoints} from sprints` : (r.finished ? 'not classified' : 'left the race'), true),
-        tile('Mountain points', r.pubKom ? String(r.pubKom.points) : '–', r.pubKom ? `${ordinal(r.pubKom.rank)} in the mountains` : 'none scored', true)));
+        tile('Green points', r.pubPoints ? String(r.pubPoints.points) : '-', r.pubPoints ? `${ordinal(r.pubPoints.rank)} · ${r.otherPoints} from sprints` : (r.finished ? 'not classified' : 'left the race'), true),
+        tile('Mountain points', r.pubKom ? String(r.pubKom.points) : '-', r.pubKom ? `${ordinal(r.pubKom.rank)} in the mountains` : 'none scored', true)));
     if (!rows.length) { drawer.appendChild(h('p', { class: 'note', text: `${r.name} left the race on stage 1 and has no results.` })); close.focus(); return; }
     const t0 = tokens();
     const b1 = chartBox('short');
@@ -1797,15 +1855,15 @@
     const sp = E.speedProfile(bib);
     add(drawer, h('h3', { text: 'By terrain' }), tbl([
       { label: 'Terrain', render: (c) => terrEl(c) },
-      { label: 'Starts', n: true, render: (c) => (r.terrain[c] ? String(r.terrain[c].starts) : '–') },
-      { label: 'Wins', n: true, render: (c) => (r.terrain[c] ? String(r.terrain[c].wins) : '–') },
-      { label: 'Top-10s', n: true, render: (c) => (r.terrain[c] ? String(r.terrain[c].top10s) : '–') },
-      { label: 'Avg place', n: true, render: (c) => (r.terrain[c] ? r.terrain[c].avgRank.toFixed(1) : '–') },
-      { label: 'Speed vs median', n: true, render: (c) => (sp[c].index == null ? '–' : `${sp[c].index >= 1 ? '+' : ''}${((sp[c].index - 1) * 100).toFixed(1)}%`) },
+      { label: 'Starts', n: true, render: (c) => (r.terrain[c] ? String(r.terrain[c].starts) : '-') },
+      { label: 'Wins', n: true, render: (c) => (r.terrain[c] ? String(r.terrain[c].wins) : '-') },
+      { label: 'Top-10s', n: true, render: (c) => (r.terrain[c] ? String(r.terrain[c].top10s) : '-') },
+      { label: 'Avg place', n: true, render: (c) => (r.terrain[c] ? r.terrain[c].avgRank.toFixed(1) : '-') },
+      { label: 'Speed vs median', n: true, render: (c) => (sp[c].index == null ? '-' : `${sp[c].index >= 1 ? '+' : ''}${((sp[c].index - 1) * 100).toFixed(1)}%`) },
     ], TERR),
     h('div', { class: 'panel-tools' },
       h('button', { class: 'btn primary', type: 'button', text: 'Compare head-to-head', on: { click: () => { S.a = bib; if (S.b === bib) S.b = bib === 1 ? 11 : 1; S.h2hMode = 'riders'; closeRider(); go('h2h'); if (hooks.h2h) hooks.h2h(); } } }),
-      r.gcRank ? h('button', { class: 'btn', type: 'button', text: 'Where the race turned', on: { click: () => { S.outrightBib = bib; closeRider(); go('outright'); if (hooks.outright) hooks.outright(); } } }) : null));
+      r.gcRank ? h('button', { class: 'btn', type: 'button', text: 'Biggest day against the top ten', on: { click: () => { S.outrightBib = bib; closeRider(); go('outright'); if (hooks.outright) hooks.outright(); } } }) : null));
     close.focus();
   }
 
@@ -1835,12 +1893,19 @@
     if (built.has(name)) { const root = document.getElementById(`view-${name}`); fn(root, API); charts.forEach((c) => { if (root.contains(c.el)) draw(c); }); }
   };
   /** Open a tab and scroll to the panel that implements a function code such as "E7". Returns the panel or null. */
+  // Works on a tab that was never opened: the tab is drawn at once, and the scroll waits until the
+  // hashchange handler (which scrolls to the top) has run.
   API.goToFunction = (viewName, code) => {
+    const pending = location.hash !== `#${viewName}`;
     go(viewName);
+    if (pending) show(viewName);
     const root = document.getElementById(`view-${viewName}`);
     const el = [...root.querySelectorAll('[data-fn]')].find((p) => p.dataset.fn.split(' ').includes(code));
-    if (el) { el.scrollIntoView({ block: 'start', behavior: 'smooth' }); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 2200); }
-    return el || null;
+    if (!el) return null;
+    const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const jump = () => { el.scrollIntoView({ block: 'start', behavior: calm ? 'auto' : 'smooth' }); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 2200); };
+    if (pending) window.addEventListener('hashchange', () => setTimeout(jump, 0), { once: true }); else jump();
+    return el;
   };
   window.TDF_APP = API;
 

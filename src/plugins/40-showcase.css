@@ -1,0 +1,107 @@
+/* Showcase plugin: 3D podium, counting numbers, race replay, 3D race, page-wide motion.
+   Motion animates transform and opacity only, and everything that moves sits inside
+   @media (prefers-reduced-motion: no-preference), so it is off for people who ask for less motion. */
+:root { --sc-ease: cubic-bezier(0.2, 0.8, 0.2, 1); --sc-depth: 34px; }
+
+/* ---------- start tab: podium and numbers ---------- */
+.sc-hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 20px 32px; align-items: end; }
+@media (max-width: 900px) { .sc-hero { grid-template-columns: minmax(0, 1fr); } }
+.sc-scene { perspective: 1000px; perspective-origin: 50% 20%; overflow: hidden; padding: 18px 12px 0; }
+.sc-stage {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: end;
+  max-width: 560px; margin: 0 auto; transform-style: preserve-3d;
+  transform: rotateX(var(--rx, -10deg)) rotateY(var(--ry, 0deg));
+}
+.sc-col { display: flex; flex-direction: column; gap: 10px; cursor: pointer; transform-style: preserve-3d; min-width: 0; }
+.sc-card {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1px; min-width: 0;
+  background: var(--sheet-2); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 8px 7px;
+}
+.sc-name { font-weight: 700; font-size: 15px; line-height: 1.2; overflow-wrap: anywhere; }
+.sc-team { font-size: 12px; color: var(--muted); }
+.sc-time { font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.sc-p1 .sc-card { border-color: color-mix(in srgb, var(--maillot) 70%, var(--rule)); box-shadow: 0 0 0 2px color-mix(in srgb, var(--maillot) 45%, transparent); }
+
+.sc-block { position: relative; height: var(--h); transform-style: preserve-3d; }
+.sc-p1 { --h: 150px; --face: var(--maillot); --face-ink: var(--maillot-ink); --top: color-mix(in srgb, var(--maillot) 60%, #ffffff); --side: color-mix(in srgb, var(--maillot) 70%, #000000); }
+/* 2nd and 3rd follow the ink colour, so they stand out from the page in both themes */
+.sc-p2, .sc-p3 { --face: color-mix(in srgb, var(--ink) 86%, var(--sheet)); --face-ink: var(--sheet); --top: color-mix(in srgb, var(--ink) 58%, var(--sheet)); --side: color-mix(in srgb, var(--ink) 70%, #000000); }
+.sc-p2 { --h: 112px; }
+.sc-p3 { --h: 84px; }
+.sc-front {
+  position: absolute; inset: 0; border: 0; border-radius: 2px 2px 0 0; margin: 0; padding: 0; cursor: pointer;
+  background: var(--face); color: var(--face-ink); display: grid; place-items: center;
+}
+.sc-front:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.sc-num { font-family: var(--font-display); font-weight: 700; font-size: 46px; line-height: 1; }
+.sc-p1 .sc-num { font-size: 60px; }
+.sc-top { position: absolute; left: 0; right: 0; top: 0; height: var(--sc-depth); background: var(--top); transform-origin: top center; transform: rotateX(-90deg); }
+.sc-side { position: absolute; top: 0; left: 100%; width: var(--sc-depth); height: 100%; background: var(--side); transform-origin: left center; transform: rotateY(90deg); }
+
+.sc-nums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sc-nums .value.sc-count { font-family: var(--font-display); font-weight: 700; font-size: 40px; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.sc-look { font-size: 14px; color: var(--ink-2); }
+.sc-look b { color: var(--ink); }
+
+/* ---------- outright tab: replay ---------- */
+.sc-ctrl { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+.sc-play { min-width: 92px; }
+.sc-slide { flex: 1 1 260px; min-width: 0; }
+.sc-range { flex: 1 1 auto; min-width: 140px; accent-color: var(--ink); cursor: pointer; }
+.sc-cap {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; min-height: 40px;
+  border-left: 5px solid var(--tc, var(--rule-strong)); padding: 4px 0 4px 12px; background: var(--sheet-2); border-radius: 0 8px 8px 0;
+}
+.sc-cap-n { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1; }
+.sc-cap-t { display: inline-flex; align-items: center; gap: 4px; color: var(--ink-2); font-size: 14px; }
+.sc-cap-w { font-size: 14px; color: var(--ink-2); }
+.sc-cap-w b { color: var(--ink); }
+
+/* ---------- outright tab: 3D race ---------- */
+.chart.sc-3d { height: 460px; border-radius: 8px; background: radial-gradient(ellipse at 50% 40%, var(--sheet-2), var(--sheet) 70%); }
+.chart.sc-3d.sc-flat { height: 380px; background: none; }
+/* on phones a vertical finger drag scrolls the page; a sideways drag still turns the chart */
+.chart.sc-3d { touch-action: pan-y; }
+@media (max-width: 760px) { .chart.sc-3d { height: 360px; } .sc-num { font-size: 36px; } .sc-p1 .sc-num { font-size: 46px; } .sc-p1 { --h: 120px; } .sc-p2 { --h: 92px; } .sc-p3 { --h: 70px; } }
+
+/* ---------- motion (only when the visitor has not asked for less) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* tabs: a short fade and rise, panels one after another */
+  .view:not([hidden]) > * { animation: sc-enter 320ms var(--sc-ease) backwards; }
+  .view:not([hidden]) > :nth-child(2) { animation-delay: 40ms; }
+  .view:not([hidden]) > :nth-child(3) { animation-delay: 80ms; }
+  .view:not([hidden]) > :nth-child(4) { animation-delay: 120ms; }
+  .view:not([hidden]) > :nth-child(5) { animation-delay: 160ms; }
+  .view:not([hidden]) > :nth-child(6) { animation-delay: 200ms; }
+  .view:not([hidden]) > :nth-child(7) { animation-delay: 240ms; }
+  .view:not([hidden]) > :nth-child(n+8) { animation-delay: 280ms; }
+  @keyframes sc-enter { from { opacity: 0; transform: translateY(10px); } }
+
+  /* podium: the steps rise out of the floor, third first and the winner last */
+  .sc-stage { transition: transform 260ms var(--sc-ease); }
+  .sc-col { animation: sc-rise 820ms var(--sc-ease) backwards; transition: transform 200ms var(--sc-ease); }
+  .sc-col.sc-p3 { animation-delay: 150ms; }
+  .sc-col.sc-p2 { animation-delay: 300ms; }
+  .sc-col.sc-p1 { animation-delay: 470ms; }
+  @keyframes sc-rise { from { transform: translateY(110%); } }
+  .sc-col:hover { transform: translateY(-5px); }
+
+  /* replay caption swaps with a short fade */
+  .sc-cap.sc-swap > * { animation: sc-fade 260ms var(--sc-ease) backwards; }
+  @keyframes sc-fade { from { opacity: 0; transform: translateX(-6px); } }
+
+  /* small lift for clickable cards */
+  .rb, button.tile, a.tile, .tile.click, .card.click { transition: transform 180ms var(--sc-ease); }
+  .rb:hover, button.tile:hover, a.tile:hover, .tile.click:hover, .card.click:hover { transform: translateY(-3px); }
+
+  /* active tab: the underline grows from the centre */
+  .tabs a { position: relative; }
+  .tabs a[aria-current="page"] { border-bottom-color: transparent; }
+  .tabs a::after {
+    content: ""; position: absolute; left: 8px; right: 8px; bottom: -3px; height: 3px; border-radius: 2px;
+    background: var(--asphalt-ink); transform: scaleX(0); transition: transform 260ms var(--sc-ease);
+  }
+  .tabs a[aria-current="page"]::after { transform: scaleX(1); }
+  .tabs a:hover::after { transform: scaleX(0.35); }
+  .tabs a[aria-current="page"]:hover::after { transform: scaleX(1); }
+}

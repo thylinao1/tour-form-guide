@@ -13,6 +13,7 @@
   --asphalt-2: #222830;
   --asphalt-ink: #eef0f2;
   --asphalt-muted: #9aa2ab;
+  --asphalt-rule: #2f363f; --asphalt-hover: #2b323b; /* lines and hover on the dark masthead surface (same in both themes) */
   --maillot: #ffd20a;
   --maillot-ink: #1a1600;
   --green: #0d8a3d;
@@ -76,6 +77,8 @@ button, select, input { font: inherit; color: inherit; }
 .num, td.n, th.n { font-variant-numeric: tabular-nums; }
 
 /* ---------- masthead ---------- */
+/* a jump to a panel lands just below the sticky masthead; app.js keeps --mast-h equal to its real height */
+.view [data-fn], .view [data-fn-also] { scroll-margin-top: calc(var(--mast-h, 64px) + 14px); }
 .masthead {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
   background: var(--asphalt); color: var(--asphalt-ink);
@@ -95,12 +98,24 @@ button, select, input { font: inherit; color: inherit; }
 .tabs::-webkit-scrollbar { display: none; }
 .tabs a {
   font-family: var(--font-display); font-weight: 600; font-size: 15px; letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--asphalt-muted); text-decoration: none; padding: 16px 10px 13px; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -3px;
+  color: var(--asphalt-muted); text-decoration: none; padding: 16px 9px 13px; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -3px;
 }
 .tabs a:hover { color: var(--asphalt-ink); }
 .tabs a[aria-current="page"] { color: var(--asphalt-ink); border-bottom-color: var(--asphalt-ink); }
+/* focus on the dark masthead: yellow ring drawn inside, so the scrolling tab strip never clips it */
+.masthead :focus-visible { outline: 2px solid var(--maillot); outline-offset: -3px; }
+.tbl tr.click:focus-visible { outline-offset: -2px; }
+.btn:focus-visible, .chip:focus-visible, .seg button:focus-visible, .sel:focus-visible, .finder:focus-visible { outline-width: 3px; }
+/* laptop widths: the tab row moves under the brand and wraps, so all tabs stay visible without scrolling.
+   The Help button (guide plugin) moves to the right end of the brand row. */
+@media (max-width: 1439px) and (min-width: 761px) {
+  .mast-inner { flex-wrap: wrap; row-gap: 0; }
+  .tabs { order: 3; flex: 1 1 100%; flex-wrap: wrap; margin-left: 0; overflow: visible; }
+  .tabs a { padding: 9px 8px 8px; font-size: 14px; letter-spacing: 0.05em; margin-bottom: 0; }
+  .mast-inner > .gd-help { margin-left: auto; }
+}
 .theme-toggle {
-  flex: none; align-self: center; background: var(--asphalt-2); border: 1px solid #2f363f; color: var(--asphalt-ink);
+  flex: none; align-self: center; background: var(--asphalt-2); border: 1px solid var(--asphalt-rule); color: var(--asphalt-ink);
   border-radius: 999px; padding: 4px 10px; font-size: 12px; cursor: pointer; font-family: var(--font-display); letter-spacing: 0.06em; text-transform: uppercase;
 }
 
@@ -149,6 +164,10 @@ h3 { font-family: var(--font-display); font-weight: 600; font-size: 17px; letter
   letter-spacing: 0.08em; color: var(--ink-2); border: 1px solid var(--rule-strong); border-radius: 4px; padding: 1px 6px; vertical-align: 3px; margin-left: 6px; white-space: nowrap;
   background: var(--sheet-2);
 }
+.fn.also { border-style: dashed; background: transparent; }
+button.fn-jump { cursor: pointer; transition: transform 0.15s ease-out; }
+button.fn-jump:hover { background: var(--maillot); color: var(--maillot-ink); border-color: var(--maillot); transform: translateY(-1px); }
+button.fn-jump:focus-visible { outline: 3px solid var(--focus, var(--maillot)); outline-offset: 2px; }
 
 /* ---------- stat tiles ---------- */
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
@@ -358,6 +377,8 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
   padding: calc(env(safe-area-inset-top, 0px) + 16px) max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 24px) 18px;
   display: flex; flex-direction: column; gap: 14px;
 }
+/* children keep their full height so the drawer scrolls instead of squashing charts and tables */
+.drawer > * { flex-shrink: 0; }
 .drawer .close { position: sticky; top: 0; align-self: end; margin-bottom: -40px; z-index: 2; }
 .drawer .who { display: flex; gap: 12px; align-items: center; padding-right: 60px; }
 .drawer .who .bib { font-size: 20px; padding: 8px 8px 6px; }
@@ -380,5 +401,10 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
 @media (max-width: 600px) { .panel-tools { width: 100%; min-width: 0; } .panel-tools select.sel { width: 100%; min-width: 0; } }
 
 /* highlight for a panel reached from the function map */
-.panel.flash { animation: flash-ring 2.2s ease-out 1; }
-@keyframes flash-ring { 0% { box-shadow: 0 0 0 0 var(--accent, #f5b700); } 25% { box-shadow: 0 0 0 5px var(--accent, #f5b700); } 100% { box-shadow: 0 0 0 0 transparent; } }
+/* a ring on its own layer, faded with opacity only */
+.panel.flash { position: relative; }
+.panel.flash::after {
+  content: ""; position: absolute; inset: -5px; border: 3px solid var(--maillot); border-radius: calc(var(--r) + 5px);
+  pointer-events: none; opacity: 0; animation: flash-ring 2.2s ease-out 1;
+}
+@keyframes flash-ring { 0% { opacity: 0; } 15% { opacity: 1; } 60% { opacity: 1; } 100% { opacity: 0; } }

@@ -1,0 +1,21 @@
+/* E13 Depth of squads and E15 The long day: chart on the left, detail card on the right */
+.cov-split { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 1000px) { .cov-split { grid-template-columns: minmax(0, 1fr); } }
+.cov-main { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.cov-side { display: flex; flex-direction: column; gap: 10px; min-width: 0; padding: 14px 16px; background: var(--sheet-2); border: 1px solid var(--rule); border-radius: var(--r); }
+.cov-side .tiles .tile { background: var(--sheet); border-color: var(--rule); }
+.cov-side-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px; }
+.cov-side-head h3 { font-size: 22px; }
+.cov-sub { margin-top: 2px; }
+.cov-mini { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+.cov-mini .tile { padding: 8px 10px; }
+.cov-flags { display: flex; flex-wrap: wrap; gap: 6px; }
+.cov-longest { background: var(--maillot); color: var(--maillot-ink); border-color: transparent; font-weight: 600; }
+.chart.cov-depth-chart { height: 560px; }
+.chart.cov-long-chart { height: 340px; }
+@media (max-width: 640px) { .chart.cov-depth-chart { height: 520px; } .chart.cov-long-chart { height: 300px; } }
+
+/* entrance when the card changes: opacity and transform only */
+.cov-enter { animation: cov-rise 320ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes cov-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .cov-enter { animation: none; } }

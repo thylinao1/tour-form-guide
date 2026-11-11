@@ -115,7 +115,9 @@ export function build(outFile) {
   const pcss = pluginFiles('.css'), pjs = pluginFiles('.js');
   const head = [
     '<title>Tour de France 2025 Form Guide</title>',
+    `<link rel="icon" href="data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#ffd20a"/><circle cx="10" cy="20" r="5.5" fill="none" stroke="#15191e" stroke-width="2.2"/><circle cx="22" cy="20" r="5.5" fill="none" stroke="#15191e" stroke-width="2.2"/><path d="M10 20l5-9h6l1 9M15 11l4 9" fill="none" stroke="#15191e" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/></svg>')}">`,
     '<meta name="description" content="Interactive OLAP dashboard of the Tour de France 2025: overall race, stages, jerseys, teams, nations and rider match-ups.">',
+    `<style>\n${fs.readFileSync(path.join(VENDOR, 'fonts.css'), 'utf8')}\n</style>`,
     `<style>\n${css}\n${pcss.map((p) => `/* plugin ${p.name} */\n${p.text}`).join('\n')}\n</style>`,
   ].join('\n');
   const scripts = [

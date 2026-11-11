@@ -72,14 +72,14 @@
   const pad2 = (n) => String(n).padStart(2, '0');
   /** 277349 -> 77h 02' 29" */
   function fmtTime(s) {
-    if (s == null || isNaN(s)) return '–';
+    if (s == null || isNaN(s)) return '-';
     const neg = s < 0; s = Math.abs(Math.round(s));
     const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
     return (neg ? '−' : '') + `${h}h ${pad2(m)}' ${pad2(sec)}"`;
   }
   /** 264 -> +4' 24" ; 3723 -> +1h 02' 03" ; 0 -> leader dash */
   function fmtGap(s, zero) {
-    if (s == null || isNaN(s)) return '–';
+    if (s == null || isNaN(s)) return '-';
     if (s === 0 && zero !== undefined) return zero;
     const sign = s < 0 ? '−' : '+';
     let a = Math.abs(s);
@@ -92,7 +92,7 @@
   }
   /** 13991 -> 3:53:11 */
   function fmtClock(s) {
-    if (s == null) return '–';
+    if (s == null) return '-';
     const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
     return `${h}:${pad2(m)}:${pad2(sec)}`;
   }
@@ -612,6 +612,18 @@
       return o;
     }
 
+    /* ---- bonuses and penalties per rider (E7) ----
+     * net = penalty - bonus, the seconds these rules added to (positive) or removed from (negative) the rider's total.
+     * Sorted by net, most time saved first. */
+    function bonusLedger(uptoStage) {
+      const last = uptoStage || LAST;
+      return riders.map((r) => {
+        const rows = byRider.get(r.bib).filter((x) => x.stage <= last);
+        const bonus = sum(rows.map((x) => x.bonus)), penalty = sum(rows.map((x) => x.penalty));
+        return { bib: r.bib, bonus, penalty, net: penalty - bonus, bonusDays: rows.filter((x) => x.bonus).length, penaltyDays: rows.filter((x) => x.penalty).length };
+      }).filter((x) => x.bonus || x.penalty).sort((a, b) => a.net - b.net || a.bib - b.bib);
+    }
+
     /* ---- stage detail (E2) ---- */
     function stageDetail(stageId) {
       const s = stageById.get(stageId);
@@ -631,7 +643,7 @@
       gcProgress, gcAfter, gcPositionAfter, gcFinal, gcTop10, benchMedian,
       youngClassification, pointsRanking, pivotal, teamClassification, TEAMCLASS, TEAMCLASS_ADJ,
       teamContribution, teamTop10Detail, h2h, teamH2H, weekForm, consistency, terrainStats,
-      speedProfile, finisherSpeedMedian, stageDetail, official: raw.official || [], published,
+      speedProfile, finisherSpeedMedian, stageDetail, bonusLedger, official: raw.official || [], published,
     };
   }
 

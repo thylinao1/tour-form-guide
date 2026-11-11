@@ -293,5 +293,22 @@ check('Published points and mountains standings (full lists, top 10 = official)'
   E.riders.filter((r) => r.points > 0 && !r.pubPoints).forEach((r) => eq(r.finished, false, `bib ${r.bib} unclassified only if out of the race`));
 });
 
+check('E7 bonus and penalty ledger, and the stage 2 counterfactual leader', (eq) => {
+  const L = E.bonusLedger();
+  eq(L.length, 36, 'riders with any bonus or penalty');
+  const pog = L.find((x) => x.bib === 1);
+  eq(pog.bonus, 52, 'Pogacar bonus seconds'); eq(pog.penalty, 0, 'Pogacar penalty'); eq(pog.net, -52, 'Pogacar net');
+  eq(L[0].bib, 1, 'most time saved first');
+  eq(L.filter((x) => x.penalty).length, 4, 'four penalised riders');
+  eq(L.find((x) => x.bib === 97).penalty, 20, 'Penhoet 20 s penalty');
+  for (let i = 1; i < L.length; i++) eq(L[i - 1].net <= L[i].net, true, `sorted by net at ${i}`);
+  L.forEach((x) => eq(x.net, x.penalty - x.bonus, `net bib ${x.bib}`));
+  eq(E.gcAfter(2)[0].bib, 106, 'actual leader after stage 2 (Van der Poel)');
+  eq(E.gcAfter(2, { bonus: false })[0].bib, 1, 'without bonuses Pogacar leads after stage 2');
+  eq(E.leaders.filter((l) => l.changed).map((l) => l.stage).join(','), '2,5,6,7,10,12', 'stages where yellow changed hands');
+  const s2 = E.stageDetail(2).rows[0];
+  eq(s2.adj, s2.time - s2.bonus + s2.penalty, 'stage row adjusted time');
+});
+
 console.log(`\n${pass} passed, ${fail} failed`);
 if (failures.length) { console.log('\n' + failures.join('\n')); process.exit(1); }
