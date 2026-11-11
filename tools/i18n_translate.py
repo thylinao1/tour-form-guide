@@ -104,10 +104,12 @@ def main():
         table.update(numbered(lang))
         extra = os.path.join(ROOT, 'i18n', 'extra.json')  # hand-added entries: {lang: {English: translation}}
         if os.path.exists(extra): table.update(json.load(open(extra, encoding='utf8')).get(lang, {}))
-        more, more_en = os.path.join(CH, f'extra-{lang}.json'), os.path.join(CH, 'extra-en.json')  # the same hand-added entries, translated as a chunk
-        if os.path.exists(more):
+        for group in ('extra', 'terms'):  # later additions translated as their own small chunks; "{1}" or "#" slots
+            more, more_en = os.path.join(CH, f'{group}-{lang}.json'), os.path.join(CH, f'{group}-en.json')
+            if not (os.path.exists(more) and os.path.exists(more_en)): continue
             en, tr = json.load(open(more_en, encoding='utf8')), json.load(open(more, encoding='utf8'))
-            table.update({en[k]: tr[k].strip() for k in en if isinstance(tr.get(k), str) and tr[k].count('#') == en[k].count('#')})
+            slots = lambda s: sorted(re.findall(r'\{\d+\}', s)) + ['#'] * s.count('#')
+            table.update({re.sub(r'\{\d+\}', '#', en[k]): tr[k].strip() for k in en if isinstance(tr.get(k), str) and tr[k].strip() and slots(tr[k]) == slots(en[k])})
         json.dump(table, open(os.path.join(ROOT, 'i18n', lang + '.json'), 'w', encoding='utf8'), ensure_ascii=False, indent=0, sort_keys=True)
         total = sum(len(json.load(open(p, encoding='utf8'))) for p in glob.glob(os.path.join(CH, 'en-*.json')))
         print(f'{lang}: {len(table)} of {total} translations', flush=True)

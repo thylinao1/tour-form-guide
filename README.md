@@ -114,6 +114,10 @@ The translations are in `i18n/*.json`. They were made by machine (`tools/i18n_ex
 
 The **Colour blind** button swaps the data colours for the Okabe-Ito set. `tests/colorblind.test.mjs` simulates red-blind and green-blind vision to check the colours stay apart.
 
+## Terms and conditions
+
+Because the site has a betting theme, a first-time visitor sees a short terms window (`src/plugins/75-terms.js`): eight points (no real betting, not advice, adults only, your data and so on), a tick box "I am 18 or older and I accept these terms" and an Accept button. Until it is accepted the window cannot be dismissed; afterwards the footer link "Terms and conditions" opens it again. The acceptance is saved in the browser together with the terms version. The window has its own language menu and is translated like the rest of the page. The recording and test switches `?terms=0`, `?welcome=0`, `?tour=1` and `?smoke` keep it shut.
+
 ## Data sources and credits
 
 - **Race results:** BT5110 course CSVs (riders, individual results, exits), cleaned by Group 31 into one CSV per table of our Task 2 schema. See `data/cleaned/README.md` for every cleaning step.
