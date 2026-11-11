@@ -5395,10 +5395,10 @@ ORDER BY f.rank LIMIT 10;`,
     const scene = h('div', { class: 'sc-scene', role: 'group', 'aria-label': 'Podium of the 2025 Tour de France' }, stage);
     addTilt(scene, stage);
     const tiles = [
-      numberTile('Riders', n.riders, `${E.teams.length} teams of 8`),
       numberTile('Stages', n.stages, '3 weeks, 2 rest days'),
       numberTile('Kilometres', n.km, 'raced from start to Paris'),
-      numberTile('Finishers', n.finishers, `${n.riders - n.finishers} riders left the race`),
+      numberTile('Stage wins by the winner', E.stages.filter((s) => s.winnerBib === pod[0].bib).length, 'out of 21 stages'),
+      numberTile('Days in yellow for the winner', E.leaders.filter((l) => l.bib === pod[0].bib).length, 'leader after that many stages'),
     ];
     add(p.body, h('div', { class: 'sc-hero' }, scene, h('div', { class: 'tiles sc-nums' }, tiles.map((t) => t.el))),
       lookFor('the winner stands on the tall yellow step. The time under each name is the gap to the winner after 3 weeks of racing, so a small gap means a close race.'));
