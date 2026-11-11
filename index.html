@@ -171,6 +171,9 @@ button, select, input { font: inherit; color: inherit; }
   font-size: 18px; letter-spacing: 0.04em; padding: 4px 8px 3px; border-radius: 3px; line-height: 1.1;
 }
 .brand-text { font-family: var(--font-display); font-weight: 600; font-size: 20px; letter-spacing: 0.06em; text-transform: uppercase; }
+/* the slogan next to the name: italic, quieter than the name, dropped when the header gets tight */
+.brand-tag { font-family: var(--font-body); font-style: italic; font-weight: 500; font-size: 15px; color: var(--asphalt-muted); white-space: nowrap; margin-inline-start: 4px; }
+@media (max-width: 1040px) { .brand-tag { display: none; } }
 .tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; min-width: 0; margin-left: auto; }
 .tabs::-webkit-scrollbar { display: none; }
 .tabs a {
@@ -1232,7 +1235,7 @@ dialog.gd-dialog::backdrop { background: rgba(8, 10, 14, 0.58); animation: gd-fa
 <body>
 <header class="masthead">
   <div class="mast-inner">
-    <a class="brand" href="#race" aria-label="Tour 2025 Race Analyst, start here"><span class="brand-block">TOUR ’25</span><span class="brand-text">Race Analyst</span></a>
+    <a class="brand" href="#race" aria-label="Tour 2025 Race Analyst, start here"><span class="brand-block">TOUR ’25</span><span class="brand-text">Race Analyst</span><em class="brand-tag" data-no-i18n>Expect the unexpected</em></a>
     <nav class="tabs" aria-label="Sections">
       <a href="#race">Start here</a>
       <a href="#outright">Overall winner</a>
