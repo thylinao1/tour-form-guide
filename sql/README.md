@@ -17,3 +17,5 @@ tests/sql_check.sh        # PASS or FAIL per check
 ```
 
 The dashboard's Function map shows a short version of each E query (from `src/plugins/05-sql.js`).
+
+The PostgreSQL files of the final report are in [`final_report/`](final_report/README.md): the normalized schema with its triggers, the star schema with surrogate keys, the constraint tests and the five query pairs of the comparison.
