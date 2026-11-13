@@ -19,7 +19,8 @@ DROP FUNCTION IF EXISTS check_team_has_rider, check_location_is_used,
 CREATE TABLE country (
     country_code CHAR(3) PRIMARY KEY,
     country_name TEXT NOT NULL,
-    -- the code is a three-letter ISO 3166-1 alpha-3 code.
+    -- The CHECK tests the format only: three capital letters, as in ISO 3166-1 alpha-3.
+    -- The data preparation maps the source codes to ISO codes. XXX stands for Not specified.
     CHECK (country_code ~ '^[A-Z]{3}$')
 );
 
