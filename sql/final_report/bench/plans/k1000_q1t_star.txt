@@ -1,0 +1,13 @@
+Sort  (cost=270594.60..270995.46 rows=160344 width=62)
+  Sort Key: (sum(f.adjusted_time)), d.bib_number
+  ->  Finalize GroupAggregate  (cost=1000.86..250701.71 rows=160344 width=62)
+        Group Key: d.bib_number
+        ->  Gather Merge  (cost=1000.86..247735.35 rows=272585 width=62)
+              Workers Planned: 1
+              ->  Partial GroupAggregate  (cost=0.85..216069.52 rows=160344 width=62)
+                    Group Key: d.bib_number
+                    ->  Nested Loop  (cost=0.85..205234.00 rows=1846416 width=58)
+                          ->  Parallel Index Scan using dim_rider_bib_number_key on dim_rider d  (cost=0.42..6947.78 rows=94320 width=58)
+                                Filter: finished_race
+                          ->  Index Scan using fact_results_pkey on fact_results f  (cost=0.43..1.89 rows=21 width=8)
+                                Index Cond: (rider_key = d.rider_key)

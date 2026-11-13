@@ -1,0 +1,18 @@
+Sort  (cost=4214.20..4214.25 rows=20 width=71)
+  Sort Key: s.date
+  ->  Nested Loop  (cost=1.14..4213.76 rows=20 width=71)
+        ->  Index Scan using rider_pkey on rider r  (cost=0.42..8.44 rows=1 width=19)
+              Index Cond: (bib_number = 1)
+        ->  Nested Loop  (cost=0.72..200.13 rows=20 width=60)
+              ->  Index Scan using result_pkey on result x  (cost=0.43..42.03 rows=20 width=24)
+                    Index Cond: (bib_number = 1)
+              ->  Index Scan using stage_pkey on stage s  (cost=0.29..7.90 rows=1 width=40)
+                    Index Cond: (stage_id = x.stage_id)
+        SubPlan 1
+          ->  Aggregate  (cost=200.23..200.24 rows=1 width=8)
+                ->  Nested Loop  (cost=0.72..200.18 rows=7 width=12)
+                      ->  Index Scan using result_pkey on result p  (cost=0.43..42.03 rows=20 width=16)
+                            Index Cond: (bib_number = x.bib_number)
+                      ->  Index Scan using stage_pkey on stage ps  (cost=0.29..7.91 rows=1 width=4)
+                            Index Cond: (stage_id = p.stage_id)
+                            Filter: (date <= s.date)

@@ -1,0 +1,18 @@
+Sort  (cost=4895.14..4895.19 rows=20 width=71)
+  Sort Key: s.stage_date
+  ->  Nested Loop  (cost=1.14..4894.70 rows=20 width=71)
+        ->  Nested Loop  (cost=0.85..86.28 rows=20 width=31)
+              ->  Index Scan using dim_rider_bib_number_key on dim_rider d  (cost=0.42..8.44 rows=1 width=19)
+                    Index Cond: (bib_number = 1)
+              ->  Index Scan using fact_results_pkey on fact_results f  (cost=0.43..77.63 rows=21 width=16)
+                    Index Cond: (rider_key = d.rider_key)
+        ->  Index Scan using dim_stage_pkey on dim_stage s  (cost=0.29..0.31 rows=1 width=44)
+              Index Cond: (stage_key = f.stage_key)
+        SubPlan 1
+          ->  Aggregate  (cost=240.11..240.12 rows=1 width=8)
+                ->  Nested Loop  (cost=0.72..240.09 rows=7 width=4)
+                      ->  Index Scan using fact_results_pkey on fact_results p  (cost=0.43..77.63 rows=21 width=8)
+                            Index Cond: (rider_key = f.rider_key)
+                      ->  Index Scan using dim_stage_pkey on dim_stage ps  (cost=0.29..7.74 rows=1 width=4)
+                            Index Cond: (stage_key = p.stage_key)
+                            Filter: (stage_date <= s.stage_date)

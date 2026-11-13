@@ -1,0 +1,23 @@
+Sort  (cost=4997.40..5002.00 rows=1840 width=39)
+  Sort Key: (sum(x.finish_time)), t.team_name
+  ->  HashAggregate  (cost=4879.23..4897.63 rows=1840 width=39)
+        Group Key: t.team_name, c.country_name
+        ->  Merge Join  (cost=3487.23..4865.43 rows=1840 width=35)
+              Merge Cond: (r.rider_team = t.team_name)
+              ->  WindowAgg  (cost=3471.46..4371.96 rows=36020 width=40)
+                    Window: w1 AS (PARTITION BY r.rider_team, x.stage_id ORDER BY x.finish_time, x.bib_number ROWS UNBOUNDED PRECEDING)
+                    Run Condition: (row_number() OVER w1 <= 3)
+                    ->  Sort  (cost=3471.46..3561.51 rows=36020 width=32)
+                          Sort Key: r.rider_team, x.stage_id, x.finish_time, x.bib_number
+                          ->  Hash Join  (cost=60.40..745.38 rows=36020 width=32)
+                                Hash Cond: (x.bib_number = r.bib_number)
+                                ->  Seq Scan on result x  (cost=0.00..590.20 rows=36020 width=12)
+                                ->  Hash  (cost=37.40..37.40 rows=1840 width=24)
+                                      ->  Seq Scan on rider r  (cost=0.00..37.40 rows=1840 width=24)
+              ->  Sort  (cost=15.69..16.27 rows=230 width=31)
+                    Sort Key: t.team_name
+                    ->  Hash Join  (cost=1.68..6.67 rows=230 width=31)
+                          Hash Cond: (t.team_country = c.country_code)
+                          ->  Seq Scan on team t  (cost=0.00..4.30 rows=230 width=24)
+                          ->  Hash  (cost=1.30..1.30 rows=30 width=15)
+                                ->  Seq Scan on country c  (cost=0.00..1.30 rows=30 width=15)

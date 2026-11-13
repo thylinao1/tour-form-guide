@@ -1,0 +1,10 @@
+Sort  (cost=106.66..107.06 rows=160 width=57)
+  Sort Key: (sum(f.adjusted_time)), d.bib_number
+  ->  HashAggregate  (cost=99.20..100.80 rows=160 width=57)
+        Group Key: d.bib_number
+        ->  Hash Join  (cost=6.84..83.54 rows=3132 width=53)
+              Hash Cond: (f.rider_key = d.rider_key)
+              ->  Seq Scan on fact_results f  (cost=0.00..67.02 rows=3602 width=8)
+              ->  Hash  (cost=4.84..4.84 rows=160 width=53)
+                    ->  Seq Scan on dim_rider d  (cost=0.00..4.84 rows=160 width=53)
+                          Filter: finished_race

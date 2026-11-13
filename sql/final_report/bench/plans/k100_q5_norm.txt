@@ -1,0 +1,23 @@
+Sort  (cost=8326.41..8338.71 rows=4918 width=49)
+  Sort Key: (sum(((x.finish_time - x.time_bonus) + x.time_penalty))), r.bib_number
+  ->  Finalize HashAggregate  (cost=7975.67..8024.85 rows=4918 width=49)
+        Group Key: r.bib_number
+        ->  Gather  (cost=7048.58..7933.86 rows=8361 width=49)
+              Workers Planned: 1
+              ->  Partial HashAggregate  (cost=6048.58..6097.76 rows=4918 width=49)
+                    Group Key: r.bib_number
+                    ->  Hash Anti Join  (cost=603.23..5907.88 rows=14070 width=53)
+                          Hash Cond: (r.bib_number = e.bib_number)
+                          ->  Hash Join  (cost=534.23..5653.33 rows=16181 width=53)
+                                Hash Cond: (x.stage_id = s.stage_id)
+                                ->  Hash Join  (cost=479.48..5449.62 rows=56632 width=57)
+                                      Hash Cond: (x.bib_number = r.bib_number)
+                                      ->  Parallel Seq Scan on result x  (cost=0.00..4413.82 rows=211882 width=20)
+                                      ->  Hash  (cost=418.00..418.00 rows=4918 width=41)
+                                            ->  Seq Scan on rider r  (cost=0.00..418.00 rows=4918 width=41)
+                                                  Filter: (dob >= '2000-01-01'::date)
+                                ->  Hash  (cost=47.25..47.25 rows=600 width=4)
+                                      ->  Seq Scan on stage s  (cost=0.00..47.25 rows=600 width=4)
+                                            Filter: (type = 'mountain'::text)
+                          ->  Hash  (cost=39.00..39.00 rows=2400 width=4)
+                                ->  Seq Scan on exit e  (cost=0.00..39.00 rows=2400 width=4)

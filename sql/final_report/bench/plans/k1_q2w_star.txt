@@ -1,0 +1,14 @@
+Sort  (cost=437.35..437.41 rows=23 width=39)
+  Sort Key: (sum(f.finish_time)), t.team_name
+  ->  HashAggregate  (cost=436.60..436.83 rows=23 width=39)
+        Group Key: t.team_name
+        ->  Hash Join  (cost=281.34..418.59 rows=3602 width=35)
+              Hash Cond: (f.team_key = t.team_key)
+              ->  WindowAgg  (cost=279.83..369.85 rows=3602 width=24)
+                    Window: w1 AS (PARTITION BY f.team_key, f.stage_key ORDER BY f.finish_time, f.rider_key ROWS UNBOUNDED PRECEDING)
+                    Run Condition: (row_number() OVER w1 <= 3)
+                    ->  Sort  (cost=279.80..288.81 rows=3602 width=16)
+                          Sort Key: f.team_key, f.stage_key, f.finish_time, f.rider_key
+                          ->  Seq Scan on fact_results f  (cost=0.00..67.02 rows=3602 width=16)
+              ->  Hash  (cost=1.23..1.23 rows=23 width=35)
+                    ->  Seq Scan on dim_team t  (cost=0.00..1.23 rows=23 width=35)

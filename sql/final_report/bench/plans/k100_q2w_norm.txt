@@ -1,0 +1,27 @@
+Sort  (cost=66252.91..66298.91 rows=18400 width=41)
+  Sort Key: (sum(x.finish_time)), t.team_name
+  ->  GroupAggregate  (cost=55.28..64949.51 rows=18400 width=41)
+        Group Key: t.team_name, c.country_name
+        ->  Incremental Sort  (cost=55.28..64627.51 rows=18400 width=37)
+              Sort Key: t.team_name, c.country_name
+              Presorted Key: t.team_name
+              ->  Merge Join  (cost=27.31..64075.51 rows=18400 width=37)
+                    Merge Cond: (r.rider_team = t.team_name)
+                    ->  WindowAgg  (cost=20.89..59061.53 rows=360200 width=42)
+                          Window: w1 AS (PARTITION BY r.rider_team, x.stage_id ORDER BY x.finish_time, x.bib_number ROWS UNBOUNDED PRECEDING)
+                          Run Condition: (row_number() OVER w1 <= 3)
+                          ->  Incremental Sort  (cost=20.89..50957.03 rows=360200 width=34)
+                                Sort Key: r.rider_team, x.stage_id, x.finish_time, x.bib_number
+                                Presorted Key: r.rider_team
+                                ->  Nested Loop  (cost=0.71..33277.40 rows=360200 width=34)
+                                      ->  Index Scan using rider_team_idx on rider r  (cost=0.29..1143.40 rows=18400 width=26)
+                                      ->  Index Scan using result_pkey on result x  (cost=0.42..1.55 rows=20 width=12)
+                                            Index Cond: (bib_number = r.bib_number)
+                    ->  Materialize  (cost=0.43..247.23 rows=2300 width=33)
+                          ->  Nested Loop  (cost=0.43..241.48 rows=2300 width=33)
+                                ->  Index Scan using team_pkey on team t  (cost=0.28..182.67 rows=2300 width=26)
+                                ->  Memoize  (cost=0.15..0.17 rows=1 width=15)
+                                      Cache Key: t.team_country
+                                      Cache Mode: logical
+                                      ->  Index Scan using country_pkey on country c  (cost=0.14..0.16 rows=1 width=15)
+                                            Index Cond: (country_code = t.team_country)

@@ -1,0 +1,14 @@
+Sort  (cost=303193.76..303194.34 rows=230 width=41)
+  Sort Key: (sum(f.finish_time)), t.team_name
+  ->  GroupAggregate  (cost=0.56..303184.74 rows=230 width=41)
+        Group Key: t.team_name
+        ->  Nested Loop  (cost=0.56..303122.40 rows=12007 width=37)
+              ->  Index Scan using dim_team_team_name_key on dim_team t  (cost=0.27..25.79 rows=230 width=37)
+              ->  Index Scan using fact_team_stage_idx on fact_results f  (cost=0.29..1317.29 rows=52 width=8)
+                    Index Cond: (team_key = t.team_key)
+                    Filter: ((SubPlan 1) < 3)
+                    SubPlan 1
+                      ->  Aggregate  (cost=8.32..8.33 rows=1 width=8)
+                            ->  Index Scan using fact_team_stage_idx on fact_results g  (cost=0.29..8.32 rows=1 width=0)
+                                  Index Cond: ((team_key = f.team_key) AND (stage_key = f.stage_key))
+                                  Filter: ((finish_time < f.finish_time) OR ((finish_time = f.finish_time) AND (rider_key < f.rider_key)))

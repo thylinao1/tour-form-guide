@@ -1,0 +1,18 @@
+Sort  (cost=11890.20..11928.78 rows=15433 width=60)
+  Sort Key: t.total_time, r.bib_number
+  ->  Hash Join  (cost=10146.48..10816.55 rows=15433 width=60)
+        Hash Cond: (r.rider_country = c.country_code)
+        ->  Hash Anti Join  (cost=10144.81..10768.64 rows=15433 width=53)
+              Hash Cond: (r.bib_number = e.bib_number)
+              ->  Hash Join  (cost=10075.81..10496.12 rows=17748 width=53)
+                    Hash Cond: (r.bib_number = t.bib_number)
+                    ->  Seq Scan on rider r  (cost=0.00..372.00 rows=18400 width=45)
+                    ->  Hash  (cost=9853.96..9853.96 rows=17748 width=12)
+                          ->  Subquery Scan on t  (cost=9499.00..9853.96 rows=17748 width=12)
+                                ->  HashAggregate  (cost=9499.00..9676.48 rows=17748 width=12)
+                                      Group Key: x.bib_number
+                                      ->  Seq Scan on result x  (cost=0.00..5897.00 rows=360200 width=16)
+              ->  Hash  (cost=39.00..39.00 rows=2400 width=4)
+                    ->  Seq Scan on exit e  (cost=0.00..39.00 rows=2400 width=4)
+        ->  Hash  (cost=1.30..1.30 rows=30 width=15)
+              ->  Seq Scan on country c  (cost=0.00..1.30 rows=30 width=15)

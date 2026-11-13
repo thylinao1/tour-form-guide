@@ -1,0 +1,15 @@
+Sort  (cost=51030.66..51030.72 rows=23 width=39)
+  Sort Key: (sum(f.finish_time)), t.team_name
+  ->  GroupAggregate  (cost=0.14..51030.14 rows=23 width=39)
+        Group Key: t.team_name
+        ->  Nested Loop  (cost=0.14..51023.90 rows=1201 width=35)
+              Join Filter: (f.team_key = t.team_key)
+              ->  Index Scan using dim_team_team_name_key on dim_team t  (cost=0.14..12.48 rows=23 width=35)
+              ->  Materialize  (cost=0.00..50600.08 rows=1201 width=8)
+                    ->  Seq Scan on fact_results f  (cost=0.00..50594.07 rows=1201 width=8)
+                          Filter: ((SubPlan 1) < 3)
+                          SubPlan 1
+                            ->  Aggregate  (cost=14.01..14.02 rows=1 width=8)
+                                  ->  Index Scan using fact_stage_idx on fact_results g  (cost=0.28..14.01 rows=2 width=0)
+                                        Index Cond: (stage_key = f.stage_key)
+                                        Filter: ((team_key = f.team_key) AND ((finish_time < f.finish_time) OR ((finish_time = f.finish_time) AND (rider_key < f.rider_key))))

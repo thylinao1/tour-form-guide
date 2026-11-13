@@ -1,0 +1,15 @@
+Sort  (cost=450986.17..451043.67 rows=23000 width=44)
+  Sort Key: (sum(f.finish_time)), t.team_name
+  ->  HashAggregate  (cost=449089.90..449319.90 rows=23000 width=44)
+        Group Key: t.team_name
+        ->  Hash Join  (cost=734.74..431212.81 rows=3575418 width=40)
+              Hash Cond: (f.team_key = t.team_key)
+              ->  WindowAgg  (cost=1.24..385002.33 rows=3602000 width=24)
+                    Window: w1 AS (PARTITION BY f.team_key, f.stage_key ORDER BY f.finish_time, f.rider_key ROWS UNBOUNDED PRECEDING)
+                    Run Condition: (row_number() OVER w1 <= 3)
+                    ->  Incremental Sort  (cost=1.13..303957.33 rows=3602000 width=16)
+                          Sort Key: f.team_key, f.stage_key, f.finish_time, f.rider_key
+                          Presorted Key: f.team_key, f.stage_key
+                          ->  Index Scan using fact_team_stage_idx on fact_results f  (cost=0.43..191900.41 rows=3602000 width=16)
+              ->  Hash  (cost=446.00..446.00 rows=23000 width=40)
+                    ->  Seq Scan on dim_team t  (cost=0.00..446.00 rows=23000 width=40)

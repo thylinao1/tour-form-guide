@@ -1,0 +1,20 @@
+Sort  (cost=79174.41..79957.46 rows=313217 width=60)
+  Sort Key: (sum(((x.finish_time - x.time_bonus) + x.time_penalty))), r.bib_number
+  ->  GroupAggregate  (cost=2.63..38805.21 rows=313217 width=60)
+        Group Key: r.bib_number, c.country_name
+        ->  Incremental Sort  (cost=2.63..31757.83 rows=313217 width=64)
+              Sort Key: r.bib_number, c.country_name
+              Presorted Key: r.bib_number
+              ->  Merge Join  (cost=1.14..21070.29 rows=313217 width=64)
+                    Merge Cond: (r.bib_number = x.bib_number)
+                    ->  Nested Loop  (cost=0.72..1224.55 rows=16000 width=52)
+                          ->  Merge Anti Join  (cost=0.57..827.69 rows=16000 width=45)
+                                Merge Cond: (r.bib_number = e.bib_number)
+                                ->  Index Scan using rider_pkey on rider r  (cost=0.29..679.41 rows=18400 width=45)
+                                ->  Index Only Scan using exit_pkey on exit e  (cost=0.28..72.28 rows=2400 width=4)
+                          ->  Memoize  (cost=0.15..0.17 rows=1 width=15)
+                                Cache Key: r.rider_country
+                                Cache Mode: logical
+                                ->  Index Scan using country_pkey on country c  (cost=0.14..0.16 rows=1 width=15)
+                                      Index Cond: (country_code = r.rider_country)
+                    ->  Index Scan using result_pkey on result x  (cost=0.42..15773.07 rows=360200 width=16)

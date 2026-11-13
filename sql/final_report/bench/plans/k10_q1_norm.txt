@@ -1,0 +1,17 @@
+Sort  (cost=4174.56..4252.86 rows=31322 width=58)
+  Sort Key: (sum(((x.finish_time - x.time_bonus) + x.time_penalty))), r.bib_number
+  ->  HashAggregate  (cost=1522.38..1835.60 rows=31322 width=58)
+        Group Key: r.bib_number, c.country_name
+        ->  Hash Join  (cost=92.36..1130.86 rows=31322 width=62)
+              Hash Cond: (x.bib_number = r.bib_number)
+              ->  Seq Scan on result x  (cost=0.00..590.20 rows=36020 width=16)
+              ->  Hash  (cost=72.36..72.36 rows=1600 width=50)
+                    ->  Hash Join  (cost=9.08..72.36 rows=1600 width=50)
+                          Hash Cond: (r.rider_country = c.country_code)
+                          ->  Hash Anti Join  (cost=7.40..65.90 rows=1600 width=43)
+                                Hash Cond: (r.bib_number = e.bib_number)
+                                ->  Seq Scan on rider r  (cost=0.00..37.40 rows=1840 width=43)
+                                ->  Hash  (cost=4.40..4.40 rows=240 width=4)
+                                      ->  Seq Scan on exit e  (cost=0.00..4.40 rows=240 width=4)
+                          ->  Hash  (cost=1.30..1.30 rows=30 width=15)
+                                ->  Seq Scan on country c  (cost=0.00..1.30 rows=30 width=15)

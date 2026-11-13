@@ -1,0 +1,16 @@
+Sort  (cost=87054.59..87112.13 rows=23015 width=52)
+  Sort Key: t.team_country_name, t.team_name
+  ->  GroupAggregate  (cost=59832.31..85387.12 rows=23015 width=52)
+        Group Key: t.team_country_name, t.team_name
+        Group Key: t.team_country_name
+        Group Key: ()
+        ->  Gather Merge  (cost=59832.31..83154.49 rows=200248 width=40)
+              Workers Planned: 2
+              ->  Sort  (cost=58832.29..59040.88 rows=83437 width=40)
+                    Sort Key: t.team_country_name, t.team_name
+                    ->  Hash Join  (cost=733.50..49729.98 rows=83437 width=40)
+                          Hash Cond: (f.team_key = t.team_key)
+                          ->  Parallel Seq Scan on fact_results f  (cost=0.00..48777.42 rows=83437 width=8)
+                                Filter: (rank <= 10)
+                          ->  Hash  (cost=446.00..446.00 rows=23000 width=40)
+                                ->  Seq Scan on dim_team t  (cost=0.00..446.00 rows=23000 width=40)

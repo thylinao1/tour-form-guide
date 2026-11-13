@@ -1,0 +1,19 @@
+Sort  (cost=8537.73..8548.17 rows=4174 width=49)
+  Sort Key: (sum(f.adjusted_time)), d.bib_number
+  ->  Finalize HashAggregate  (cost=8244.98..8286.72 rows=4174 width=49)
+        Group Key: d.bib_number
+        ->  Gather  (cost=7458.16..8209.50 rows=7096 width=49)
+              Workers Planned: 1
+              ->  Partial HashAggregate  (cost=6458.16..6499.90 rows=4174 width=49)
+                    Group Key: d.bib_number
+                    ->  Hash Join  (cost=585.92..6389.50 rows=13733 width=45)
+                          Hash Cond: (f.stage_key = s.stage_key)
+                          ->  Hash Join  (cost=525.17..6202.32 rows=48065 width=49)
+                                Hash Cond: (f.rider_key = d.rider_key)
+                                ->  Parallel Seq Scan on fact_results f  (cost=0.00..5120.82 rows=211882 width=12)
+                                ->  Hash  (cost=473.00..473.00 rows=4174 width=45)
+                                      ->  Seq Scan on dim_rider d  (cost=0.00..473.00 rows=4174 width=45)
+                                            Filter: (is_young_rider AND finished_race)
+                          ->  Hash  (cost=53.25..53.25 rows=600 width=4)
+                                ->  Seq Scan on dim_stage s  (cost=0.00..53.25 rows=600 width=4)
+                                      Filter: (stage_type = 'mountain'::text)

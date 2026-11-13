@@ -1,0 +1,22 @@
+Sort  (cost=1047.87..1053.19 rows=2129 width=47)
+  Sort Key: c.country_name, t.team_name
+  ->  GroupAggregate  (cost=882.67..930.18 rows=2129 width=47)
+        Group Key: c.country_name, t.team_name
+        Group Key: c.country_name
+        Group Key: ()
+        ->  Sort  (cost=882.67..887.91 rows=2098 width=35)
+              Sort Key: c.country_name, t.team_name
+              ->  Hash Join  (cost=69.25..766.91 rows=2098 width=35)
+                    Hash Cond: (t.team_country = c.country_code)
+                    ->  Hash Join  (cost=67.58..758.95 rows=2098 width=28)
+                          Hash Cond: (r.rider_team = t.team_name)
+                          ->  Hash Join  (cost=60.40..746.17 rows=2098 width=24)
+                                Hash Cond: (x.bib_number = r.bib_number)
+                                ->  Seq Scan on result x  (cost=0.00..680.25 rows=2098 width=4)
+                                      Filter: (rank <= 10)
+                                ->  Hash  (cost=37.40..37.40 rows=1840 width=24)
+                                      ->  Seq Scan on rider r  (cost=0.00..37.40 rows=1840 width=24)
+                          ->  Hash  (cost=4.30..4.30 rows=230 width=24)
+                                ->  Seq Scan on team t  (cost=0.00..4.30 rows=230 width=24)
+                    ->  Hash  (cost=1.30..1.30 rows=30 width=15)
+                          ->  Seq Scan on country c  (cost=0.00..1.30 rows=30 width=15)

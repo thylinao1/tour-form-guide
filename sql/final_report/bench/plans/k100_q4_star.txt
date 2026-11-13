@@ -1,0 +1,14 @@
+Sort  (cost=9598.77..9604.56 rows=2315 width=51)
+  Sort Key: t.team_country_name, t.team_name
+  ->  GroupAggregate  (cost=9178.09..9469.40 rows=2315 width=51)
+        Group Key: t.team_country_name, t.team_name
+        Group Key: t.team_country_name
+        Group Key: ()
+        ->  Sort  (cost=9178.09..9231.72 rows=21453 width=39)
+              Sort Key: t.team_country_name, t.team_name
+              ->  Hash Join  (cost=73.75..7634.66 rows=21453 width=39)
+                    Hash Cond: (f.team_key = t.team_key)
+                    ->  Seq Scan on fact_results f  (cost=0.00..7504.50 rows=21453 width=8)
+                          Filter: (rank <= 10)
+                    ->  Hash  (cost=45.00..45.00 rows=2300 width=39)
+                          ->  Seq Scan on dim_team t  (cost=0.00..45.00 rows=2300 width=39)
